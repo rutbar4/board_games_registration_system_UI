@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid";
 
 export default function Review({ setFormData, formData }) {
   return (
-    <React.Fragment center>
+    <React.Fragment>
       <Typography variant="h6" gutterBottom>
         Game summary
       </Typography>
