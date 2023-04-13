@@ -13,21 +13,28 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../Auth/useAuth";
 
 const theme = createTheme();
 
 export default function SignUp() {
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const { signupOrganisation } = useAuth();
+  const handleSignUp = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const response = await signupOrganisation(
+      data.get("organisationName"),
+      data.get("organisationUsername"),
+      data.get("email"),
+      data.get("organisationAddress"),
+      data.get("organisationCity"),
+      data.get("password")
+    );
+    console.log(response);
   };
-
+  
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -44,34 +51,35 @@ export default function SignUp() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            Sign up as Organisation
           </Typography>
           <Box
             component="form"
             noValidate
-            onSubmit={handleSubmit}
+            onSubmit={handleSignUp}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
                   autoComplete="given-name"
-                  name="firstName"
+                  name="organisationName"
                   required
                   fullWidth
-                  id="firstName"
-                  label="First Name"
+                  id="organisationName"
+                  label="Name of organisation"
                   autoFocus
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
+                  autoComplete="given-name"
+                  name="organisationUsername"
                   required
                   fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
+                  id="organisationUsername"
+                  label="Username"
+                  autoFocus
                 />
               </Grid>
               <Grid item xs={12}>
@@ -79,9 +87,28 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="email"
-                  label="Email Address"
+                  label="E-mail address"
                   name="email"
                   autoComplete="email"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="organisationAddress"
+                  label="Address of location"
+                  name="organisationAddress"
+                  autoComplete="address"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="organisationCity"
+                  label="City"
+                  name="organisationCity"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -109,6 +136,9 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onClick={() => {
+                handleSignUp();
+              }}
             >
               Sign Up
             </Button>

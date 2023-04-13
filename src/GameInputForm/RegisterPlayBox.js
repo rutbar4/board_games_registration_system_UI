@@ -27,11 +27,11 @@ export default function RegisterPlayBox() {
     time_m: "",
   });
 
-  React.useEffect(() => {
-    console.log("Debug from Checkout.js");
-    console.log(formData);
-    console.log("End of debug from Checkout.js");
-  });
+  // React.useEffect(() => {
+  //   console.log("Debug from Checkout.js");
+  //   console.log(formData);
+  //   console.log("End of debug from Checkout.js");
+  // });
 
   function getStepContent(step) {
     switch (step) {
@@ -117,7 +117,6 @@ export default function RegisterPlayBox() {
           </React.Fragment>
         )}
       </Paper>
-      {/* <Copyright /> */}
     </Container>
   );
 }

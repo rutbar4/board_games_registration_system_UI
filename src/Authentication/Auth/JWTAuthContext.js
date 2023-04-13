@@ -62,7 +62,8 @@ const AuthContext = createContext({
   method: "JWT",
   login: () => Promise.resolve(), // isAUthenticated
   logout: () => Promise.resolve(),
-  register: () => Promise.resolve(),
+  signupUser: () => Promise.resolve(),
+  signupOrganisation: () => Promise.resolve(),
 });
 
 axios.interceptors.response.use(
@@ -87,7 +88,7 @@ export const AuthProvider = (props) => {
         console.log(response);
         if (accessToken && response) {
           const user = response.data;
-debugger;
+          debugger;
           dispatch({
             type: "INITIALIZE",
             payload: {
@@ -140,14 +141,46 @@ debugger;
     dispatch({ type: "LOGOUT" });
   };
 
-  const register = async (email, name, surname, password, phoneNumber) => {
-    const response = await axios.post("http://localhost:12010/register", {
-      email,
-      name,
-      surname,
-      password,
-      phoneNumber,
+  const signupUser = async (name, username, email, password) => {
+    const response = await axios.post(
+      "http://localhost:7293/api/v1/Auth/registerUser",
+      {
+        name,
+        username,
+        email,
+        password,
+      }
+    );
+    const { accessToken, user } = response.data;
+
+    window.localStorage.setItem("accessToken", accessToken);
+    dispatch({
+      type: "REGISTER",
+      payload: {
+        user,
+      },
     });
+  };
+
+  const signupOrganisation = async (
+    name,
+    username,
+    email,
+    address,
+    city,
+    password
+  ) => {
+    const response = await axios.post(
+      "http://localhost:7293/api/Organisation/registerOrganisation",
+      {
+        name,
+        username,
+        email,
+        address,
+        city,
+        password,
+      }
+    );
     const { accessToken, user } = response.data;
 
     window.localStorage.setItem("accessToken", accessToken);
@@ -166,7 +199,8 @@ debugger;
         method: "JWT",
         login,
         logout,
-        register,
+        signupUser,
+        signupOrganisation,
       }}
     >
       {children}

@@ -13,19 +13,24 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../Auth/useAuth";
 
 const theme = createTheme();
 
 export default function SignUp() {
   const navigate = useNavigate();
-
-  const handleSubmit = (event) => {
+  
+  const { signupUser } = useAuth();
+  const handleSignUp = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const response = await signupUser(
+      data.get("name"),
+      data.get("userName"),
+      data.get("email"),
+      data.get("password")
+    );
+    console.log(response);
   };
 
   return (
@@ -49,18 +54,18 @@ export default function SignUp() {
           <Box
             component="form"
             noValidate
-            onSubmit={handleSubmit}
+            onSubmit={handleSignUp}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
-                  name="firstName"
+                  name="name"
                   required
                   fullWidth
-                  id="firstName"
-                  label="First Name"
+                  id="name"
+                  label="Name"
                   autoFocus
                 />
               </Grid>
@@ -68,10 +73,9 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
+                  id="userName"
+                  label="Username"
+                  name="userName"
                 />
               </Grid>
               <Grid item xs={12}>
