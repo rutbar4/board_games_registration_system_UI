@@ -19,7 +19,7 @@ const theme = createTheme();
 
 export default function SignUp() {
   const navigate = useNavigate();
-  
+
   const { signupUser } = useAuth();
   const handleSignUp = async (event) => {
     event.preventDefault();
@@ -31,6 +31,7 @@ export default function SignUp() {
       data.get("password")
     );
     console.log(response);
+    navigate("/");
   };
 
   return (

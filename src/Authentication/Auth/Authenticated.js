@@ -8,7 +8,6 @@ const Authenticated = (props) => {
   const auth = useAuth();
   const location = useLocation();
   const [requestedLocation, setRequestedLocation] = useState(null);
-  debugger;
   if (!auth.isAuthenticated) {
     if (location.pathname !== requestedLocation) {
       setRequestedLocation(location.pathname);

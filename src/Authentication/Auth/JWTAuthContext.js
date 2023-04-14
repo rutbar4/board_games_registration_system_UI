@@ -6,6 +6,7 @@ const initialAuthState = {
   isAuthenticated: false,
   isInitialized: false,
   user: null,
+  organisation: null,
 };
 
 const setSession = (accessToken) => {
@@ -20,36 +21,40 @@ const setSession = (accessToken) => {
 
 const handlers = {
   INITIALIZE: (state, action) => {
-    const { isAuthenticated, user } = action.payload;
+    const { isAuthenticated, user, organisation } = action.payload;
 
     return {
       ...state,
       isAuthenticated,
       isInitialized: true,
       user,
+      organisation,
     };
   },
   LOGIN: (state, action) => {
-    const { user } = action.payload;
+    const { user, organisation } = action.payload;
 
     return {
       ...state,
       isAuthenticated: true,
       user,
+      organisation,
     };
   },
   LOGOUT: (state) => ({
     ...state,
     isAuthenticated: false,
     user: null,
+    organisation: null,
   }),
   REGISTER: (state, action) => {
-    const { user } = action.payload;
+    const { user, organisation } = action.payload;
 
     return {
       ...state,
       isAuthenticated: true,
       user,
+      organisation,
     };
   },
 };
@@ -84,24 +89,34 @@ export const AuthProvider = (props) => {
       try {
         const accessToken = window.localStorage.getItem("accessToken");
         setSession(accessToken);
-        const response = await axios.get("http://localhost:7293/api/user");
-        console.log(response);
+        const response = await axios.get("http://localhost:7293/api/profile");
         if (accessToken && response) {
-          const user = response.data;
-          debugger;
-          dispatch({
-            type: "INITIALIZE",
-            payload: {
-              isAuthenticated: true,
-              user,
-            },
-          });
+          if (response.data.organisation) {
+            const organisation = response.data;
+            dispatch({
+              type: "INITIALIZE",
+              payload: {
+                isAuthenticated: true,
+                organisation,
+              },
+            });
+          } else if (response.data.user) {
+            const user = response.data;
+            dispatch({
+              type: "INITIALIZE",
+              payload: {
+                isAuthenticated: true,
+                user,
+              },
+            });
+          }
         } else {
           dispatch({
             type: "INITIALIZE",
             payload: {
               isAuthenticated: false,
               user: null,
+              organisation: null,
             },
           });
         }
@@ -112,6 +127,7 @@ export const AuthProvider = (props) => {
           payload: {
             isAuthenticated: false,
             user: null,
+            organisation: null,
           },
         });
       }
@@ -125,15 +141,27 @@ export const AuthProvider = (props) => {
       username: name,
       password,
     });
-    const { token, username } = response.data;
+    if (response.data.organisation) {
+      const { token, organisation } = response.data;
 
-    setSession(token);
-    dispatch({
-      type: "LOGIN",
-      payload: {
-        username,
-      },
-    });
+      setSession(token);
+      dispatch({
+        type: "LOGIN",
+        payload: {
+          organisation,
+        },
+      });
+    }
+    if (response.data.user) {
+      const { token, user } = response.data;
+      setSession(token);
+      dispatch({
+        type: "LOGIN",
+        payload: {
+          user,
+        },
+      });
+    }
   };
 
   const logout = async () => {
@@ -151,9 +179,9 @@ export const AuthProvider = (props) => {
         password,
       }
     );
-    const { accessToken, user } = response.data;
+    const { token, user } = response.data;
 
-    window.localStorage.setItem("accessToken", accessToken);
+    window.localStorage.setItem("accessToken", token);
     dispatch({
       type: "REGISTER",
       payload: {
@@ -171,7 +199,7 @@ export const AuthProvider = (props) => {
     password
   ) => {
     const response = await axios.post(
-      "http://localhost:7293/api/Organisation/registerOrganisation",
+      "http://localhost:7293/api/v1/Auth/registerOrganisation",
       {
         name,
         username,
@@ -181,13 +209,13 @@ export const AuthProvider = (props) => {
         password,
       }
     );
-    const { accessToken, user } = response.data;
+    const { token, organisation } = response.data;
 
-    window.localStorage.setItem("accessToken", accessToken);
+    window.localStorage.setItem("accessToken", token);
     dispatch({
       type: "REGISTER",
       payload: {
-        user,
+        organisation,
       },
     });
   };

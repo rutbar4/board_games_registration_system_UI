@@ -33,8 +33,9 @@ export default function SignUp() {
       data.get("password")
     );
     console.log(response);
+    navigate("/");
   };
-  
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">

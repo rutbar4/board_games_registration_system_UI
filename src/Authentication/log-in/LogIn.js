@@ -20,6 +20,7 @@ const theme = createTheme();
 export default function LogIn() {
   const navigate = useNavigate();
 
+  const auth = useAuth();
   const { login } = useAuth();
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -28,7 +29,7 @@ export default function LogIn() {
     console.log(response);
     navigate("/");
   };
-
+  // if (auth.isAuthenticated) navigate("/");
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">

@@ -8,10 +8,12 @@ import LogIn from "./Authentication/log-in/LogIn";
 import SignUp from "./Authentication/sign-up/SignUp";
 import OrganisationSignUp from "./Authentication/sign-up/OrganisationSignUp";
 import MeniuToolbar from "./Toolbars/MeniuToolbar";
+import OrganisationProfile from "./Profiles/OrganisationProfile";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { useRoutes } from "react-router-dom";
 import Authenticated from "./Authentication/Auth/Authenticated";
+import { StyledEngineProvider } from "@mui/material/styles";
 
 const router = [
   {
@@ -32,7 +34,19 @@ const router = [
   },
   {
     path: "organisation_sign_up",
-    element: <OrganisationSignUp />,
+    element: (
+      <Authenticated>
+        <OrganisationSignUp />
+      </Authenticated>
+    ),
+  },
+  {
+    path: "organisation_profile",
+    element: (
+      <Authenticated>
+        <OrganisationProfile />
+      </Authenticated>
+    ),
   },
 ];
 
@@ -58,9 +72,11 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <MeniuToolbar />
-      {content}
-      <Copyright sx={{ mt: 8, mb: 4 }} />
+      <StyledEngineProvider>
+        <MeniuToolbar />
+        {content}
+        <Copyright sx={{ mt: 8, mb: 4 }} />
+      </StyledEngineProvider>
     </ThemeProvider>
   );
 }
