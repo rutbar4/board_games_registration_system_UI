@@ -19,16 +19,45 @@ import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
 import MuiGrid from "@mui/material/Grid";
 import { styled } from "@mui/material/styles";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import { useNavigate } from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { TableVirtuoso } from "react-virtuoso";
 import useAuth from "../Authentication/Auth/useAuth";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import TableSortLabel from "@material-ui/core/TableSortLabel";
+import AddIcon from "@mui/icons-material/Add";
+
+const columns = [
+  { id: "name", label: "Board Game Name", minWidth: 50 },
+  { id: "gameType", label: "Type", minWidth: 50 },
+  // { id: "deleteButton", label: "55", minWidth: 60 },
+];
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
 
 const Grid = styled(MuiGrid)(({ theme }) => ({
   width: "100%",
@@ -38,89 +67,57 @@ const Grid = styled(MuiGrid)(({ theme }) => ({
   },
 }));
 
-const sample = [
-  ["Stalo zaidimas2", 159],
-  ["Stalo zaidimas2", 237],
-  ["Stalo zaidimas2", 262],
-];
-function createData(id, dessert, calories) {
-  return { id, dessert, calories };
-}
-const columns = [
-  {
-    width: 200,
-    label: "Board Game",
-    dataKey: "dessert",
-  },
-  {
-    width: 120,
-    label: "Times Played",
-    dataKey: "calories",
-    numeric: true,
-  },
-];
-const rows = Array.from({ length: 1 }, (_, index) => {
-  const randomSelection = sample[Math.floor(Math.random() * sample.length)];
-  return createData(index, ...randomSelection);
-});
-const VirtuosoTableComponents = {
-  Scroller: React.forwardRef((props, ref) => (
-    <TableContainer component={Paper} {...props} ref={ref} />
-  )),
-  Table: (props) => (
-    <Table
-      {...props}
-      sx={{ borderCollapse: "separate", tableLayout: "fixed" }}
-    />
-  ),
-  TableHead,
-  TableRow: ({ item: _item, ...props }) => <TableRow {...props} />,
-  TableBody: React.forwardRef((props, ref) => (
-    <TableBody {...props} ref={ref} />
-  )),
-};
-function fixedHeaderContent() {
-  return (
-    <TableRow>
-      {columns.map((column) => (
-        <TableCell
-          key={column.dataKey}
-          variant="head"
-          align={column.numeric || false ? "right" : "left"}
-          style={{ width: column.width }}
-          sx={{
-            backgroundColor: "background.paper",
-          }}
-        >
-          {column.label}
-        </TableCell>
-      ))}
-    </TableRow>
-  );
-}
-function rowContent(_index, row) {
-  return (
-    <React.Fragment>
-      {columns.map((column) => (
-        <TableCell
-          key={column.dataKey}
-          align={column.numeric || false ? "right" : "left"}
-        >
-          {row[column.dataKey]}
-        </TableCell>
-      ))}
-    </React.Fragment>
-  );
-}
-
 const theme = createTheme();
 export default function OrganisationProfile() {
   const { organisation } = useAuth();
   console.log(organisation);
+
+  const [games, setGames] = React.useState([]);
+  console.log(games);
+  const isMountedRef = useRefMounted();
+  const getAllBGByOrganisation = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:7293/api/BoardGamePlay/GetAllBGDataByOrganisation/" +
+          organisation.id
+      );
+
+      if (isMountedRef.current) {
+        setGames(response.data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, [isMountedRef]);
+
+  useEffect(() => {
+    getAllBGByOrganisation();
+  }, [getAllBGByOrganisation]);
+
+  const handleAdd = async (event) => {
+    {
+      const formData = new FormData(event.currentTarget);
+      const data = {
+        Name: formData.get("BGName"),
+        GameType: formData.get("BGType"),
+        OrganisationId: organisation.id,
+      };
+      const response = await axios.post(
+        "http://localhost:7293/api/BoardGamePlay/AddOrganisationBG",
+        data
+      );
+      console.log("Board Game added");
+      console.log(response.data);
+      if (response) setGames(response.data);
+    }
+  };
+
+  if (!organisation) return null;
+
   return (
     <ThemeProvider theme={theme}>
       <Typography variant="h6" gutterBottom align="center" mt={2}>
-        My Profile
+        My Organisation Profile
       </Typography>
       <Container component="main" maxWidth="lg">
         <CssBaseline />
@@ -134,72 +131,72 @@ export default function OrganisationProfile() {
         >
           <Grid container spacing={6} item xs={11}>
             <Grid container spacing={2} item xs={7}>
-              <Grid item xs={9}>
+              <Grid item xs={10}>
                 <TextField
                   name="organisationName"
                   fullWidth
                   id="organisationName"
                   label="Name of organisation"
-                  defaultValue={organisation.organisation.name}
+                  defaultValue={organisation.name}
                   variant="standard"
                   InputProps={{
                     readOnly: true,
                   }}
                 />
               </Grid>
-              <Grid item xs={9}>
+              <Grid item xs={10}>
                 <TextField
                   name="organisationUsername"
                   fullWidth
                   id="organisationUsername"
                   label="Username"
-                  defaultValue={organisation.organisation.username}
+                  defaultValue={organisation.username}
                   variant="standard"
                   InputProps={{
                     readOnly: true,
                   }}
                 />
               </Grid>
-              <Grid item xs={9}>
+              <Grid item xs={10}>
                 <TextField
                   fullWidth
                   id="email"
                   label="E-mail address"
                   name="email"
-                  defaultValue={organisation.organisation.email}
+                  defaultValue={organisation.email}
                   variant="standard"
                   InputProps={{
                     readOnly: true,
                   }}
                 />
               </Grid>
-              <Grid item xs={9}>
+              <Grid item xs={10}>
                 <TextField
                   fullWidth
                   id="organisationAddress"
                   label="Address of location"
                   name="organisationAddress"
-                  defaultValue={organisation.organisation.address}
+                  defaultValue={organisation.address}
                   variant="standard"
                   InputProps={{
                     readOnly: true,
                   }}
                 />
               </Grid>
-              <Grid item xs={9}>
+              <Grid item xs={10}>
                 <TextField
                   fullWidth
                   id="organisationCity"
                   label="City"
                   name="organisationCity"
-                  defaultValue={organisation.organisation.city}
+                  defaultValue={organisation.city}
                   variant="standard"
                   InputProps={{
                     readOnly: true,
                   }}
                 />
               </Grid>
-              <Grid item xs={9}>
+              <Grid item xs={10}>
                 <TextField
                   fullWidth
                   name="password"
@@ -213,7 +210,7 @@ export default function OrganisationProfile() {
                   }}
                 />
               </Grid>
-              <Grid item xs={9}>
+              <Grid item xs={10}>
                 <TextField
                   fullWidth
                   name="description"
@@ -225,24 +222,111 @@ export default function OrganisationProfile() {
                   defaultValue="Description"
                 />
               </Grid>
+              <Grid container justifyContent="flex-end" item xs={10}>
+                <Button type="submit" variant="contained" sx={{ mt: 1, mb: 0 }}>
+                  Edit profile
+                </Button>
+              </Grid>
             </Grid>
-            <Divider orientation="vertical" flexItem>
-              AA
-            </Divider>
+            <Grid item xs={1}>
+              <Divider
+                orientation="vertical"
+                sx={{ borderRightWidth: 4 }}
+              ></Divider>
+            </Grid>
             <Grid item xs={4}>
-              <Paper style={{ height: 500, width: "100%" }}>
-                <TableVirtuoso
-                  data={rows}
-                  components={VirtuosoTableComponents}
-                  fixedHeaderContent={fixedHeaderContent}
-                  itemContent={rowContent}
-                />
+              <Paper
+                style={{ height: 500, width: "100%" }}
+                component="form"
+                onSubmit={handleAdd}
+              >
+                <TableContainer sx={{ maxHeight: 440 }} label="Filled">
+                  {/* <Table stickyHeader aria-label="customized table"> */}
+                  <Table stickyHeader size="small" aria-label="a dense table">
+                    {/* aria-label="sticky table" */}
+                    <TableHead>
+                      <TableRow>
+                        {columns.map((column) => (
+                          <StyledTableCell
+                            key={column.id}
+                            align={column.align}
+                            style={{
+                              minWidth: column.minWidth,
+                            }}
+                          >
+                            {column.label}
+                          </StyledTableCell>
+                        ))}
+                        <StyledTableCell
+                          key="deleteButton"
+                          style={{
+                            minWidth: 50,
+                          }}
+                        ></StyledTableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {games.map((row) => {
+                        return (
+                          <StyledTableRow hover tabIndex={-1} key={row.code}>
+                            {columns.map((column) => {
+                              const value = row[column.id];
+                              return (
+                                <StyledTableCell
+                                  key={column.id}
+                                  align={column.align}
+                                >
+                                  {column.format && typeof value === "number"
+                                    ? column.format(value)
+                                    : value}
+                                </StyledTableCell>
+                              );
+                            })}
+                            <Tooltip title="Delete">
+                              <StyledTableCell key="deleteButton">
+                                <IconButton
+                                  aria-label="delete"
+                                  id="deleteButton"
+                                >
+                                  <DeleteIcon fontSize="inherit" />
+                                </IconButton>
+                              </StyledTableCell>
+                            </Tooltip>
+                          </StyledTableRow>
+                        );
+                      })}
+                      <StyledTableCell>
+                        <TextField
+                          fullWidth
+                          label="Name"
+                          id="BGName"
+                          name="BGName"
+                          variant="standard"
+                        />
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <TextField
+                          fullWidth
+                          label="Type"
+                          id="BGType"
+                          name="BGType"
+                          variant="standard"
+                        />
+                      </StyledTableCell>
+                      <Tooltip title="Add new board game">
+                        <StyledTableCell>
+                          <IconButton id="addBoardGame" type="submit">
+                            <AddIcon />
+                          </IconButton>
+                        </StyledTableCell>
+                      </Tooltip>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
               </Paper>
+              <Grid item></Grid>
             </Grid>
           </Grid>
-          <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
-            Sign Up
-          </Button>
         </Box>
       </Container>
     </ThemeProvider>

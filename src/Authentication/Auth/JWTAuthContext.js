@@ -92,7 +92,7 @@ export const AuthProvider = (props) => {
         const response = await axios.get("http://localhost:7293/api/profile");
         if (accessToken && response) {
           if (response.data.organisation) {
-            const organisation = response.data;
+            const organisation = response.data.organisation;
             dispatch({
               type: "INITIALIZE",
               payload: {
@@ -148,6 +148,7 @@ export const AuthProvider = (props) => {
       dispatch({
         type: "LOGIN",
         payload: {
+          user: null,
           organisation,
         },
       });

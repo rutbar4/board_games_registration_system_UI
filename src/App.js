@@ -14,6 +14,7 @@ import Typography from "@mui/material/Typography";
 import { useRoutes } from "react-router-dom";
 import Authenticated from "./Authentication/Auth/Authenticated";
 import { StyledEngineProvider } from "@mui/material/styles";
+import useAuth from "./Authentication/Auth/useAuth";
 
 const router = [
   {
@@ -34,11 +35,7 @@ const router = [
   },
   {
     path: "organisation_sign_up",
-    element: (
-      <Authenticated>
-        <OrganisationSignUp />
-      </Authenticated>
-    ),
+    element: <OrganisationSignUp />,
   },
   {
     path: "organisation_profile",
@@ -68,13 +65,14 @@ function Copyright(props) {
 function App() {
   const content = useRoutes(router);
   const theme = createTheme();
+  const auth = useAuth();
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <StyledEngineProvider>
         <MeniuToolbar />
-        {content}
+        {auth.isInitialized ? content : null}
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </StyledEngineProvider>
     </ThemeProvider>
