@@ -33,7 +33,12 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import AddIcon from "@mui/icons-material/Add";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 const columns = [
   { id: "name", label: "Board Game Name", minWidth: 50 },
   { id: "gameType", label: "Type", minWidth: 50 },
@@ -69,8 +74,21 @@ const Grid = styled(MuiGrid)(({ theme }) => ({
 
 const theme = createTheme();
 export default function OrganisationProfile() {
+  const [open, setOpen] = React.useState(false);
   const { organisation } = useAuth();
   console.log(organisation);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const [games, setGames] = React.useState([]);
   console.log(games);
@@ -112,10 +130,33 @@ export default function OrganisationProfile() {
     }
   };
 
+  const handleDelete = async (id) => {
+    {
+      const response = await axios.delete(
+        "http://localhost:7293/api/BoardGamePlay/DeleteOrganisationBG/" + id
+      );
+      if (response) {
+        console.log("Board Game deleted");
+        console.log(response);
+        setGames(response.data);
+        setOpen(true);
+      }
+    }
+  };
   if (!organisation) return null;
 
   return (
     <ThemeProvider theme={theme}>
+      <Snackbar
+        open={open}
+        autoHideDuration={4500}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="warning" sx={{ width: "100%" }}>
+          Board game deleted!
+        </Alert>
+      </Snackbar>
       <Typography variant="h6" gutterBottom align="center" mt={2}>
         My Organisation Profile
       </Typography>
@@ -258,7 +299,6 @@ export default function OrganisationProfile() {
                           </StyledTableCell>
                         ))}
                         <StyledTableCell
-                          key="deleteButton"
                           style={{
                             minWidth: 50,
                           }}
@@ -266,11 +306,16 @@ export default function OrganisationProfile() {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {games.map((row) => {
+                      {games.map((game) => {
                         return (
-                          <StyledTableRow hover tabIndex={-1} key={row.code}>
+                          <StyledTableRow
+                            hover
+                            tabIndex={-1}
+                            key={game.code}
+                            // onSubmit={handleDelete}
+                          >
                             {columns.map((column) => {
-                              const value = row[column.id];
+                              const value = game[column.id];
                               return (
                                 <StyledTableCell
                                   key={column.id}
@@ -286,7 +331,10 @@ export default function OrganisationProfile() {
                               <StyledTableCell key="deleteButton">
                                 <IconButton
                                   aria-label="delete"
-                                  id="deleteButton"
+                                  id={game.id}
+                                  onClick={() => {
+                                    handleDelete(game.id);
+                                  }}
                                 >
                                   <DeleteIcon fontSize="inherit" />
                                 </IconButton>
