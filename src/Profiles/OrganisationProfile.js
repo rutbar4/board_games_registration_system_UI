@@ -75,24 +75,34 @@ const Grid = styled(MuiGrid)(({ theme }) => ({
 const theme = createTheme();
 export default function OrganisationProfile() {
   const [open, setOpen] = React.useState(false);
+  const [openSuccess, setOpenSuccess] = React.useState({
+    open: false,
+    message: "",
+  });
+  const [isEditing, setIsEditing] = React.useState(false);
   const { organisation } = useAuth();
   console.log(organisation);
-
-  const handleClick = () => {
-    setOpen(true);
-  };
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
+  };
+  const handleCloseSuccess = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccess({
+      open: false,
+      message: "",
+    });
   };
 
   const [games, setGames] = React.useState([]);
   console.log(games);
   const isMountedRef = useRefMounted();
+
   const getAllBGByOrganisation = useCallback(async () => {
     try {
       const response = await axios.get(
@@ -114,6 +124,7 @@ export default function OrganisationProfile() {
 
   const handleAdd = async (event) => {
     {
+      event.preventDefault();
       const formData = new FormData(event.currentTarget);
       const data = {
         Name: formData.get("BGName"),
@@ -126,7 +137,13 @@ export default function OrganisationProfile() {
       );
       console.log("Board Game added");
       console.log(response.data);
-      if (response) setGames(response.data);
+      if (response) {
+        setGames(response.data);
+        setOpenSuccess({
+          open: true,
+          message: "Board Game added",
+        });
+      }
     }
   };
 
@@ -143,13 +160,56 @@ export default function OrganisationProfile() {
       }
     }
   };
+  const handleEditProfile = async (event) => {
+    {
+      event.preventDefault();
+      const formData = new FormData(event.currentTarget);
+      setIsEditing(false);
+      const data = {
+        ID: organisation.id,
+        Name: formData.get("organisationName"),
+        UserName: organisation.username,
+        Password: formData.get("password"),
+        Email: formData.get("email"),
+        Address: formData.get("organisationAddress"),
+        City: formData.get("organisationCity"),
+        Description: formData.get("description"),
+      };
+      const response = await axios.put(
+        "http://localhost:7293/api/Organisation/UpdateOrganisation",
+        data
+      );
+      if (response) {
+        console.log("Profile updated");
+        console.log(response);
+        setOpenSuccess({
+          open: true,
+          message: "Profile updated",
+        });
+      }
+    }
+  };
   if (!organisation) return null;
 
   return (
     <ThemeProvider theme={theme}>
       <Snackbar
+        open={openSuccess.open}
+        autoHideDuration={2000}
+        onClose={handleCloseSuccess}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSuccess}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          {openSuccess.message}
+        </Alert>
+      </Snackbar>
+      <Snackbar
         open={open}
-        autoHideDuration={4500}
+        autoHideDuration={2000}
         onClose={handleClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
@@ -171,7 +231,14 @@ export default function OrganisationProfile() {
           }}
         >
           <Grid container spacing={6} item xs={11}>
-            <Grid container spacing={2} item xs={7}>
+            <Grid
+              container
+              component="form"
+              spacing={2}
+              item
+              xs={7}
+              onSubmit={(e) => handleEditProfile(e)}
+            >
               <Grid item xs={10}>
                 <TextField
                   name="organisationName"
@@ -181,7 +248,7 @@ export default function OrganisationProfile() {
                   defaultValue={organisation.name}
                   variant="standard"
                   InputProps={{
-                    readOnly: true,
+                    readOnly: !isEditing,
                   }}
                 />
               </Grid>
@@ -207,7 +274,7 @@ export default function OrganisationProfile() {
                   defaultValue={organisation.email}
                   variant="standard"
                   InputProps={{
-                    readOnly: true,
+                    readOnly: !isEditing,
                   }}
                 />
               </Grid>
@@ -220,7 +287,7 @@ export default function OrganisationProfile() {
                   defaultValue={organisation.address}
                   variant="standard"
                   InputProps={{
-                    readOnly: true,
+                    readOnly: !isEditing,
                   }}
                 />
               </Grid>
@@ -233,7 +300,7 @@ export default function OrganisationProfile() {
                   defaultValue={organisation.city}
                   variant="standard"
                   InputProps={{
-                    readOnly: true,
+                    readOnly: !isEditing,
                   }}
                 />
               </Grid>
@@ -247,7 +314,7 @@ export default function OrganisationProfile() {
                   defaultValue="Password"
                   variant="standard"
                   InputProps={{
-                    readOnly: true,
+                    readOnly: !isEditing,
                   }}
                 />
               </Grid>
@@ -260,13 +327,41 @@ export default function OrganisationProfile() {
                   id="description"
                   multiline
                   rows={4}
-                  defaultValue="Description"
+                  placeholder="Write about your organisation"
+                  InputProps={{
+                    readOnly: !isEditing,
+                  }}
                 />
               </Grid>
               <Grid container justifyContent="flex-end" item xs={10}>
-                <Button type="submit" variant="contained" sx={{ mt: 1, mb: 0 }}>
-                  Edit profile
-                </Button>
+                {!isEditing && (
+                  <Button
+                    variant="contained"
+                    sx={{ mt: 1, mb: 0 }}
+                    onClick={() => setIsEditing(true)}
+                  >
+                    Edit profile
+                  </Button>
+                )}
+                {isEditing && (
+                  <>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      sx={{ mt: 1, mb: 0, mr: 1 }}
+                    >
+                      Update
+                    </Button>
+                    <Button
+                      variant="contained"
+                      sx={{ mt: 1, mb: 0 }}
+                      onClick={() => setIsEditing(false)}
+                      color="error"
+                    >
+                      Cancel
+                    </Button>
+                  </>
+                )}
               </Grid>
             </Grid>
             <Grid item xs={1}>
