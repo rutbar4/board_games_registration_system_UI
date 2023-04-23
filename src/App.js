@@ -6,6 +6,7 @@ import ReactDOM from "react-dom/client";
 import BGamePlayInputForm from "./GameInputForm/BGamePlayInputForm";
 import LogIn from "./Authentication/log-in/LogIn";
 import SignUp from "./Authentication/sign-up/SignUp";
+import OrganisationTableStat from "./Statistics/OrganisationTableStat";
 import OrganisationSignUp from "./Authentication/sign-up/OrganisationSignUp";
 import MeniuToolbar from "./Toolbars/MeniuToolbar";
 import OrganisationProfile from "./Profiles/OrganisationProfile";
@@ -36,6 +37,14 @@ const router = [
   {
     path: "organisation_sign_up",
     element: <OrganisationSignUp />,
+  },
+  {
+    path: "/org_stat",
+    element: (
+      <Authenticated>
+        <OrganisationTableStat />
+      </Authenticated>
+    ),
   },
   {
     path: "organisation_profile",

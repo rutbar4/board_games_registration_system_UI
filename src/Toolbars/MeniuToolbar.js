@@ -177,9 +177,20 @@ export default function MeniuToolbar() {
                 )}
               </ListItem>
               <ListItem disablePadding>
+                {!auth.organisation && (
+                  <ListItemButton
+                    onClick={() => {
+                      navigate("/");
+                    }}
+                  >
+                    <ListItemText primary="Register play" />
+                  </ListItemButton>
+                )}
+              </ListItem>
+              <ListItem disablePadding>
                 <ListItemButton
                   onClick={() => {
-                    // navigate("/sign_up");
+                    navigate("/org_stat");
                   }}
                 >
                   <ListItemText primary="Game Stat" />

@@ -25,6 +25,7 @@ export default function RegisterPlayBox() {
     winnerPoints: "",
     time_h: "",
     time_m: "",
+    DatePlayed: "",
   });
 
   // React.useEffect(() => {

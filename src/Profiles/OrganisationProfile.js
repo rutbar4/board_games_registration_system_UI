@@ -311,7 +311,7 @@ export default function OrganisationProfile() {
                   label="Password"
                   type="password"
                   id="password"
-                  defaultValue="Password"
+                  defaultValue={organisation.password}
                   variant="standard"
                   InputProps={{
                     readOnly: !isEditing,
@@ -327,6 +327,7 @@ export default function OrganisationProfile() {
                   id="description"
                   multiline
                   rows={4}
+                  defaultValue={organisation.description}
                   placeholder="Write about your organisation"
                   InputProps={{
                     readOnly: !isEditing,

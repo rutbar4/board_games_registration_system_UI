@@ -9,6 +9,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import FormGroup from "@mui/material/FormGroup";
 import { FormLabel } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 export default function GameResults({ setFormData, formData }) {
   const { players } = formData;
@@ -58,6 +59,21 @@ export default function GameResults({ setFormData, formData }) {
               );
             })}
           </FormGroup>
+        </Grid>
+        <Grid item xs={12}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              id="GamePlayDay"
+              name="GamePlayDay"
+              label="Game play day"
+              onChange={(value) =>
+                setFormData((data) => ({
+                  ...data,
+                  DatePlayed: value,
+                }))
+              }
+            />
+          </LocalizationProvider>
         </Grid>
         <Grid item xs={12}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
