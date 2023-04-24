@@ -55,7 +55,11 @@ export default function Top10PlayedGamesHistogram() {
           <ValueAxis />
           <BarSeries valueField="playCount" argumentField="boardGameName" />
           <Title
-            text={<Typography variant="h6s">Top 10 played games</Typography>}
+            text={
+              <Typography variant="h6s">
+                All time Top 10 played Board Games
+              </Typography>
+            }
           />
           <EventTracker />
           <Tooltip />

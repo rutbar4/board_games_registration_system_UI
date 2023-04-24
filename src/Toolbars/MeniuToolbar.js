@@ -107,9 +107,19 @@ export default function MeniuToolbar() {
                 noWrap
                 sx={{ flexGrow: 1 }}
               >
-                Board Game Registration System ({auth.user && auth.user.name})
+                Board Game Registration System
                 {/* LOGO */}
               </Typography>
+              {auth.user && (
+                <Typography
+                  variant="h6"
+                  color="inherit"
+                  noWrap
+                  sx={{ flexGrow: 1 }}
+                >
+                  Hi {auth.user.username}!{/* LOGO */}
+                </Typography>
+              )}
               <Button
                 color="inherit"
                 onClick={() => {
@@ -166,6 +176,17 @@ export default function MeniuToolbar() {
             <Divider />
             <List>
               <ListItem disablePadding>
+                {auth.isAuthenticated && auth.user && (
+                  <ListItemButton
+                    onClick={() => {
+                      navigate("/user_profile");
+                    }}
+                  >
+                    <ListItemText primary="My profile" />
+                  </ListItemButton>
+                )}
+              </ListItem>
+              <ListItem disablePadding>
                 {auth.isAuthenticated && auth.organisation && (
                   <ListItemButton
                     onClick={() => {
@@ -173,6 +194,17 @@ export default function MeniuToolbar() {
                     }}
                   >
                     <ListItemText primary="My profile" />
+                  </ListItemButton>
+                )}
+              </ListItem>
+              <ListItem disablePadding>
+                {auth.isAuthenticated && (auth.organisation || auth.user) && (
+                  <ListItemButton
+                    onClick={() => {
+                      navigate("/my_board_games");
+                    }}
+                  >
+                    <ListItemText primary="My board games" />
                   </ListItemButton>
                 )}
               </ListItem>
@@ -193,7 +225,7 @@ export default function MeniuToolbar() {
                     navigate("/org_stat");
                   }}
                 >
-                  <ListItemText primary="Game Stat" />
+                  <ListItemText primary="Game play statistics" />
                 </ListItemButton>
               </ListItem>
               <ListItem disablePadding>

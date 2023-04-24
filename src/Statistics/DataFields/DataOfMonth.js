@@ -19,6 +19,7 @@ export default function DataOfMonth() {
   const { organisation } = useAuth();
   const isMountedRef = useRefMounted();
   const [winners, setWinners] = React.useState(null);
+  const [boardGames, setBoardGames] = React.useState(null);
   const today = new Date();
 
   const GetTopMonthPlayer = async (datePicker) => {
@@ -45,9 +46,35 @@ export default function DataOfMonth() {
     }
   };
 
+  const GetTopMonthBoardGame = async (datePicker) => {
+    try {
+      const date = datePicker ? datePicker.$d : today;
+      console.log("dt");
+      console.log(date);
+      const response = await axios.post(
+        "http://localhost:7293/api/BoardGamePlay/TopMonthBoardGames/" +
+          organisation.id,
+        date
+      );
+      console.log(response);
+      setBoardGames(
+        response.data
+          ? response.data.boardGames +
+              "\n (played " +
+              response.data.count +
+              " times)"
+          : null
+      );
+      console.log(response);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(async () => {
     await GetTopMonthPlayer();
-  }, [GetTopMonthPlayer]);
+    await GetTopMonthBoardGame();
+  }, [GetTopMonthPlayer, GetTopMonthBoardGame]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -70,6 +97,7 @@ export default function DataOfMonth() {
                   defaultValue={dayjs(today)}
                   onChange={(e) => {
                     GetTopMonthPlayer(e);
+                    GetTopMonthBoardGame(e);
                   }}
                   views={["year", "month"]}
                 />
@@ -89,7 +117,7 @@ export default function DataOfMonth() {
               multiline
               id="playerOfMonth"
               variant="standard"
-              value={winners}
+              value={winners ?? ""}
               InputProps={{
                 readOnly: true,
               }}
@@ -103,12 +131,12 @@ export default function DataOfMonth() {
           </Typography>
           <Grid item>
             <TextField
-              defaultValue="b"
               placeholder="Here will be shown the most played board game(s) in a selected month"
               multiline
               inputProps={{ min: 0, style: { textAlign: "center" } }}
               id="boardGameOfMonth"
               variant="standard"
+              value={boardGames ?? ""}
               InputProps={{
                 readOnly: true,
               }}

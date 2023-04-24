@@ -2,9 +2,9 @@ import * as React from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Container } from "@mui/system";
 import useAuth from "../Authentication/Auth/useAuth";
-import PlaysTable from "./DataFealds/PlaysTable";
-import Top10PlayedGamesHistogram from "./DataFealds/Top10PlayedGamesHistogram";
-import DataOfMonth from "./DataFealds/DataOfMonth";
+import PlaysTable from "./DataFields/PlaysTable";
+import Top10PlayedGamesHistogram from "./DataFields/Top10PlayedGamesHistogram";
+import DataOfMonth from "./DataFields/DataOfMonth";
 import { Grid } from "@mui/material";
 
 const theme = createTheme();

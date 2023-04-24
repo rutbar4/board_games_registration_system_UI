@@ -10,6 +10,8 @@ import OrganisationTableStat from "./Statistics/OrganisationTableStat";
 import OrganisationSignUp from "./Authentication/sign-up/OrganisationSignUp";
 import MeniuToolbar from "./Toolbars/MeniuToolbar";
 import OrganisationProfile from "./Profiles/OrganisationProfile";
+import UserProfile from "./Profiles/UserProfile";
+import MyBoardGamesTable from "./MyBoardGames/MyBoardGamesTable";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { useRoutes } from "react-router-dom";
@@ -51,6 +53,22 @@ const router = [
     element: (
       <Authenticated>
         <OrganisationProfile />
+      </Authenticated>
+    ),
+  },
+  {
+    path: "user_profile",
+    element: (
+      <Authenticated>
+        <UserProfile />
+      </Authenticated>
+    ),
+  },
+  {
+    path: "my_board_games",
+    element: (
+      <Authenticated>
+        <MyBoardGamesTable />
       </Authenticated>
     ),
   },

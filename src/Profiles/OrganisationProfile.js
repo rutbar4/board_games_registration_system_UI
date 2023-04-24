@@ -10,9 +10,6 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Container from "@mui/material/Container";
@@ -20,7 +17,6 @@ import Divider from "@mui/material/Divider";
 import MuiGrid from "@mui/material/Grid";
 import { styled } from "@mui/material/styles";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import { useNavigate } from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
@@ -35,34 +31,11 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import AddIcon from "@mui/icons-material/Add";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import BoardGamesList from "../MyBoardGames/MyBoardGamesTable";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
-const columns = [
-  { id: "name", label: "Board Game Name", minWidth: 50 },
-  { id: "gameType", label: "Type", minWidth: 50 },
-  // { id: "deleteButton", label: "55", minWidth: 60 },
-];
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
 
 const Grid = styled(MuiGrid)(({ theme }) => ({
   width: "100%",
@@ -99,67 +72,6 @@ export default function OrganisationProfile() {
     });
   };
 
-  const [games, setGames] = React.useState([]);
-  console.log(games);
-  const isMountedRef = useRefMounted();
-
-  const getAllBGByOrganisation = useCallback(async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:7293/api/BoardGamePlay/GetAllBGDataByOrganisation/" +
-          organisation.id
-      );
-
-      if (isMountedRef.current) {
-        setGames(response.data);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [isMountedRef]);
-
-  useEffect(() => {
-    getAllBGByOrganisation();
-  }, [getAllBGByOrganisation]);
-
-  const handleAdd = async (event) => {
-    {
-      event.preventDefault();
-      const formData = new FormData(event.currentTarget);
-      const data = {
-        Name: formData.get("BGName"),
-        GameType: formData.get("BGType"),
-        OrganisationId: organisation.id,
-      };
-      const response = await axios.post(
-        "http://localhost:7293/api/BoardGamePlay/AddOrganisationBG",
-        data
-      );
-      console.log("Board Game added");
-      console.log(response.data);
-      if (response) {
-        setGames(response.data);
-        setOpenSuccess({
-          open: true,
-          message: "Board Game added",
-        });
-      }
-    }
-  };
-
-  const handleDelete = async (id) => {
-    {
-      const response = await axios.delete(
-        "http://localhost:7293/api/BoardGamePlay/DeleteOrganisationBG/" + id
-      );
-      if (response) {
-        console.log("Board Game deleted");
-        console.log(response);
-        setGames(response.data);
-        setOpen(true);
-      }
-    }
-  };
   const handleEditProfile = async (event) => {
     {
       event.preventDefault();
@@ -212,267 +124,161 @@ export default function OrganisationProfile() {
         autoHideDuration={2000}
         onClose={handleClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert onClose={handleClose} severity="warning" sx={{ width: "100%" }}>
-          Board game deleted!
-        </Alert>
-      </Snackbar>
-      <Typography variant="h6" gutterBottom align="center" mt={2}>
-        My Organisation Profile
-      </Typography>
-      <Container component="main" maxWidth="lg">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 7,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Grid container spacing={6} item xs={11}>
-            <Grid
-              container
-              component="form"
-              spacing={2}
-              item
-              xs={7}
-              onSubmit={(e) => handleEditProfile(e)}
+      ></Snackbar>
+      <>
+        <Container component="main" maxWidth="sm" alignItems="center">
+          <Paper
+            variant="outlined"
+            sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 3 } }}
+          >
+            <Typography variant="h6" gutterBottom align="center">
+              My Organisation Profile
+            </Typography>
+            <CssBaseline />
+            <Box
+              sx={{
+                marginTop: 5,
+              }}
             >
-              <Grid item xs={10}>
-                <TextField
-                  name="organisationName"
-                  fullWidth
-                  id="organisationName"
-                  label="Name of organisation"
-                  defaultValue={organisation.name}
-                  variant="standard"
-                  InputProps={{
-                    readOnly: !isEditing,
-                  }}
-                />
+              <Grid container item xs={12}>
+                <Grid
+                  container
+                  component="form"
+                  spacing={2}
+                  item
+                  onSubmit={(e) => handleEditProfile(e)}
+                >
+                  <Grid item>
+                    <TextField
+                      name="organisationName"
+                      fullWidth
+                      id="organisationName"
+                      label="Name of organisation"
+                      defaultValue={organisation.name}
+                      variant="standard"
+                      InputProps={{
+                        readOnly: !isEditing,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <TextField
+                      name="organisationUsername"
+                      fullWidth
+                      id="organisationUsername"
+                      label="Username"
+                      defaultValue={organisation.username}
+                      variant="standard"
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <TextField
+                      fullWidth
+                      id="email"
+                      label="E-mail address"
+                      name="email"
+                      defaultValue={organisation.email}
+                      variant="standard"
+                      InputProps={{
+                        readOnly: !isEditing,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <TextField
+                      fullWidth
+                      id="organisationAddress"
+                      label="Address of location"
+                      name="organisationAddress"
+                      defaultValue={organisation.address}
+                      variant="standard"
+                      InputProps={{
+                        readOnly: !isEditing,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <TextField
+                      fullWidth
+                      id="organisationCity"
+                      label="City"
+                      name="organisationCity"
+                      defaultValue={organisation.city}
+                      variant="standard"
+                      InputProps={{
+                        readOnly: !isEditing,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <TextField
+                      fullWidth
+                      name="password"
+                      label="Password"
+                      type="password"
+                      id="password"
+                      defaultValue={organisation.password}
+                      variant="standard"
+                      InputProps={{
+                        readOnly: !isEditing,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <TextField
+                      fullWidth
+                      name="description"
+                      label="Description"
+                      type="description"
+                      id="description"
+                      multiline
+                      rows={4}
+                      defaultValue={organisation.description}
+                      placeholder="Write about your organisation"
+                      InputProps={{
+                        readOnly: !isEditing,
+                      }}
+                    />
+                  </Grid>
+                  <Grid container justifyContent="flex-end" item>
+                    {!isEditing && (
+                      <Button
+                        variant="contained"
+                        sx={{ mt: 1, mb: 0 }}
+                        onClick={() => setIsEditing(true)}
+                      >
+                        Edit profile
+                      </Button>
+                    )}
+                    {isEditing && (
+                      <>
+                        <Button
+                          type="submit"
+                          variant="contained"
+                          sx={{ mt: 1, mb: 0, mr: 1 }}
+                        >
+                          Update
+                        </Button>
+                        <Button
+                          variant="contained"
+                          sx={{ mt: 1, mb: 0 }}
+                          onClick={() => setIsEditing(false)}
+                          color="error"
+                        >
+                          Cancel
+                        </Button>
+                      </>
+                    )}
+                  </Grid>
+                </Grid>
               </Grid>
-              <Grid item xs={10}>
-                <TextField
-                  name="organisationUsername"
-                  fullWidth
-                  id="organisationUsername"
-                  label="Username"
-                  defaultValue={organisation.username}
-                  variant="standard"
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                />
-              </Grid>
-              <Grid item xs={10}>
-                <TextField
-                  fullWidth
-                  id="email"
-                  label="E-mail address"
-                  name="email"
-                  defaultValue={organisation.email}
-                  variant="standard"
-                  InputProps={{
-                    readOnly: !isEditing,
-                  }}
-                />
-              </Grid>
-              <Grid item xs={10}>
-                <TextField
-                  fullWidth
-                  id="organisationAddress"
-                  label="Address of location"
-                  name="organisationAddress"
-                  defaultValue={organisation.address}
-                  variant="standard"
-                  InputProps={{
-                    readOnly: !isEditing,
-                  }}
-                />
-              </Grid>
-              <Grid item xs={10}>
-                <TextField
-                  fullWidth
-                  id="organisationCity"
-                  label="City"
-                  name="organisationCity"
-                  defaultValue={organisation.city}
-                  variant="standard"
-                  InputProps={{
-                    readOnly: !isEditing,
-                  }}
-                />
-              </Grid>
-              <Grid item xs={10}>
-                <TextField
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  defaultValue={organisation.password}
-                  variant="standard"
-                  InputProps={{
-                    readOnly: !isEditing,
-                  }}
-                />
-              </Grid>
-              <Grid item xs={10}>
-                <TextField
-                  fullWidth
-                  name="description"
-                  label="Description"
-                  type="description"
-                  id="description"
-                  multiline
-                  rows={4}
-                  defaultValue={organisation.description}
-                  placeholder="Write about your organisation"
-                  InputProps={{
-                    readOnly: !isEditing,
-                  }}
-                />
-              </Grid>
-              <Grid container justifyContent="flex-end" item xs={10}>
-                {!isEditing && (
-                  <Button
-                    variant="contained"
-                    sx={{ mt: 1, mb: 0 }}
-                    onClick={() => setIsEditing(true)}
-                  >
-                    Edit profile
-                  </Button>
-                )}
-                {isEditing && (
-                  <>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      sx={{ mt: 1, mb: 0, mr: 1 }}
-                    >
-                      Update
-                    </Button>
-                    <Button
-                      variant="contained"
-                      sx={{ mt: 1, mb: 0 }}
-                      onClick={() => setIsEditing(false)}
-                      color="error"
-                    >
-                      Cancel
-                    </Button>
-                  </>
-                )}
-              </Grid>
-            </Grid>
-            <Grid item xs={1}>
-              <Divider
-                orientation="vertical"
-                sx={{ borderRightWidth: 4 }}
-              ></Divider>
-            </Grid>
-            <Grid item xs={4}>
-              <Paper
-                style={{ height: 500, width: "100%" }}
-                component="form"
-                onSubmit={handleAdd}
-              >
-                <TableContainer sx={{ maxHeight: 440 }} label="Filled">
-                  {/* <Table stickyHeader aria-label="customized table"> */}
-                  <Table stickyHeader size="small" aria-label="a dense table">
-                    {/* aria-label="sticky table" */}
-                    <TableHead>
-                      <TableRow>
-                        {columns.map((column) => (
-                          <StyledTableCell
-                            key={column.id}
-                            align={column.align}
-                            style={{
-                              minWidth: column.minWidth,
-                            }}
-                          >
-                            {column.label}
-                          </StyledTableCell>
-                        ))}
-                        <StyledTableCell
-                          style={{
-                            minWidth: 50,
-                          }}
-                        ></StyledTableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {games.map((game) => {
-                        return (
-                          <StyledTableRow
-                            hover
-                            tabIndex={-1}
-                            key={game.code}
-                            // onSubmit={handleDelete}
-                          >
-                            {columns.map((column) => {
-                              const value = game[column.id];
-                              return (
-                                <StyledTableCell
-                                  key={column.id}
-                                  align={column.align}
-                                >
-                                  {column.format && typeof value === "number"
-                                    ? column.format(value)
-                                    : value}
-                                </StyledTableCell>
-                              );
-                            })}
-                            <Tooltip title="Delete">
-                              <StyledTableCell key="deleteButton">
-                                <IconButton
-                                  aria-label="delete"
-                                  id={game.id}
-                                  onClick={() => {
-                                    handleDelete(game.id);
-                                  }}
-                                >
-                                  <DeleteIcon fontSize="inherit" />
-                                </IconButton>
-                              </StyledTableCell>
-                            </Tooltip>
-                          </StyledTableRow>
-                        );
-                      })}
-                      <StyledTableCell>
-                        <TextField
-                          fullWidth
-                          label="Name"
-                          id="BGName"
-                          name="BGName"
-                          variant="standard"
-                        />
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <TextField
-                          fullWidth
-                          label="Type"
-                          id="BGType"
-                          name="BGType"
-                          variant="standard"
-                        />
-                      </StyledTableCell>
-                      <Tooltip title="Add new board game">
-                        <StyledTableCell>
-                          <IconButton id="addBoardGame" type="submit">
-                            <AddIcon />
-                          </IconButton>
-                        </StyledTableCell>
-                      </Tooltip>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Paper>
-              <Grid item></Grid>
-            </Grid>
-          </Grid>
-        </Box>
-      </Container>
+            </Box>
+          </Paper>
+        </Container>
+      </>
     </ThemeProvider>
   );
 }

@@ -101,7 +101,7 @@ export const AuthProvider = (props) => {
               },
             });
           } else if (response.data.user) {
-            const user = response.data;
+            const user = response.data.user;
             dispatch({
               type: "INITIALIZE",
               payload: {
