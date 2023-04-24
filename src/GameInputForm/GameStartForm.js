@@ -40,9 +40,7 @@ export default function GameStartForm({ setFormData, formData }) {
     getAllOrganisationsNames();
   }, [getAllOrganisationsNames]);
 
-  // const [selected, setSelected] = React.useState("");
   const changeSelectOptionHandler = (event) => {
-    // setSelected(event.target.innerText);
     getBGByOrganisation(event.target.innerText);
   };
 
