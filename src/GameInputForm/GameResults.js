@@ -10,9 +10,11 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import FormGroup from "@mui/material/FormGroup";
 import { FormLabel } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
 
 export default function GameResults({ setFormData, formData }) {
   const { players } = formData;
+  const today = new Date();
 
   const [selectedWinner, setSelectedWinner] = React.useState("");
 
@@ -65,11 +67,12 @@ export default function GameResults({ setFormData, formData }) {
             <DatePicker
               id="GamePlayDay"
               name="GamePlayDay"
+              defaultValue={dayjs(today)}
               label="Game play day"
               onChange={(value) =>
                 setFormData((data) => ({
                   ...data,
-                  DatePlayed: value,
+                  DatePlayed: value === null ? dayjs(today) : value,
                 }))
               }
             />

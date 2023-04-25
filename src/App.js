@@ -3,15 +3,17 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import ReactDOM from "react-dom/client";
-import BGamePlayInputForm from "./GameInputForm/BGamePlayInputForm";
+import BGamePlayInputForm from "./GameInputForm/RegisterPlayForm";
 import LogIn from "./Authentication/log-in/LogIn";
 import SignUp from "./Authentication/sign-up/SignUp";
-import OrganisationTableStat from "./Statistics/OrganisationTableStat";
+import OrganisationTableStat from "./Statistics/Organisation/OrganisationTableStat";
+import UserTableStat from "./Statistics/User/UserTableStat";
 import OrganisationSignUp from "./Authentication/sign-up/OrganisationSignUp";
 import MeniuToolbar from "./Toolbars/MeniuToolbar";
 import OrganisationProfile from "./Profiles/OrganisationProfile";
 import UserProfile from "./Profiles/UserProfile";
-import MyBoardGamesTable from "./MyBoardGames/MyBoardGamesTable";
+import OrganisationBoardGamesTable from "./MyBoardGames/OrganisationsBoardGamesTable";
+import UserBoardGamesTable from "./MyBoardGames/UserBoardGamesTable";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { useRoutes } from "react-router-dom";
@@ -49,6 +51,14 @@ const router = [
     ),
   },
   {
+    path: "/user_stat",
+    element: (
+      <Authenticated>
+        <UserTableStat />
+      </Authenticated>
+    ),
+  },
+  {
     path: "organisation_profile",
     element: (
       <Authenticated>
@@ -65,10 +75,18 @@ const router = [
     ),
   },
   {
-    path: "my_board_games",
+    path: "organisation_board_games",
     element: (
       <Authenticated>
-        <MyBoardGamesTable />
+        <OrganisationBoardGamesTable />
+      </Authenticated>
+    ),
+  },
+  {
+    path: "user_board_games",
+    element: (
+      <Authenticated>
+        <UserBoardGamesTable />
       </Authenticated>
     ),
   },

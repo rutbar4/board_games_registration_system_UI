@@ -1,8 +1,8 @@
 import * as React from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Container } from "@mui/system";
-import useRefMounted from "../../hooks/useRefMounted";
-import useAuth from "../../Authentication/Auth/useAuth";
+import useRefMounted from "../../../hooks/useRefMounted";
+import useAuth from "../../../Authentication/Auth/useAuth";
 import { Grid, TextField, Typography } from "@mui/material";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -16,7 +16,7 @@ import dayjs from "dayjs";
 const theme = createTheme();
 
 export default function DataOfMonth() {
-  const { organisation } = useAuth();
+  const { user } = useAuth();
   const isMountedRef = useRefMounted();
   const [winners, setWinners] = React.useState(null);
   const [boardGames, setBoardGames] = React.useState(null);
@@ -29,7 +29,7 @@ export default function DataOfMonth() {
       console.log(date);
       const response = await axios.post(
         "http://localhost:7293/api/BoardGamePlay/TopMonthPlayers/" +
-          organisation.id,
+          user.id,
         date
       );
       setWinners(
@@ -53,7 +53,7 @@ export default function DataOfMonth() {
       console.log(date);
       const response = await axios.post(
         "http://localhost:7293/api/BoardGamePlay/TopMonthBoardGames/" +
-          organisation.id,
+          user.id,
         date
       );
       console.log(response);

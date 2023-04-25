@@ -4,17 +4,26 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Grid from "@mui/material/Grid";
+import useAuth from "../Authentication/Auth/useAuth";
 
 export default function Review({ setFormData, formData }) {
+  const auth = useAuth();
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
         Game summary
       </Typography>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
-          Organisation:
-        </Grid>
+        {!auth.user && (
+          <Grid item xs={12}>
+            Organisation:
+          </Grid>
+        )}
+        {auth.user && (
+          <Grid item xs={12}>
+            Organisation/My Name:
+          </Grid>
+        )}
         <Grid item xs={12}>
           <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
             {formData.organisation}

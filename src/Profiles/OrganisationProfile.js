@@ -1,37 +1,18 @@
 import * as React from "react";
-import ReactDOM from "react-dom";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import useRefMounted from "../hooks/useRefMounted";
-import { useEffect, useCallback } from "react";
 import axios from "axios";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Container from "@mui/material/Container";
-import Divider from "@mui/material/Divider";
 import MuiGrid from "@mui/material/Grid";
 import { styled } from "@mui/material/styles";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import useAuth from "../Authentication/Auth/useAuth";
-import DeleteIcon from "@mui/icons-material/Delete";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
-import AddIcon from "@mui/icons-material/Add";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-import BoardGamesList from "../MyBoardGames/MyBoardGamesTable";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;

@@ -1,5 +1,4 @@
 import * as React from "react";
-// import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
@@ -198,10 +197,19 @@ export default function MeniuToolbar() {
                 )}
               </ListItem>
               <ListItem disablePadding>
-                {auth.isAuthenticated && (auth.organisation || auth.user) && (
+                {auth.isAuthenticated && auth.organisation && (
                   <ListItemButton
                     onClick={() => {
-                      navigate("/my_board_games");
+                      navigate("/organisation_board_games");
+                    }}
+                  >
+                    <ListItemText primary="My board games" />
+                  </ListItemButton>
+                )}
+                {auth.isAuthenticated && auth.user && (
+                  <ListItemButton
+                    onClick={() => {
+                      navigate("/user_board_games");
                     }}
                   >
                     <ListItemText primary="My board games" />
@@ -220,22 +228,35 @@ export default function MeniuToolbar() {
                 )}
               </ListItem>
               <ListItem disablePadding>
-                <ListItemButton
-                  onClick={() => {
-                    navigate("/org_stat");
-                  }}
-                >
-                  <ListItemText primary="Game play statistics" />
-                </ListItemButton>
+                {auth.isAuthenticated && auth.organisation && (
+                  <ListItemButton
+                    onClick={() => {
+                      navigate("/org_stat");
+                    }}
+                  >
+                    <ListItemText primary="Game play statistics" />
+                  </ListItemButton>
+                )}
+                {auth.isAuthenticated && auth.user && (
+                  <ListItemButton
+                    onClick={() => {
+                      navigate("/user_stat");
+                    }}
+                  >
+                    <ListItemText primary="Game play statistics" />
+                  </ListItemButton>
+                )}
               </ListItem>
               <ListItem disablePadding>
-                <ListItemButton
-                  onClick={() => {
-                    // navigate("/sign_up");
-                  }}
-                >
-                  <ListItemText primary="Tournaments" />
-                </ListItemButton>
+                {auth.organisation && (
+                  <ListItemButton
+                    onClick={() => {
+                      // navigate("/sign_up");
+                    }}
+                  >
+                    <ListItemText primary="Tournaments" />
+                  </ListItemButton>
+                )}
               </ListItem>
             </List>
             <Divider />

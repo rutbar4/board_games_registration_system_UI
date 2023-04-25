@@ -1,5 +1,5 @@
 import * as React from "react";
-import RegisterPlayBox from "./RegisterPlayBox";
+import RegisterPlayBox from "./RegisterPlayForm";
 
 export default function BGamePlayInputForm() {
   return (

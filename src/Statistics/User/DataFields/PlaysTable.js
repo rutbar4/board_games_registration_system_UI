@@ -8,8 +8,8 @@ import TableRow from "@mui/material/TableRow";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import { useEffect, useCallback } from "react";
-import useRefMounted from "../../hooks/useRefMounted";
-import useAuth from "../../Authentication/Auth/useAuth";
+import useRefMounted from "../../../hooks/useRefMounted";
+import useAuth from "../../../Authentication/Auth/useAuth";
 import axios from "axios";
 import { Typography } from "@mui/material";
 
@@ -23,7 +23,7 @@ const columns = [
 ];
 
 export default function PlaysTable() {
-  const { organisation } = useAuth();
+  const { user } = useAuth();
   const [plays, setPlays] = React.useState([]);
 
   console.log(plays);
@@ -31,10 +31,10 @@ export default function PlaysTable() {
 
   const GetAllPlaysByOrgnisation = useCallback(async () => {
     try {
-      console.log(organisation.id);
+      console.log(user.id);
       const response = await axios.get(
-        "http://localhost:7293/api/BoardGamePlay/AllPlaysByOrganisationId/" +
-          organisation.id
+        "http://localhost:7293/api/BoardGamePlay/AllPlaysByUserId/" +
+          user.id
       );
 
       if (isMountedRef.current) {

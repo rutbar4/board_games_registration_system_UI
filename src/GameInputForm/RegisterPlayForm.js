@@ -28,12 +28,6 @@ export default function RegisterPlayBox() {
     DatePlayed: "",
   });
 
-  // React.useEffect(() => {
-  //   console.log("Debug from Checkout.js");
-  //   console.log(formData);
-  //   console.log("End of debug from Checkout.js");
-  // });
-
   function getStepContent(step) {
     switch (step) {
       case 0:
@@ -56,6 +50,16 @@ export default function RegisterPlayBox() {
     if (activeStep === 2) {
       const response = await axios.post(
         "http://localhost:7293/api/BoardGamePlay/register",
+        formData
+      );
+      console.log("Game play registered");
+    }
+  };
+
+  const handleFinishByUser = async () => {
+    if (activeStep === 2) {
+      const response = await axios.post(
+        "http://localhost:7293/api/BoardGamePlay/registerByUser",
         formData
       );
       console.log("Game play registered");
@@ -109,7 +113,6 @@ export default function RegisterPlayBox() {
                 }}
                 sx={{ mt: 3, ml: 1 }}
               >
-                {/* {activeStep === steps.length - 2 ? "Complete Play" : "Next"} */}
                 {activeStep === steps.length - 1 ? "Finish" : ""}
                 {activeStep === steps.length - 2 ? "Complete Play" : ""}
                 {activeStep === steps.length - 3 ? "Next" : ""}
