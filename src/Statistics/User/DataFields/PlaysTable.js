@@ -12,20 +12,22 @@ import useRefMounted from "../../../hooks/useRefMounted";
 import useAuth from "../../../Authentication/Auth/useAuth";
 import axios from "axios";
 import { Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const theme = createTheme();
-const columns = [
-  { id: "boardGameName", label: "Board Game Name" },
-  { id: "boardGameType", label: "Type" },
-  { id: "playersCount", label: "Number of players" },
-  { id: "winner", label: "Winner" },
-  { id: "winnerPoints", label: "Winning points" },
-];
 
 export default function PlaysTable() {
   const { user } = useAuth();
   const [plays, setPlays] = React.useState([]);
-
+  const { t } = useTranslation();
+  const columns = [
+    { id: "boardGameName", label: t("Board Game Name" )},
+    { id: "boardGameType", label:t( "Type" )},
+    { id: "playersCount", label: t("Number of players") },
+    { id: "winner", label: t("Winner") },
+    { id: "winnerPoints", label: t("Winning points") },
+  ];
+  
   console.log(plays);
   const isMountedRef = useRefMounted();
 
@@ -64,7 +66,7 @@ export default function PlaysTable() {
                   id="playsTableTitle"
                   component="div"
                 >
-                  All Board Game Plays
+                  {t("All Board Game Plays")}
                 </Typography>
               </TableCell>
             </TableRow>

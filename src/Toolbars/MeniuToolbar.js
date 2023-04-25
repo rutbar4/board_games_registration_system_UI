@@ -9,7 +9,7 @@ import Grid from "@mui/material/Grid";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../Authentication/Auth/useAuth";
 import LogIn from "../Authentication/log-in/LogIn";
-
+import LanguageSwitcher from "./LanguageSwitcher";
 import { styled, useTheme } from "@mui/material/styles";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -24,6 +24,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
+import { useTranslation } from "react-i18next";
 
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -72,6 +73,7 @@ export default function MeniuToolbar() {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const auth = useAuth();
+  const { t } = useTranslation();
 
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -85,6 +87,7 @@ export default function MeniuToolbar() {
 
   return (
     <Grid container spacing={2} alignItems="center" justifyContent="center">
+      <LanguageSwitcher />
       <Grid item xs={9} mt={2}>
         <Box>
           <AppBar position="static" open={open}>
@@ -106,8 +109,8 @@ export default function MeniuToolbar() {
                 noWrap
                 sx={{ flexGrow: 1 }}
               >
-                Board Game Registration System
-                {/* LOGO */}
+                {t("Board Game Registration System")}
+                
               </Typography>
               {auth.user && (
                 <Typography
@@ -116,7 +119,7 @@ export default function MeniuToolbar() {
                   noWrap
                   sx={{ flexGrow: 1 }}
                 >
-                  Hi {auth.user.username}!{/* LOGO */}
+                  ({t("Hi ")} {auth.user.username}!)
                 </Typography>
               )}
               <Button
@@ -124,8 +127,8 @@ export default function MeniuToolbar() {
                 onClick={() => {
                   navigate("/");
                 }}
-              >
-                Register Play
+              >{t("Register play")}
+                
               </Button>
               {!auth.isAuthenticated && (
                 <Button
@@ -133,8 +136,8 @@ export default function MeniuToolbar() {
                   onClick={() => {
                     navigate("/log_in");
                   }}
-                >
-                  Log in
+                >{t("Log in")}
+                  
                 </Button>
               )}
               {auth.isAuthenticated && (
@@ -143,8 +146,8 @@ export default function MeniuToolbar() {
                   onClick={() => {
                     logout();
                   }}
-                >
-                  Log out
+                >{t("Log out")}
+                  
                 </Button>
               )}
             </Toolbar>
@@ -181,7 +184,7 @@ export default function MeniuToolbar() {
                       navigate("/user_profile");
                     }}
                   >
-                    <ListItemText primary="My profile" />
+                    <ListItemText primary={t("My profile")} />
                   </ListItemButton>
                 )}
               </ListItem>
@@ -192,7 +195,7 @@ export default function MeniuToolbar() {
                       navigate("/organisation_profile");
                     }}
                   >
-                    <ListItemText primary="My profile" />
+                    <ListItemText primary={t("My profile")}  />
                   </ListItemButton>
                 )}
               </ListItem>
@@ -203,7 +206,7 @@ export default function MeniuToolbar() {
                       navigate("/organisation_board_games");
                     }}
                   >
-                    <ListItemText primary="My board games" />
+                    <ListItemText primary={t("My board games")} />
                   </ListItemButton>
                 )}
                 {auth.isAuthenticated && auth.user && (
@@ -212,7 +215,7 @@ export default function MeniuToolbar() {
                       navigate("/user_board_games");
                     }}
                   >
-                    <ListItemText primary="My board games" />
+                    <ListItemText primary={t("My board games")} />
                   </ListItemButton>
                 )}
               </ListItem>
@@ -223,7 +226,7 @@ export default function MeniuToolbar() {
                       navigate("/");
                     }}
                   >
-                    <ListItemText primary="Register play" />
+                    <ListItemText primary={t("Register play")} />
                   </ListItemButton>
                 )}
               </ListItem>
@@ -234,7 +237,7 @@ export default function MeniuToolbar() {
                       navigate("/org_stat");
                     }}
                   >
-                    <ListItemText primary="Game play statistics" />
+                    <ListItemText primary={t("Game play statistics")} />
                   </ListItemButton>
                 )}
                 {auth.isAuthenticated && auth.user && (
@@ -243,7 +246,7 @@ export default function MeniuToolbar() {
                       navigate("/user_stat");
                     }}
                   >
-                    <ListItemText primary="Game play statistics" />
+                    <ListItemText primary={t("Game play statistics")} />
                   </ListItemButton>
                 )}
               </ListItem>
@@ -254,7 +257,7 @@ export default function MeniuToolbar() {
                       // navigate("/sign_up");
                     }}
                   >
-                    <ListItemText primary="Tournaments" />
+                    <ListItemText primary={t("Tournaments")} />
                   </ListItemButton>
                 )}
               </ListItem>

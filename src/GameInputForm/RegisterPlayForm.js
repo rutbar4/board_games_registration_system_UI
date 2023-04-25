@@ -12,8 +12,7 @@ import GameStartForm from "./GameStartForm";
 import GameResults from "./GameResults";
 import Review from "./Review";
 import axios from "axios";
-
-const steps = ["Starting board game", "Game results", "Review played game"];
+import { useTranslation } from "react-i18next";
 
 export default function RegisterPlayBox() {
   const [formData, setFormData] = useState({
@@ -27,7 +26,13 @@ export default function RegisterPlayBox() {
     time_m: "",
     DatePlayed: "",
   });
+  const { t } = useTranslation();
 
+  const steps = [
+    t("Starting board game"),
+    t("Game results"),
+    t("Review played game"),
+  ];
   function getStepContent(step) {
     switch (step) {
       case 0:
@@ -56,15 +61,15 @@ export default function RegisterPlayBox() {
     }
   };
 
-  const handleFinishByUser = async () => {
-    if (activeStep === 2) {
-      const response = await axios.post(
-        "http://localhost:7293/api/BoardGamePlay/registerByUser",
-        formData
-      );
-      console.log("Game play registered");
-    }
-  };
+  // const handleFinishByUser = async () => {
+  //   if (activeStep === 2) {
+  //     const response = await axios.post(
+  //       "http://localhost:7293/api/BoardGamePlay/registerByUser",
+  //       formData
+  //     );
+  //     console.log("Game play registered");
+  //   }
+  // };
 
   const handleBack = () => {
     setActiveStep(activeStep - 1);
@@ -77,7 +82,7 @@ export default function RegisterPlayBox() {
         sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 3 } }}
       >
         <Typography component="h1" variant="h4" align="center">
-          Board Game Play
+          {t("Board Game Play")}
         </Typography>
         <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
           {steps.map((label) => (
@@ -89,10 +94,10 @@ export default function RegisterPlayBox() {
         {activeStep === steps.length ? (
           <React.Fragment>
             <Typography variant="h5" gutterBottom>
-              Thank you for your input.
+              {t("Thank you for your input.")}
             </Typography>
             <Typography variant="subtitle1">
-              Your board game play has been recorded
+              {t("Your board game play has been recorded")}
             </Typography>
           </React.Fragment>
         ) : (
@@ -101,7 +106,7 @@ export default function RegisterPlayBox() {
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
               {activeStep !== 0 && activeStep !== 3 && (
                 <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
-                  Back
+                  {t("Back")}
                 </Button>
               )}
 
@@ -113,9 +118,9 @@ export default function RegisterPlayBox() {
                 }}
                 sx={{ mt: 3, ml: 1 }}
               >
-                {activeStep === steps.length - 1 ? "Finish" : ""}
-                {activeStep === steps.length - 2 ? "Complete Play" : ""}
-                {activeStep === steps.length - 3 ? "Next" : ""}
+                {activeStep === steps.length - 1 ? t("Finish") : ""}
+                {activeStep === steps.length - 2 ? t("Complete play") : ""}
+                {activeStep === steps.length - 3 ? t("Next") : ""}
               </Button>
             </Box>
           </React.Fragment>

@@ -5,23 +5,26 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Grid from "@mui/material/Grid";
 import useAuth from "../Authentication/Auth/useAuth";
+import { useTranslation } from "react-i18next";
 
 export default function Review({ setFormData, formData }) {
   const auth = useAuth();
+  const { t } = useTranslation();
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        Game summary
+        {t("Game summary")}
       </Typography>
       <Grid container spacing={3}>
         {!auth.user && (
           <Grid item xs={12}>
-            Organisation:
+            {t("Organisation:")}
           </Grid>
         )}
         {auth.user && (
           <Grid item xs={12}>
-            Organisation/My Name:
+            {t("Organisation/My Name:")}
           </Grid>
         )}
         <Grid item xs={12}>
@@ -30,7 +33,7 @@ export default function Review({ setFormData, formData }) {
           </Typography>
         </Grid>
         <Grid item xs={12} sm={6}>
-          Board game name:
+          {t("Board game name:")}
           <Grid item xs={12}>
             <Typography sx={{ fontWeight: "bold" }}>
               {formData.boardGameName}
@@ -39,7 +42,7 @@ export default function Review({ setFormData, formData }) {
         </Grid>
         <Grid item xs={12} sm={6}>
           {/* //padaryti kad būtų galima pasirinkti tipą ar įrašyti iš esamų */}
-          Board game type:
+          {t("Board game type:")}
           <Grid item xs={12}>
             <Typography sx={{ fontWeight: "bold" }}>
               {formData.boardGameType}
@@ -47,7 +50,7 @@ export default function Review({ setFormData, formData }) {
           </Grid>
         </Grid>
         <Grid item xs={12} sm={6}>
-          Players:
+          {t("Players:")}
           <Grid item xs={12}>
             <Typography sx={{ fontWeight: "bold" }}>
               {formData.players}
@@ -55,7 +58,7 @@ export default function Review({ setFormData, formData }) {
           </Grid>
         </Grid>
         <Grid item xs={12} sm={6}>
-          Winner:
+          {t("Winner:")}
           <Grid item xs={12}>
             <Typography sx={{ fontWeight: "bold" }}>
               {formData.winner}
@@ -64,7 +67,7 @@ export default function Review({ setFormData, formData }) {
         </Grid>
 
         <Grid item xs={12}>
-          Time played:
+          {t("Time played:")}
           <Grid item xs={12}>
             <Typography sx={{ fontWeight: "bold" }}>
               {formData.time_h}
@@ -73,7 +76,7 @@ export default function Review({ setFormData, formData }) {
         </Grid>
 
         <Grid item xs={12}>
-          Winner points:
+          {t("Winner points:")}
           <Grid item xs={12}>
             <Typography sx={{ fontWeight: "bold" }}>
               {formData.winnerPoints}

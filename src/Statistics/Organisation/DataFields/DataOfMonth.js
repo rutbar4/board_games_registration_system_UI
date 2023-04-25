@@ -12,6 +12,7 @@ import { useEffect, useCallback } from "react";
 import axios from "axios";
 import FormControl from "@mui/material/FormControl";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 
 const theme = createTheme();
 
@@ -20,11 +21,13 @@ export default function DataOfMonth() {
   const isMountedRef = useRefMounted();
   const [winners, setWinners] = React.useState(null);
   const [boardGames, setBoardGames] = React.useState(null);
-  const today = new Date();
+  const today = new Date().$d;
+  const todayjs = dayjs(today);
+  const { t } = useTranslation();
 
   const GetTopMonthPlayer = async (datePicker) => {
     try {
-      const date = datePicker ? datePicker.$d : today;
+      const date = datePicker ? datePicker.$d : todayjs;
       console.log("dt");
       console.log(date);
       const response = await axios.post(
@@ -35,9 +38,10 @@ export default function DataOfMonth() {
       setWinners(
         response.data
           ? response.data.players +
-              "\n (won " +
+              "\n" +
+              t("(won ") +
               response.data.winCount +
-              " games)"
+              t(" games)")
           : null
       );
       console.log(response);
@@ -48,7 +52,7 @@ export default function DataOfMonth() {
 
   const GetTopMonthBoardGame = async (datePicker) => {
     try {
-      const date = datePicker ? datePicker.$d : today;
+      const date = datePicker ? datePicker.$d : todayjs;
       console.log("dt");
       console.log(date);
       const response = await axios.post(
@@ -60,9 +64,10 @@ export default function DataOfMonth() {
       setBoardGames(
         response.data
           ? response.data.boardGames +
-              "\n (played " +
+              "\n" +
+              t("(played ") +
               response.data.count +
-              " times)"
+              t(" times)")
           : null
       );
       console.log(response);
@@ -93,8 +98,8 @@ export default function DataOfMonth() {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["DatePicker"]}>
                 <DatePicker
-                  label={'"Month" and "Year"'}
-                  defaultValue={dayjs(today)}
+                  label={t('"Month" and "Year"')}
+                  defaultValue={todayjs}
                   onChange={(e) => {
                     GetTopMonthPlayer(e);
                     GetTopMonthBoardGame(e);

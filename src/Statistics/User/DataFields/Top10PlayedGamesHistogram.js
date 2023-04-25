@@ -7,6 +7,7 @@ import useAuth from "../../../Authentication/Auth/useAuth";
 import { BarSeries, ValueScale } from "@devexpress/dx-react-chart";
 import { EventTracker } from "@devexpress/dx-react-chart";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import {
   Chart,
   Title,
@@ -22,6 +23,7 @@ const theme = createTheme();
 export default function Top10PlayedGamesHistogram() {
   const { user } = useAuth();
   const isMountedRef = useRefMounted();
+  const { t } = useTranslation();
 
   const [chartData, setChartData] = React.useState([]);
 
@@ -57,7 +59,7 @@ export default function Top10PlayedGamesHistogram() {
           <Title
             text={
               <Typography variant="h6s">
-                All time Top 10 played Board Games
+                {t("All time Top 10 played Board Games")}
               </Typography>
             }
           />

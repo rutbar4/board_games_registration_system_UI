@@ -13,6 +13,7 @@ import Paper from "@mui/material/Paper";
 import useAuth from "../Authentication/Auth/useAuth";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import { useTranslation } from "react-i18next";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -34,6 +35,7 @@ export default function OrganisationProfile() {
     message: "",
   });
   const [isEditing, setIsEditing] = React.useState(false);
+  const { t } = useTranslation();
   const { organisation } = useAuth();
   console.log(organisation);
 
@@ -113,7 +115,7 @@ export default function OrganisationProfile() {
             sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 3 } }}
           >
             <Typography variant="h6" gutterBottom align="center">
-              My Organisation Profile
+              {t("My Organisation Profile")}
             </Typography>
             <CssBaseline />
             <Box
@@ -159,7 +161,7 @@ export default function OrganisationProfile() {
                     <TextField
                       fullWidth
                       id="email"
-                      label="E-mail address"
+                      label={t("E-mail address")}
                       name="email"
                       defaultValue={organisation.email}
                       variant="standard"
@@ -172,7 +174,7 @@ export default function OrganisationProfile() {
                     <TextField
                       fullWidth
                       id="organisationAddress"
-                      label="Address of location"
+                      label={t("Address of location")}
                       name="organisationAddress"
                       defaultValue={organisation.address}
                       variant="standard"
@@ -185,7 +187,7 @@ export default function OrganisationProfile() {
                     <TextField
                       fullWidth
                       id="organisationCity"
-                      label="City"
+                      label={t("City")}
                       name="organisationCity"
                       defaultValue={organisation.city}
                       variant="standard"
@@ -198,7 +200,7 @@ export default function OrganisationProfile() {
                     <TextField
                       fullWidth
                       name="password"
-                      label="Password"
+                      label={t("Password")}
                       type="password"
                       id="password"
                       defaultValue={organisation.password}
@@ -212,7 +214,7 @@ export default function OrganisationProfile() {
                     <TextField
                       fullWidth
                       name="description"
-                      label="Description"
+                      label={t("Description")}
                       type="description"
                       id="description"
                       multiline
@@ -231,7 +233,7 @@ export default function OrganisationProfile() {
                         sx={{ mt: 1, mb: 0 }}
                         onClick={() => setIsEditing(true)}
                       >
-                        Edit profile
+                        {t("Edit profile")}
                       </Button>
                     )}
                     {isEditing && (
@@ -241,7 +243,7 @@ export default function OrganisationProfile() {
                           variant="contained"
                           sx={{ mt: 1, mb: 0, mr: 1 }}
                         >
-                          Update
+                          {t("Update")}
                         </Button>
                         <Button
                           variant="contained"
@@ -249,7 +251,7 @@ export default function OrganisationProfile() {
                           onClick={() => setIsEditing(false)}
                           color="error"
                         >
-                          Cancel
+                          {t("Cancel")}
                         </Button>
                       </>
                     )}

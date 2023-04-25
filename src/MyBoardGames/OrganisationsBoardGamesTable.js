@@ -23,6 +23,7 @@ import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import { useTranslation } from "react-i18next";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -67,6 +68,7 @@ export default function OrganisationProfile() {
     open: false,
     message: "",
   });
+  const { t } = useTranslation();
   const { organisation } = useAuth();
   console.log(organisation);
 
@@ -171,7 +173,7 @@ export default function OrganisationProfile() {
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
         <Alert onClose={handleClose} severity="warning" sx={{ width: "100%" }}>
-          Board game deleted!
+          {t("Board game deleted!")}
         </Alert>
       </Snackbar>
       <Container component="main" maxWidth="md">
@@ -230,10 +232,10 @@ export default function OrganisationProfile() {
                             </StyledTableCell>
                           );
                         })}
-                        <Tooltip title="Delete">
+                        <Tooltip title={t("Delete")}>
                           <StyledTableCell key="deleteButton">
                             <IconButton
-                              aria-label="delete"
+                              aria-label={t("delete")}
                               id={game.id}
                               onClick={() => {
                                 handleDelete(game.id);
@@ -249,7 +251,7 @@ export default function OrganisationProfile() {
                   <StyledTableCell>
                     <TextField
                       fullWidth
-                      label="Name"
+                      label={t("Name")}
                       id="BGName"
                       name="BGName"
                       variant="standard"
@@ -258,13 +260,13 @@ export default function OrganisationProfile() {
                   <StyledTableCell>
                     <TextField
                       fullWidth
-                      label="Type"
+                      label={t("Type")}
                       id="BGType"
                       name="BGType"
                       variant="standard"
                     />
                   </StyledTableCell>
-                  <Tooltip title="Add new board game">
+                  <Tooltip title={t("Add new board game")}>
                     <StyledTableCell>
                       <IconButton id="addBoardGame" type="submit">
                         <AddIcon />

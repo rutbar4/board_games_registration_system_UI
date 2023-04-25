@@ -10,6 +10,7 @@ import { useEffect, useCallback } from "react";
 import useAuth from "../Authentication/Auth/useAuth";
 import Switch from "@mui/material/Switch";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 axios.interceptors.response.use(
   (response) => {
@@ -24,6 +25,7 @@ const label = { inputProps: { "aria-label": "Switch demo" } };
 
 export default function GameStartForm({ setFormData, formData }) {
   const auth = useAuth();
+  const { t } = useTranslation();
 
   console.log(auth.user);
   const [organisations, setOrganisations] = React.useState([]);
@@ -86,7 +88,7 @@ export default function GameStartForm({ setFormData, formData }) {
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        Starting board game
+        {t("Starting board game")}
       </Typography>{" "}
       <Grid container spacing={3}>
         <Grid item xs={12}>
@@ -107,7 +109,7 @@ export default function GameStartForm({ setFormData, formData }) {
                     }));
                   }}
                 />
-                I am playing my board game
+                {t("I am playing my board game")}
               </Typography>{" "}
             </Grid>
           )}
@@ -118,12 +120,10 @@ export default function GameStartForm({ setFormData, formData }) {
               name="organisationName"
               options={organisations}
               renderInput={(params) => (
-                <TextField {...params} label="Organisation" />
+                <TextField {...params} label={t("Organisation")} />
               )}
               onChange={(e) => {
                 changeSelectOptionHandler(e);
-                console.log("aaaaaaa");
-                console.log(auth.user.name);
                 setFormData((data) => ({
                   ...data,
                   organisation: e.target.innerText,
@@ -139,7 +139,7 @@ export default function GameStartForm({ setFormData, formData }) {
             name="boardGameName"
             options={games}
             renderInput={(params) => (
-              <TextField {...params} label="Board game name" />
+              <TextField {...params} label={t("Board game name")} />
             )}
             onChange={(e) =>
               setFormData((data) => ({
@@ -151,14 +151,13 @@ export default function GameStartForm({ setFormData, formData }) {
         </Grid>
         <Grid item xs={12} sm={6}>
           <Autocomplete
-            //padaryti kad būtų galima pasirinkti tipą ar įrašyti iš esamų
             required
             id="boardGameType"
             name="boardGameType"
             variant="standard"
             options={boardGameTypes}
             renderInput={(params) => (
-              <TextField {...params} label="Board game type" />
+              <TextField {...params} label={t("Board game type")} />
             )}
             onChange={(e) =>
               setFormData((data) => ({
@@ -169,23 +168,17 @@ export default function GameStartForm({ setFormData, formData }) {
           />
         </Grid>
         <Grid item xs={12}>
-          <PlayersInput //PRIDETI SOLO ZAIDIMAM
+          <PlayersInput
             setFormData={setFormData}
             formData={formData}
             id="Players"
             name="Players"
-            label="Players"
+            label={t("Players")}
             fullWidth
-            placeholder="Add Players"
+            placeholder={t("Add Players (Link to account like '@username')")}
             variant="standard"
           />
         </Grid>
-        {/* <Grid item xs={12}>
-          <FormControlLabel
-            control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
-            label="Use this address for payment details"
-          />
-        </Grid> */}
       </Grid>
     </React.Fragment>
   );

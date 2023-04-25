@@ -5,10 +5,12 @@ import PlaysTable from "./DataFields/PlaysTable";
 import Top10PlayedGamesHistogram from "./DataFields/Top10PlayedGamesHistogram";
 import DataOfMonth from "./DataFields/DataOfMonth";
 import { Grid } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const theme = createTheme();
 
 export default function OrganisationTableStat() {
+  const { t } = useTranslation();
 
   return (
     <ThemeProvider theme={theme}>

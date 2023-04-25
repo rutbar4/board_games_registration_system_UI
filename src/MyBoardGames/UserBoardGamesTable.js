@@ -23,14 +23,11 @@ import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import { useTranslation } from "react-i18next";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
-const columns = [
-  { id: "name", label: "Board Game Name", minWidth: 50 },
-  { id: "gameType", label: "Type", minWidth: 50 },
-];
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -67,8 +64,14 @@ export default function OrganisationProfile() {
     open: false,
     message: "",
   });
+  const { t } = useTranslation();
   const { user } = useAuth();
   console.log(user);
+
+  const columns = [
+    { id: "name", label: t("Board game name"), minWidth: 50 },
+    { id: "gameType", label: t("Type"), minWidth: 50 },
+  ];
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -244,7 +247,7 @@ export default function OrganisationProfile() {
                             </StyledTableCell>
                           );
                         })}
-                        <Tooltip title="Delete">
+                        <Tooltip title={t("Delete")}>
                           <StyledTableCell key="deleteButton">
                             <IconButton
                               aria-label="delete"
@@ -263,7 +266,7 @@ export default function OrganisationProfile() {
                   <StyledTableCell>
                     <TextField
                       fullWidth
-                      label="Name"
+                      label={t("Board game name")}
                       id="BGName"
                       name="BGName"
                       variant="standard"
@@ -272,13 +275,13 @@ export default function OrganisationProfile() {
                   <StyledTableCell>
                     <TextField
                       fullWidth
-                      label="Type"
+                      label={t("Type")}
                       id="BGType"
                       name="BGType"
                       variant="standard"
                     />
                   </StyledTableCell>
-                  <Tooltip title="Add new board game">
+                  <Tooltip title={t("Add new board game")}>
                     <StyledTableCell>
                       <IconButton id="addBoardGame" type="submit">
                         <AddIcon />

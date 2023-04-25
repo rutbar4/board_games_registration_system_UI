@@ -14,11 +14,13 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import useAuth from "../Auth/useAuth";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const theme = createTheme();
 
 export default function LogIn() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const auth = useAuth();
   const { login } = useAuth();
@@ -29,7 +31,9 @@ export default function LogIn() {
     console.log(response);
     navigate("/");
   };
-  // if (auth.isAuthenticated) navigate("/");
+  
+  if (auth.isAuthenticated) navigate("/");
+  
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -46,7 +50,7 @@ export default function LogIn() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Log in
+            {t("Log in")}
           </Typography>
           <Box
             component="form"
@@ -59,7 +63,7 @@ export default function LogIn() {
               required
               fullWidth
               id="username"
-              label="Username"
+              label={t("Username")}
               name="username"
               autoFocus
             />
@@ -68,7 +72,7 @@ export default function LogIn() {
               required
               fullWidth
               name="password"
-              label="Password"
+              label={t("Password")}
               type="password"
               id="password"
               autoComplete="current-password"
@@ -91,7 +95,7 @@ export default function LogIn() {
                     navigate("/sign_up");
                   }}
                 >
-                  {"Don't have an account? Sign Up"}
+                  {t("Don't have an account? Sign Up")}
                 </Link>
               </Grid>
             </Grid>

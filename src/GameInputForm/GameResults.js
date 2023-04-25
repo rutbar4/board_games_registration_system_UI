@@ -11,52 +11,55 @@ import FormGroup from "@mui/material/FormGroup";
 import { FormLabel } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 
 export default function GameResults({ setFormData, formData }) {
   const { players } = formData;
   const today = new Date();
-
+  const cjToday = dayjs(today);
   const [selectedWinner, setSelectedWinner] = React.useState("");
+  const { t } = useTranslation();
 
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        Played board game results
+        {t("Played board game results")}
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <FormLabel>Select winner</FormLabel>
+          <FormLabel>{t("Select winner")}</FormLabel>
         </Grid>
         <Grid item xs={12}>
           <FormGroup
             required
             id="Players"
-            label="Players"
+            label={t("Players")}
             autoComplete="cc-number"
             variant="standard"
           >
             {/* Add single selection to Checkbox */}
             {players.map((player) => {
+              let player1 = player.charAt(0) === "@" ? player.slice(1) : player;
               return (
                 <FormControlLabel
-                  key={player}
+                  key={player1}
                   control={
                     <Checkbox
                       disabled={
-                        selectedWinner !== "" && player !== selectedWinner
+                        selectedWinner !== "" && player1 !== selectedWinner
                       }
                     />
                   }
                   onChange={(e) => {
                     console.log(e.target.checked);
-                    if (e.target.checked === true) setSelectedWinner(player);
+                    if (e.target.checked === true) setSelectedWinner(player1);
                     else setSelectedWinner("");
                     setFormData((data) => ({
                       ...data,
-                      winner: player,
+                      winner: player1,
                     }));
                   }}
-                  label={player}
+                  label={player1}
                 />
               );
             })}
@@ -67,14 +70,15 @@ export default function GameResults({ setFormData, formData }) {
             <DatePicker
               id="GamePlayDay"
               name="GamePlayDay"
-              defaultValue={dayjs(today)}
-              label="Game play day"
-              onChange={(value) =>
+              defaultValue={cjToday}
+              label={t("Game play day")}
+              onChange={(value) => {
+                debugger;
                 setFormData((data) => ({
                   ...data,
-                  DatePlayed: value === null ? dayjs(today) : value,
-                }))
-              }
+                  DatePlayed: value === null ? cjToday : value.$d,
+                }));
+              }}
             />
           </LocalizationProvider>
         </Grid>
@@ -83,7 +87,7 @@ export default function GameResults({ setFormData, formData }) {
             <TimeField
               id="TimePlayed"
               name="TimePlayed"
-              label="Time played"
+              label={t("Time played")}
               format="HH:mm"
               fullWidth
               variant="standard"
@@ -101,10 +105,10 @@ export default function GameResults({ setFormData, formData }) {
           <TextField
             id="WinnerPoints"
             name="Winner Points"
-            label="Winner Points"
+            label={t("Winner Points")}
             type="number"
             fullWidth
-            placeholder="Winner's points"
+            placeholder={t("Winner points")}
             variant="standard"
             onChange={(e) =>
               setFormData((data) => ({

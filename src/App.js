@@ -20,6 +20,7 @@ import { useRoutes } from "react-router-dom";
 import Authenticated from "./Authentication/Auth/Authenticated";
 import { StyledEngineProvider } from "@mui/material/styles";
 import useAuth from "./Authentication/Auth/useAuth";
+import { useTranslation } from "react-i18next";
 
 const router = [
   {
@@ -111,6 +112,7 @@ function App() {
   const content = useRoutes(router);
   const theme = createTheme();
   const auth = useAuth();
+  const { t } = useTranslation();
 
   return (
     <ThemeProvider theme={theme}>

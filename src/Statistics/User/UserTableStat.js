@@ -4,11 +4,14 @@ import { Container } from "@mui/system";
 import PlaysTable from "./DataFields/PlaysTable";
 import Top10PlayedGamesHistogram from "./DataFields/Top10PlayedGamesHistogram";
 import DataOfMonth from "./DataFields/DataOfMonth";
+import { useTranslation } from "react-i18next";
 import { Grid } from "@mui/material";
 
 const theme = createTheme();
 
 export default function OrganisationTableStat() {
+  const { t } = useTranslation();
+
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth="md" sx={{ pb: 3, pt: 3 }}>

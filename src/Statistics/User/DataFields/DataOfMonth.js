@@ -12,6 +12,7 @@ import { useEffect, useCallback } from "react";
 import axios from "axios";
 import FormControl from "@mui/material/FormControl";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 
 const theme = createTheme();
 
@@ -21,6 +22,7 @@ export default function DataOfMonth() {
   const [winners, setWinners] = React.useState(null);
   const [boardGames, setBoardGames] = React.useState(null);
   const today = new Date();
+  const { t } = useTranslation();
 
   const GetTopMonthPlayer = async (datePicker) => {
     try {
@@ -28,16 +30,16 @@ export default function DataOfMonth() {
       console.log("dt");
       console.log(date);
       const response = await axios.post(
-        "http://localhost:7293/api/BoardGamePlay/TopMonthPlayers/" +
-          user.id,
+        "http://localhost:7293/api/BoardGamePlay/TopMonthPlayers/" + user.id,
         date
       );
       setWinners(
         response.data
           ? response.data.players +
-              "\n (won " +
+              "\n" +
+              t("(won ") +
               response.data.winCount +
-              " games)"
+              t(" games)")
           : null
       );
       console.log(response);
@@ -52,17 +54,17 @@ export default function DataOfMonth() {
       console.log("dt");
       console.log(date);
       const response = await axios.post(
-        "http://localhost:7293/api/BoardGamePlay/TopMonthBoardGames/" +
-          user.id,
+        "http://localhost:7293/api/BoardGamePlay/TopMonthBoardGames/" + user.id,
         date
       );
       console.log(response);
       setBoardGames(
         response.data
           ? response.data.boardGames +
-              "\n (played " +
+              "\n" +
+              t("(played ") +
               response.data.count +
-              " times)"
+              t(" times)")
           : null
       );
       console.log(response);
@@ -87,13 +89,13 @@ export default function DataOfMonth() {
       >
         <Grid container alignItems="center" justifyContent="center">
           <Typography sx={{ fontWeight: "bold", mb: 1 }}>
-            Select month
+            {t("Select month")}
           </Typography>
           <Grid item>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["DatePicker"]}>
                 <DatePicker
-                  label={'"Month" and "Year"'}
+                  label={t('"Month" and "Year"')}
                   defaultValue={dayjs(today)}
                   onChange={(e) => {
                     GetTopMonthPlayer(e);
@@ -108,11 +110,13 @@ export default function DataOfMonth() {
 
         <Grid container alignItems="center" justifyContent="center">
           <Typography sx={{ fontWeight: "bold", mb: 1 }}>
-            Player(s) of the month:
+            {t("Player(s) of the month:")}
           </Typography>
           <Grid item>
             <TextField
-              placeholder="Here will be shown the most winning player(s) in a selected month"
+              placeholder={t(
+                "Here will be shown the most winning player(s) in a selected month"
+              )}
               inputProps={{ min: 0, style: { textAlign: "center" } }}
               multiline
               id="playerOfMonth"
@@ -127,11 +131,13 @@ export default function DataOfMonth() {
 
         <Grid container alignItems="center" justifyContent="center">
           <Typography sx={{ fontWeight: "bold", mb: 1 }}>
-            Game(s) of the month:
+            {t("Game(s) of the month:")}
           </Typography>
           <Grid item>
             <TextField
-              placeholder="Here will be shown the most played board game(s) in a selected month"
+              placeholder={t(
+                "Here will be shown the most played board game(s) in a selected month"
+              )}
               multiline
               inputProps={{ min: 0, style: { textAlign: "center" } }}
               id="boardGameOfMonth"

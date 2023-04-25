@@ -15,6 +15,7 @@ import Paper from "@mui/material/Paper";
 import useAuth from "../Authentication/Auth/useAuth";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import { useTranslation } from "react-i18next";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -36,6 +37,7 @@ export default function UserProfile() {
     message: "",
   });
   const [isEditing, setIsEditing] = React.useState(false);
+  const { t } = useTranslation();
   const { user } = useAuth();
   console.log(user);
 
@@ -131,7 +133,7 @@ export default function UserProfile() {
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
         <Alert onClose={handleClose} severity="warning" sx={{ width: "100%" }}>
-          Board game deleted!
+          {t("Board game deleted!")}
         </Alert>
       </Snackbar>
 
@@ -141,7 +143,7 @@ export default function UserProfile() {
           sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 3 } }}
         >
           <Typography component="h1" variant="h4" gutterBottom align="center">
-            My Profile
+            {t("My Profile")}
           </Typography>
           <CssBaseline />
           <Box
@@ -162,7 +164,7 @@ export default function UserProfile() {
                     name="userName"
                     fullWidth
                     id="userName"
-                    label="Name"
+                    label={t("Name")}
                     defaultValue={user.name}
                     variant="standard"
                     InputProps={{
@@ -175,7 +177,7 @@ export default function UserProfile() {
                     name="userUsername"
                     fullWidth
                     id="userUsername"
-                    label="Username"
+                    label={t("Username")}
                     defaultValue={user.username}
                     variant="standard"
                     InputProps={{
@@ -187,7 +189,7 @@ export default function UserProfile() {
                   <TextField
                     fullWidth
                     id="email"
-                    label="E-mail address"
+                    label={t("E-mail address")}
                     name="email"
                     defaultValue={user.email}
                     variant="standard"
@@ -200,7 +202,7 @@ export default function UserProfile() {
                   <TextField
                     fullWidth
                     name="password"
-                    label="Password"
+                    label={t("Password")}
                     type="password"
                     id="password"
                     defaultValue={user.password}
@@ -217,7 +219,7 @@ export default function UserProfile() {
                       sx={{ mt: 1, mb: 0 }}
                       onClick={() => setIsEditing(true)}
                     >
-                      Edit profile
+                      {t("Edit profile")}
                     </Button>
                   )}
                   {isEditing && (
@@ -227,7 +229,7 @@ export default function UserProfile() {
                         variant="contained"
                         sx={{ mt: 1, mb: 0, mr: 1 }}
                       >
-                        Update
+                        {t("Update")}
                       </Button>
                       <Button
                         variant="contained"
@@ -235,7 +237,7 @@ export default function UserProfile() {
                         onClick={() => setIsEditing(false)}
                         color="error"
                       >
-                        Cancel
+                        {t("Cancel")}
                       </Button>
                     </>
                   )}

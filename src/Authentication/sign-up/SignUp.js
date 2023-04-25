@@ -14,11 +14,13 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../Auth/useAuth";
+import { useTranslation } from "react-i18next";
 
 const theme = createTheme();
 
 export default function SignUp() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const { signupUser } = useAuth();
   const handleSignUp = async (event) => {
@@ -50,7 +52,7 @@ export default function SignUp() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            {t("Sign up")}
           </Typography>
           <Box
             component="form"
@@ -66,7 +68,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="name"
-                  label="Name"
+                  label={t("Name")}
                   autoFocus
                 />
               </Grid>
@@ -75,7 +77,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="userName"
-                  label="Username"
+                  label={t("Username")}
                   name="userName"
                 />
               </Grid>
@@ -84,7 +86,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="email"
-                  label="Email Address"
+                  label={t("Email Address")}
                   name="email"
                   autoComplete="email"
                 />
@@ -94,20 +96,12 @@ export default function SignUp() {
                   required
                   fullWidth
                   name="password"
-                  label="Password"
+                  label={t("Password")}
                   type="password"
                   id="password"
                   autoComplete="new-password"
                 />
               </Grid>
-              {/* <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
-                  }
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid> */}
             </Grid>
             <Button
               type="submit"
@@ -115,7 +109,7 @@ export default function SignUp() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              {t("Sign Up")}
             </Button>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -125,7 +119,7 @@ export default function SignUp() {
                     navigate("/organisation_sign_up");
                   }}
                 >
-                  Join as organisation
+                  {t("Join as organisation")}
                 </Link>
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -135,7 +129,7 @@ export default function SignUp() {
                     navigate("/log_in");
                   }}
                 >
-                  Already have an account?
+                  {t("Already have an account?")}
                 </Link>
               </Grid>
             </Grid>
