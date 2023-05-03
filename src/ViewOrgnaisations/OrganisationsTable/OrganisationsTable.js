@@ -8,65 +8,59 @@ import TableRow from "@mui/material/TableRow";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import { useEffect, useCallback } from "react";
-import useRefMounted from "../../../hooks/useRefMounted";
-import useAuth from "../../../Authentication/Auth/useAuth";
+import useRefMounted from "../../hooks/useRefMounted";
 import axios from "axios";
-import { Typography } from "@mui/material";
+import { IconButton, Typography } from "@mui/material";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import MoreInfoDialog from "./Tools/MoreInfoDialog";
 import { useTranslation } from "react-i18next";
 
 const theme = createTheme();
 
-export default function PlaysTable() {
-  const { user } = useAuth();
-  const [plays, setPlays] = React.useState([]);
+export default function OrganisationsTable() {
+  const isMountedRef = useRefMounted();
+  const [organisations, setOrganisations] = React.useState([]);
   const { t } = useTranslation();
   const columns = [
-    { id: "boardGameName", label: t("Board Game Name") },
-    { id: "boardGameType", label: t("Type") },
-    { id: "playersCount", label: t("Number of players") },
-    { id: "winner", label: t("Winner") },
-    { id: "winnerPoints", label: t("Winning points") },
-    { id: "playDate", label: "Play date" },
+    { id: "name", label: t("Name of organisation") },
+    { id: "city", label: t("City") },
+    { id: "description", label: t("Description") },
   ];
 
-  console.log(plays);
-  const isMountedRef = useRefMounted();
-
-  const GetAllPlaysByOrgnisation = useCallback(async () => {
+  const getAllOrganisations = useCallback(async () => {
     try {
-      console.log(user.id);
       const response = await axios.get(
-        "http://localhost:7293/api/BoardGamePlay/AllPlaysByUserId/" + user.id
+        "http://localhost:7293/api/BoardGamePlay/AllOrganisations"
       );
 
       if (isMountedRef.current) {
-        setPlays(response.data);
+        setOrganisations(response.data);
+        console.log(organisations);
       }
-      console.log(plays);
     } catch (err) {
       console.error(err);
     }
   }, [isMountedRef]);
 
-  useEffect(async () => {
-    await GetAllPlaysByOrgnisation();
-  }, [GetAllPlaysByOrgnisation]);
+  useEffect(() => {
+    getAllOrganisations();
+  }, [getAllOrganisations]);
 
-  if (plays === []) return null;
+  if (organisations === []) return null;
   return (
     <ThemeProvider theme={theme}>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 550 }} aria-label="simple table">
+        <Table sx={{ minWidth: 550 }} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
               <TableCell colSpan={"100%"}>
                 <Typography
-                  sx={{ flex: "100%", textAlign: "center" }}
+                  sx={{ flex: "100%", textAlign: "center", mb: 2 }}
                   variant="h6"
-                  id="playsTableTitle"
+                  id="organisationsTable"
                   component="div"
                 >
-                  {t("All Board Game Plays")}
+                  {t("All registered organisations")}
                 </Typography>
               </TableCell>
             </TableRow>
@@ -76,23 +70,22 @@ export default function PlaysTable() {
               {columns.map((column) => (
                 <TableCell key={column.id}>{column.label}</TableCell>
               ))}
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {plays.map((row) => (
+            {organisations.map((row) => (
               <TableRow
                 key={row.name}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {row.boardGameName}
+                  {row.name}
                 </TableCell>
-                <TableCell align="left">{row.boardGameType}</TableCell>
-                <TableCell align="left">{row.playersCount}</TableCell>
-                <TableCell align="left">{row.winner}</TableCell>
-                <TableCell align="left">{row.winnerPoints}</TableCell>
-                <TableCell align="left">
-                  {row.datePlayed.slice(0, 10)}
+                <TableCell align="left">{row.city}</TableCell>
+                <TableCell align="left">{row.description}</TableCell>
+                <TableCell align="center" padding="none">
+                  <MoreInfoDialog organisationName={row.name} />
                 </TableCell>
               </TableRow>
             ))}

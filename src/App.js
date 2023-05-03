@@ -9,11 +9,16 @@ import SignUp from "./Authentication/sign-up/SignUp";
 import OrganisationTableStat from "./Statistics/Organisation/OrganisationTableStat";
 import UserTableStat from "./Statistics/User/UserTableStat";
 import OrganisationSignUp from "./Authentication/sign-up/OrganisationSignUp";
+import MainTournamentPage from ".//Tournament/MainTournamentPage";
+import TournamentTable from "./Tournament/TournamentTable";
+import AddNewTournament from "./Tournament/AddNewTournament";
 import MeniuToolbar from "./Toolbars/MeniuToolbar";
 import OrganisationProfile from "./Profiles/OrganisationProfile";
 import UserProfile from "./Profiles/UserProfile";
 import OrganisationBoardGamesTable from "./MyBoardGames/OrganisationsBoardGamesTable";
 import UserBoardGamesTable from "./MyBoardGames/UserBoardGamesTable";
+import Organisations from "./ViewOrgnaisations/Organisations";
+import OrganisationPage from "./OrganisationPage/OrganisationPage";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { useRoutes } from "react-router-dom";
@@ -87,9 +92,46 @@ const router = [
     path: "user_board_games",
     element: (
       <Authenticated>
+
+
         <UserBoardGamesTable />
       </Authenticated>
     ),
+  },
+  {
+    path: "main_tournament_page",
+    element: (
+      <Authenticated>
+
+
+        
+        <MainTournamentPage />
+      </Authenticated>
+    ),
+  },
+  {
+    path: "tournament_table",
+    element: (
+      <Authenticated>
+        <TournamentTable />
+      </Authenticated>
+    ),
+  },
+  {
+    path: "add_new_tournament",
+    element: (
+      <Authenticated>
+        <AddNewTournament />
+      </Authenticated>
+    ),
+  },
+  {
+    path: "organisations",
+    element: <Organisations />,
+  },
+  {
+    path: "organisations_page",
+    element: <Organisations />,
   },
 ];
 

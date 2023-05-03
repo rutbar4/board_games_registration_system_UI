@@ -9,7 +9,7 @@ import Grid from "@mui/material/Grid";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../Authentication/Auth/useAuth";
 import LogIn from "../Authentication/log-in/LogIn";
-import LanguageSwitcher from "./LanguageSwitcher";
+import LanguageSwitcher from "../Translator/LanguageSwitcher";
 import { styled, useTheme } from "@mui/material/styles";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -87,7 +87,6 @@ export default function MeniuToolbar() {
 
   return (
     <Grid container spacing={2} alignItems="center" justifyContent="center">
-      <LanguageSwitcher />
       <Grid item xs={9} mt={2}>
         <Box>
           <AppBar position="static" open={open}>
@@ -110,7 +109,6 @@ export default function MeniuToolbar() {
                 sx={{ flexGrow: 1 }}
               >
                 {t("Board Game Registration System")}
-                
               </Typography>
               {auth.user && (
                 <Typography
@@ -127,8 +125,8 @@ export default function MeniuToolbar() {
                 onClick={() => {
                   navigate("/");
                 }}
-              >{t("Register play")}
-                
+              >
+                {t("Register play")}
               </Button>
               {!auth.isAuthenticated && (
                 <Button
@@ -136,8 +134,8 @@ export default function MeniuToolbar() {
                   onClick={() => {
                     navigate("/log_in");
                   }}
-                >{t("Log in")}
-                  
+                >
+                  {t("Log in")}
                 </Button>
               )}
               {auth.isAuthenticated && (
@@ -146,8 +144,8 @@ export default function MeniuToolbar() {
                   onClick={() => {
                     logout();
                   }}
-                >{t("Log out")}
-                  
+                >
+                  {t("Log out")}
                 </Button>
               )}
             </Toolbar>
@@ -195,7 +193,7 @@ export default function MeniuToolbar() {
                       navigate("/organisation_profile");
                     }}
                   >
-                    <ListItemText primary={t("My profile")}  />
+                    <ListItemText primary={t("My profile")} />
                   </ListItemButton>
                 )}
               </ListItem>
@@ -254,18 +252,28 @@ export default function MeniuToolbar() {
                 {auth.organisation && (
                   <ListItemButton
                     onClick={() => {
-                      // navigate("/sign_up");
+                      navigate("/main_tournament_page");
                     }}
                   >
                     <ListItemText primary={t("Tournaments")} />
                   </ListItemButton>
                 )}
               </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton
+                  onClick={() => {
+                    navigate("/organisations");
+                  }}
+                >
+                  <ListItemText primary={t("Organisations")} />
+                </ListItemButton>
+              </ListItem>
             </List>
             <Divider />
           </Drawer>
         </Box>
       </Grid>
+      <LanguageSwitcher />
     </Grid>
   );
 }

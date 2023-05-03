@@ -12,10 +12,10 @@ import {
   Tooltip,
   styled,
 } from "@mui/material";
-import Text from "./";
+import Text from ".";
 
 import WarningTwoToneIcon from "@mui/icons-material/WarningTwoTone";
-import internationalization from "../../Translator/i18n/i18n";
+import internationalization from "../i18n/i18n";
 import { useTranslation } from "react-i18next";
 
 import { LT } from "country-flag-icons/react/3x2";

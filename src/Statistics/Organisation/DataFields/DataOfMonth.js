@@ -35,15 +35,20 @@ export default function DataOfMonth() {
           organisation.id,
         date
       );
-      setWinners(
-        response.data
-          ? response.data.players +
-              "\n" +
-              t("(won ") +
-              response.data.winCount +
-              t(" games)")
-          : null
-      );
+
+      if (response.data.count === "") {
+        setWinners("");
+      } else {
+        setWinners(
+          response.data
+            ? response.data.players +
+                "\n" +
+                t("(won ") +
+                response.data.winCount +
+                t(" games)")
+            : null
+        );
+      }
       console.log(response);
     } catch (err) {
       console.error(err);
@@ -60,16 +65,22 @@ export default function DataOfMonth() {
           organisation.id,
         date
       );
+      console.log("hhhhhhhhhhhhhhh");
       console.log(response);
-      setBoardGames(
-        response.data
-          ? response.data.boardGames +
-              "\n" +
-              t("(played ") +
-              response.data.count +
-              t(" times)")
-          : null
-      );
+
+      if (response.data.count === "") {
+        setBoardGames("");
+      } else {
+        setBoardGames(
+          response.data
+            ? response.data.boardGames +
+                "\n" +
+                t("(played ") +
+                response.data.count +
+                t(" times)")
+            : null
+        );
+      }
       console.log(response);
     } catch (err) {
       console.error(err);
@@ -79,7 +90,7 @@ export default function DataOfMonth() {
   useEffect(async () => {
     await GetTopMonthPlayer();
     await GetTopMonthBoardGame();
-  }, [GetTopMonthPlayer, GetTopMonthBoardGame]);
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -92,11 +103,11 @@ export default function DataOfMonth() {
       >
         <Grid container alignItems="center" justifyContent="center">
           <Typography sx={{ fontWeight: "bold", mb: 1 }}>
-            Select month
+            {t("Select month")}
           </Typography>
           <Grid item>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={["DatePicker"]}>
+              <DemoContainer components={["DatePicker"]} type="button">
                 <DatePicker
                   label={t('"Month" and "Year"')}
                   defaultValue={todayjs}
@@ -113,11 +124,13 @@ export default function DataOfMonth() {
 
         <Grid container alignItems="center" justifyContent="center">
           <Typography sx={{ fontWeight: "bold", mb: 1 }}>
-            Player(s) of the month:
+            {t("Player(s) of the month:")}
           </Typography>
           <Grid item>
             <TextField
-              placeholder="Here will be shown the most winning player(s) in a selected month"
+              placeholder={t(
+                "Here will be shown the most winning player(s) in a selected month"
+              )}
               inputProps={{ min: 0, style: { textAlign: "center" } }}
               multiline
               id="playerOfMonth"
@@ -132,11 +145,13 @@ export default function DataOfMonth() {
 
         <Grid container alignItems="center" justifyContent="center">
           <Typography sx={{ fontWeight: "bold", mb: 1 }}>
-            Game(s) of the month:
+            {t("Game(s) of the month:")}
           </Typography>
           <Grid item>
             <TextField
-              placeholder="Here will be shown the most played board game(s) in a selected month"
+              placeholder={t(
+                "Here will be shown the most played board game(s) in a selected month"
+              )}
               multiline
               inputProps={{ min: 0, style: { textAlign: "center" } }}
               id="boardGameOfMonth"

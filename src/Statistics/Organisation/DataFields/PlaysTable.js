@@ -15,18 +15,20 @@ import { Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 const theme = createTheme();
-const columns = [
-  { id: "boardGameName", label: "Board game name" },
-  { id: "boardGameType", label: "Type" },
-  { id: "playersCount", label: "Number of players" },
-  { id: "winner", label: "Winner" },
-  { id: "winnerPoints", label: "Winning points" },
-];
 
 export default function PlaysTable() {
   const { organisation } = useAuth();
   const [plays, setPlays] = React.useState([]);
   const { t } = useTranslation();
+
+  const columns = [
+    { id: "boardGameName", label: t("Board game name") },
+    { id: "boardGameType", label: t("Type") },
+    { id: "playersCount", label: t("Number of players") },
+    { id: "winner", label: t("Winner") },
+    { id: "winnerPoints", label: t("Winning points") },
+    { id: "playDate", label: t("Play date") },
+  ];
 
   console.log(plays);
   const isMountedRef = useRefMounted();
@@ -46,7 +48,7 @@ export default function PlaysTable() {
     } catch (err) {
       console.error(err);
     }
-  }, [isMountedRef]);
+    }, [isMountedRef]);
 
   useEffect(async () => {
     await GetAllPlaysByOrgnisation();
@@ -91,6 +93,9 @@ export default function PlaysTable() {
                 <TableCell align="left">{row.playersCount}</TableCell>
                 <TableCell align="left">{row.winner}</TableCell>
                 <TableCell align="left">{row.winnerPoints}</TableCell>
+                <TableCell align="left">
+                  {row.datePlayed.slice(0, 10)}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

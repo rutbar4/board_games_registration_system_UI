@@ -215,6 +215,7 @@ export default function UserProfile() {
                 <Grid container justifyContent="flex-end" item>
                   {!isEditing && (
                     <Button
+                      color="primary"
                       variant="contained"
                       sx={{ mt: 1, mb: 0 }}
                       onClick={() => setIsEditing(true)}

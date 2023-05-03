@@ -1,5 +1,9 @@
+//turnyro pavadinimas
+//(datos kada vyks įvedimas)
+//žaidėjų suvedimas (kaip boardgame)
 import * as React from "react";
-import TextField from "@mui/material/TextField";
+import { useState } from "react";
+import { Button, TextField, Typography } from "@mui/material";
 import useRefMounted from "../hooks/useRefMounted";
 import useAuth from "../Authentication/Auth/useAuth";
 import { useEffect, useCallback } from "react";
@@ -23,6 +27,7 @@ import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -49,29 +54,23 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const Grid = styled(MuiGrid)(({ theme }) => ({
-  width: "100%",
-  ...theme.typography.body2,
-  '& [role="separator"]': {
-    margin: theme.spacing(0, 2),
-  },
-}));
-
 const theme = createTheme();
-export default function OrganisationProfile() {
+export default function AddNewTournament() {
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const [openSuccess, setOpenSuccess] = React.useState({
     open: false,
     message: "",
   });
   const { t } = useTranslation();
+  const columns = [{ id: "name", label: t("Player"), minWidth: 50 }];
   const { organisation } = useAuth();
   console.log(organisation);
 
-  const columns = [
-    { id: "name", label: t("Board Game Name"), minWidth: 50 },
-    { id: "gameType", label: t("Game type"), minWidth: 50 },
-  ];
+  const [formTournament, setTournament] = useState({
+    organisation: "",
+    DatePlayed: "",
+  });
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -89,67 +88,66 @@ export default function OrganisationProfile() {
     });
   };
 
-  const [games, setGames] = React.useState([]);
-  console.log(games);
+  const [players, setPlayers] = React.useState([]);
+  //   console.log(players);
   const isMountedRef = useRefMounted();
 
-  const getAllBGByOrganisation = useCallback(async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:7293/api/BoardGamePlay/GetAllBGDataByOrganisation/" +
-          organisation.id
-      );
+  //   const getAllBGByOrganisation = useCallback(async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         "http://localhost:7293/api/BoardGamePlay/GetAllBGDataByOrganisation/" +
+  //           organisation.id
+  //       );
 
-      if (isMountedRef.current) {
-        setGames(response.data);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [isMountedRef]);
+  //       if (isMountedRef.current) {
+  //         setPlayers(response.data);
+  //       }
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   }, [isMountedRef]);
 
-  useEffect(() => {
-    getAllBGByOrganisation();
-  }, [getAllBGByOrganisation]);
+  //   useEffect(() => {
+  //     getAllBGByOrganisation();
+  //   }, [getAllBGByOrganisation]);
 
   const handleAdd = async (event) => {
     {
       event.preventDefault();
       const formData = new FormData(event.currentTarget);
       const data = {
-        Name: formData.get("BGName"),
-        GameType: formData.get("BGType"),
+        Name: formData.get("playerName"),
         OrganisationId: organisation.id,
       };
       const response = await axios.post(
         "http://localhost:7293/api/BoardGamePlay/AddOrganisationBG",
         data
       );
-      console.log("Board Game added");
+      console.log("Player added");
       console.log(response.data);
       if (response) {
-        setGames(response.data);
+        setPlayers(response.data);
         setOpenSuccess({
           open: true,
-          message: t("Board Game added"),
+          message: "Player added",
         });
       }
     }
   };
 
-  const handleDelete = async (id) => {
-    {
-      const response = await axios.delete(
-        "http://localhost:7293/api/BoardGamePlay/DeleteOrganisationBG/" + id
-      );
-      if (response) {
-        console.log(t("Board Game deleted"));
-        console.log(response);
-        setGames(response.data);
-        setOpen(true);
-      }
-    }
-  };
+  //   const handleDelete = async (id) => {
+  //     {
+  //       const response = await axios.delete(
+  //         "http://localhost:7293/api/BoardGamePlay/DeleteOrganisationBG/" + id
+  //       );
+  //       if (response) {
+  //         console.log("Player deleted");
+  //         console.log(response);
+  //         setPlayers(response.data);
+  //         setOpen(true);
+  //       }
+  //     }
+  //   };
 
   return (
     <ThemeProvider theme={theme}>
@@ -174,7 +172,7 @@ export default function OrganisationProfile() {
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
         <Alert onClose={handleClose} severity="warning" sx={{ width: "100%" }}>
-          {t("Board game deleted!")}
+          {t("Player deleted!")}
         </Alert>
       </Snackbar>
       <Container component="main" maxWidth="md">
@@ -187,7 +185,31 @@ export default function OrganisationProfile() {
             alignItems: "center",
           }}
         >
+          <Typography component="h1" variant="h5">
+            {t("Register all tournament players")}
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "flex-end",
+              align: "left",
+              marginTop: 7,
+            }}
+          >
+            <Button
+              variant="contained"
+              onClick={() => {
+                // {handleAddTournament}
+                navigate("/tournament_table");
+              }}
+            >
+              {t("Confirm Tournament")}
+            </Button>
+          </Box>
           <Paper
+            sx={{
+              marginTop: 1,
+            }}
             style={{ height: 500, width: "100%" }}
             component="form"
             onSubmit={handleAdd}
@@ -217,11 +239,11 @@ export default function OrganisationProfile() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {games.map((game) => {
+                  {players.map((player) => {
                     return (
-                      <StyledTableRow hover tabIndex={-1} key={game.code}>
+                      <StyledTableRow hover tabIndex={-1} key={player.code}>
                         {columns.map((column) => {
-                          const value = game[column.id];
+                          const value = player[column.id];
                           return (
                             <StyledTableCell
                               key={column.id}
@@ -237,9 +259,9 @@ export default function OrganisationProfile() {
                           <StyledTableCell key="deleteButton">
                             <IconButton
                               aria-label={t("delete")}
-                              id={game.id}
+                              id={player.id}
                               onClick={() => {
-                                handleDelete(game.id);
+                                // handleDelete(player.id);
                               }}
                             >
                               <DeleteIcon fontSize="inherit" />
@@ -253,23 +275,14 @@ export default function OrganisationProfile() {
                     <TextField
                       fullWidth
                       label={t("Name")}
-                      id="BGName"
-                      name="BGName"
+                      id="playerName"
+                      name="playerName"
                       variant="standard"
                     />
                   </StyledTableCell>
-                  <StyledTableCell>
-                    <TextField
-                      fullWidth
-                      label={t("Type")}
-                      id="BGType"
-                      name="BGType"
-                      variant="standard"
-                    />
-                  </StyledTableCell>
-                  <Tooltip title={t("Add new board game")}>
+                  <Tooltip title={t("Add new player")}>
                     <StyledTableCell>
-                      <IconButton id="addBoardGame" type="submit">
+                      <IconButton id="addPlayer" type="submit">
                         <AddIcon />
                       </IconButton>
                     </StyledTableCell>
