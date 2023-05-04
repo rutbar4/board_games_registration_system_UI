@@ -27,43 +27,63 @@ import AddIcon from "@mui/icons-material/Add";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useTranslation } from "react-i18next";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   SingleEliminationBracket,
   Match,
   SVGViewer,
 } from "@g-loot/react-tournament-brackets";
 
-export default function AddNewTournament() {
+export default function TournamentTable() {
   const { t } = useTranslation();
-  //   console.log(players);
+  const { tournamentId } = useParams();
+  const [tournamentData, setTournamentData] = React.useState();
   const isMountedRef = useRefMounted();
+  const getTournament = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:7293/api/Tournament/" + tournamentId
+      );
+
+      if (isMountedRef.current) {
+        console.log(response.data);
+        setTournamentData(response.data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, [isMountedRef]);
+
+  useEffect(() => {
+    getTournament();
+  }, [getTournament]);
+
+  if (!tournamentData) return null;
 
   return (
-    <Container component="main" maxWidth="lg" p={5}>
-      <SingleElimination />
-    </Container>
+    <Box>
+      <Container component="main" maxWidth="lg">
+        <SingleEliminationBracket
+          theme={GlootTheme}
+          matches={tournamentData.matches}
+          matchComponent={Match}
+          svgWrapper={({ children, ...props }) => (
+            <SVGViewer
+              width={1300}
+              height={2000}
+              background="rgb(255, 255, 255)"
+              {...props}
+            >
+              {children}
+            </SVGViewer>
+          )}
+          onMatchClick={(match) => console.log(match)}
+          onPartyClick={(match) => console.log(match)}
+        />
+      </Container>
+    </Box>
   );
 }
-
-export const SingleElimination = () => (
-  <SingleEliminationBracket
-    theme={GlootTheme}
-    matches={simpleSmallBracket}
-    matchComponent={Match}
-    svgWrapper={({ children, ...props }) => (
-      <SVGViewer
-        width={10000}
-        height={5000}
-        background="rgb(255, 255, 255)"
-        {...props}
-      >
-        {children}
-      </SVGViewer>
-    )}
-    onMatchClick={(match) => console.log(match)}
-    onPartyClick={(match) => console.log(match)}
-  />
-);
 
 const GlootTheme = createTheme({
   textColor: { main: "#000000", highlighted: "#10131C", dark: "#707580" },
@@ -84,174 +104,3 @@ const GlootTheme = createTheme({
   connectorColorHighlight: "RGBA(152,82,242,0.4)",
   svgBackground: "#FFFFFF",
 });
-
-export const simpleSmallBracket = [
-  {
-    id: 19753,
-    nextMatchId: null,
-    tournamentRoundText: "3",
-    startTime: "2021-05-30",
-    state: "SCHEDULED",
-    participants: [
-      {
-        id: "14754a1a-932c-4992-8dec-f7f94a339960",
-        resultText: null,
-        isWinner: false,
-        status: null,
-        name: "CoKe BoYz",
-        picture: "teamlogos/client_team_default_logo",
-      },
-    ],
-  },
-  {
-    id: 19754,
-    nextMatchId: 19753,
-    tournamentRoundText: "2",
-    startTime: "2021-05-30",
-    state: "SCHEDULED",
-    participants: [
-      {
-        id: "14754a1a-932c-4992-8dec-f7f94a339960",
-        resultText: null,
-        isWinner: false,
-        status: null,
-        name: "CoKe BoYz",
-        picture: "teamlogos/client_team_default_logo",
-      },
-    ],
-  },
-  {
-    id: 19755,
-    nextMatchId: 19754,
-    tournamentRoundText: "1",
-    startTime: "2021-05-30",
-    state: "SCORE_DONE",
-    participants: [
-      {
-        id: "14754a1a-932c-4992-8dec-f7f94a339960",
-        resultText: "Won",
-        isWinner: true,
-        status: "PLAYED",
-        name: "CoKe BoYz",
-        picture: "teamlogos/client_team_default_logo",
-      },
-      {
-        id: "d16315d4-7f2d-427b-ae75-63a1ae82c0a8",
-        resultText: "Lost",
-        isWinner: false,
-        status: "PLAYED",
-        name: "Aids Team",
-        picture: "teamlogos/client_team_default_logo",
-      },
-    ],
-  },
-  {
-    id: 19756,
-    nextMatchId: 19754,
-    tournamentRoundText: "1",
-    startTime: "2021-05-30",
-    state: "RUNNING",
-    participants: [
-      {
-        id: "d8b9f00a-0ffa-4527-8316-da701894768e",
-        resultText: null,
-        isWinner: false,
-        status: null,
-        name: "Art of kill",
-        picture: "teamlogos/client_team_default_logo",
-      },
-    ],
-  },
-  {
-    id: 19757,
-    nextMatchId: 19753,
-    tournamentRoundText: "2",
-    startTime: "2021-05-30",
-    state: "SCHEDULED",
-    participants: [],
-  },
-  {
-    id: 19758,
-    nextMatchId: 19757,
-    tournamentRoundText: "1",
-    startTime: "2021-05-30",
-    state: "SCHEDULED",
-    participants: [
-      {
-        id: "9397971f-4b2f-44eb-a094-722eb286c59b",
-        resultText: null,
-        isWinner: false,
-        status: null,
-        name: "Crazy Pepes",
-        picture: "teamlogos/client_team_default_logo",
-      },
-    ],
-  },
-  {
-    id: 19759,
-    nextMatchId: 19757,
-    tournamentRoundText: "1",
-    startTime: "2021-05-30",
-    state: "SCHEDULED",
-    participants: [
-      {
-        id: "42fecd89-dc83-4821-80d3-718acb50a30c",
-        resultText: null,
-        isWinner: false,
-        status: null,
-        name: "BLUEJAYS",
-        picture: "teamlogos/client_team_default_logo",
-      },
-      {
-        id: "df01fe2c-18db-4190-9f9e-aa63364128fe",
-        resultText: null,
-        isWinner: false,
-        status: null,
-        name: "Bosphorus",
-        picture: "teamlogos/r7zn4gr8eajivapvjyzd",
-      },
-    ],
-  },
-  {
-    id: 19758,
-    nextMatchId: 19757,
-    tournamentRoundText: "1",
-    startTime: "2021-05-30",
-    state: "SCHEDULED",
-    participants: [
-      {
-        id: "9397971f-4b2f-44eb-a094-722eb286c59b",
-        resultText: null,
-        isWinner: false,
-        status: null,
-        name: "Crazy Pepes",
-        picture: "teamlogos/client_team_default_logo",
-      },
-    ],
-  },
-  {
-    id: 19759,
-    nextMatchId: 19757,
-    tournamentRoundText: "1",
-    startTime: "2021-05-30",
-    state: "SCHEDULED",
-    participants: [
-      {
-        id: "42fecd89-dc83-4821-80d3-718acb50a30c",
-        resultText: null,
-        isWinner: false,
-        status: null,
-        name: "BLUEJAYS",
-        picture: "teamlogos/client_team_default_logo",
-      },
-      {
-        id: "df01fe2c-18db-4190-9f9e-aa63364128fe",
-        resultText: null,
-        isWinner: false,
-        status: null,
-        name: "Bosphorus",
-        picture: "teamlogos/r7zn4gr8eajivapvjyzd",
-      },
-    ],
-  },
-];

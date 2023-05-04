@@ -27,7 +27,7 @@ import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -55,7 +55,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const theme = createTheme();
-export default function AddNewTournament() {
+export default function AddNewTournament({ ...props }) {
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const [openSuccess, setOpenSuccess] = React.useState({
@@ -65,11 +65,12 @@ export default function AddNewTournament() {
   const { t } = useTranslation();
   const columns = [{ id: "name", label: t("Player"), minWidth: 50 }];
   const { organisation } = useAuth();
-  console.log(organisation);
 
-  const [formTournament, setTournament] = useState({
-    organisation: "",
-    DatePlayed: "",
+  const { state } = useLocation();
+  const [tournament, setTournament] = useState({
+    Name: state.Name,
+    Date: state.TournamentDate,
+    OrganisationId: organisation.id,
   });
 
   const handleClose = (event, reason) => {
@@ -88,67 +89,72 @@ export default function AddNewTournament() {
     });
   };
 
-  const [players, setPlayers] = React.useState([]);
-  //   console.log(players);
-  const isMountedRef = useRefMounted();
-
-  //   const getAllBGByOrganisation = useCallback(async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         "http://localhost:7293/api/BoardGamePlay/GetAllBGDataByOrganisation/" +
-  //           organisation.id
-  //       );
-
-  //       if (isMountedRef.current) {
-  //         setPlayers(response.data);
-  //       }
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   }, [isMountedRef]);
-
-  //   useEffect(() => {
-  //     getAllBGByOrganisation();
-  //   }, [getAllBGByOrganisation]);
-
-  const handleAdd = async (event) => {
+  const handleAddTournament = async () => {
     {
-      event.preventDefault();
-      const formData = new FormData(event.currentTarget);
-      const data = {
-        Name: formData.get("playerName"),
-        OrganisationId: organisation.id,
-      };
       const response = await axios.post(
-        "http://localhost:7293/api/BoardGamePlay/AddOrganisationBG",
-        data
+        "http://localhost:7293/api/Tournament",
+        {
+          ...tournament,
+          Players: tournamentPlayers,
+        }
       );
-      console.log("Player added");
-      console.log(response.data);
       if (response) {
-        setPlayers(response.data);
-        setOpenSuccess({
-          open: true,
-          message: "Player added",
-        });
+        navigate("/tournament_table/" + response.data.id);
       }
     }
   };
+  console.log(state);
 
-  //   const handleDelete = async (id) => {
-  //     {
-  //       const response = await axios.delete(
-  //         "http://localhost:7293/api/BoardGamePlay/DeleteOrganisationBG/" + id
-  //       );
-  //       if (response) {
-  //         console.log("Player deleted");
-  //         console.log(response);
-  //         setPlayers(response.data);
-  //         setOpen(true);
-  //       }
-  //     }
-  //   };
+  //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Player input
 
+  const { placeholder, ...other } = props;
+  const [inputValue, setInputValue] = React.useState("");
+  const [tournamentPlayers, setTournamentPlayers] = React.useState([]);
+
+  function handleAdd(event) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const playerName = formData.get("playerName");
+
+    const newTournamentPlayers = [...tournamentPlayers];
+    const duplicatedValues = newTournamentPlayers.indexOf(playerName.trim());
+
+    if (duplicatedValues !== -1) {
+      setInputValue("");
+      return;
+    }
+    if (!playerName.replace(/\s/g, "").length) return;
+
+    newTournamentPlayers.push(playerName.trim());
+    setTournamentPlayers(newTournamentPlayers);
+
+    console.log("added tournament player", tournamentPlayers);
+
+    setInputValue("");
+  }
+  function handleChange(item) {
+    let newSelectedItem = [...tournamentPlayers];
+    if (newSelectedItem.indexOf(item) === -1) {
+      newSelectedItem = [...newSelectedItem, item];
+      console.log({
+        handleChange: formData,
+        selektintiplaueriai: tournamentPlayers,
+      });
+    }
+    setInputValue("");
+    setTournamentPlayers(newSelectedItem);
+  }
+
+  const handleDelete = (item) => {
+    const newTournamentPlayers = [...tournamentPlayers];
+    newTournamentPlayers.splice(newTournamentPlayers.indexOf(item), 1);
+    setTournamentPlayers(newTournamentPlayers);
+  };
+
+  function handleInputChange(event) {
+    setInputValue(event.target.value);
+  }
+  //>>>>>>>>>>>>>>>>Player input ^
   return (
     <ThemeProvider theme={theme}>
       <Snackbar
@@ -188,19 +194,27 @@ export default function AddNewTournament() {
           <Typography component="h1" variant="h5">
             {t("Register all tournament players")}
           </Typography>
+          <Box>
+            <Typography component="h1">{t("Tournament name:")}</Typography>
+            <Typography component="h1">{state.Name}</Typography>
+            <Typography component="h1">{t("Tournament date:")}</Typography>
+            <Typography component="h1">
+              {state.TournamentDate.toLocaleDateString()}{" "}
+              {state.TournamentDate.toLocaleTimeString()}
+            </Typography>
+          </Box>
           <Box
             sx={{
               display: "flex",
               alignItems: "flex-end",
               align: "left",
-              marginTop: 7,
+              marginTop: 6,
             }}
           >
             <Button
               variant="contained"
               onClick={() => {
-                // {handleAddTournament}
-                navigate("/tournament_table");
+                handleAddTournament();
               }}
             >
               {t("Confirm Tournament")}
@@ -208,7 +222,7 @@ export default function AddNewTournament() {
           </Box>
           <Paper
             sx={{
-              marginTop: 1,
+              marginTop: 2,
             }}
             style={{ height: 500, width: "100%" }}
             component="form"
@@ -239,11 +253,11 @@ export default function AddNewTournament() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {players.map((player) => {
+                  {tournamentPlayers.map((player) => {
                     return (
                       <StyledTableRow hover tabIndex={-1} key={player.code}>
                         {columns.map((column) => {
-                          const value = player[column.id];
+                          const value = player;
                           return (
                             <StyledTableCell
                               key={column.id}
@@ -259,9 +273,9 @@ export default function AddNewTournament() {
                           <StyledTableCell key="deleteButton">
                             <IconButton
                               aria-label={t("delete")}
-                              id={player.id}
+                              id={player}
                               onClick={() => {
-                                // handleDelete(player.id);
+                                handleDelete(player);
                               }}
                             >
                               <DeleteIcon fontSize="inherit" />

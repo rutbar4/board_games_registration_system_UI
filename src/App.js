@@ -2,7 +2,6 @@ import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import ReactDOM from "react-dom/client";
 import BGamePlayInputForm from "./GameInputForm/RegisterPlayForm";
 import LogIn from "./Authentication/log-in/LogIn";
 import SignUp from "./Authentication/sign-up/SignUp";
@@ -26,6 +25,7 @@ import Authenticated from "./Authentication/Auth/Authenticated";
 import { StyledEngineProvider } from "@mui/material/styles";
 import useAuth from "./Authentication/Auth/useAuth";
 import { useTranslation } from "react-i18next";
+import * as moment from "moment-timezone";
 
 const router = [
   {
@@ -92,8 +92,6 @@ const router = [
     path: "user_board_games",
     element: (
       <Authenticated>
-
-
         <UserBoardGamesTable />
       </Authenticated>
     ),
@@ -102,20 +100,22 @@ const router = [
     path: "main_tournament_page",
     element: (
       <Authenticated>
-
-
-        
         <MainTournamentPage />
       </Authenticated>
     ),
   },
   {
     path: "tournament_table",
-    element: (
-      <Authenticated>
-        <TournamentTable />
-      </Authenticated>
-    ),
+    children: [
+      {
+        path: ":tournamentId",
+        element: (
+          <Authenticated>
+            <TournamentTable />
+          </Authenticated>
+        ),
+      },
+    ],
   },
   {
     path: "add_new_tournament",
@@ -151,6 +151,7 @@ function Copyright(props) {
   );
 }
 function App() {
+  moment.tz.setDefault("Etc/UTC");
   const content = useRoutes(router);
   const theme = createTheme();
   const auth = useAuth();
