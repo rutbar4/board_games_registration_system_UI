@@ -8,13 +8,18 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import CloseIcon from "@mui/icons-material/Close";
-import { Container, IconButton, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Container,
+  IconButton,
+  TextField,
+  Typography,
+} from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { useTranslation } from "react-i18next";
 import Tooltip from "@mui/material/Tooltip";
-import useRefMounted from "../../../hooks/useRefMounted";
+import useRefMounted from "../hooks/useRefMounted";
 import { useCallback } from "react";
-import BoardGameTable from "./BoardGameTable";
 import axios from "axios";
 
 const theme = createTheme();
@@ -57,32 +62,34 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function MoreInfoDialog({ organisationName }) {
+export default function EditMatchDialog({ matchDetails, open, setOpen }) {
   const { t } = useTranslation();
   const isMountedRef = useRefMounted();
+  const [winnnerName, setWinnnerName] = React.useState([]);
+  const [winnnerPoints, setWinnnerPoints] = React.useState([]);
 
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
   const handleClose = () => {
+    editMatch();
     setOpen(false);
   };
 
-  const [bGames, setGames] = React.useState([]);
-  const getAllBGByOrganisation = async (organisationName) => {
+  const [match, setMatch] = React.useState([]);
+  const editMatch = async (organisationName) => {
     try {
       console.log("aaaaaaaaaaaaaaaaaaaaa");
       console.log(organisationName);
-      const response = await axios.get(
-        "http://localhost:7293/api/BoardGamePlay/GetAllBGDataByOrganisationName/" +
-          organisationName
+      const response = await axios.put(
+        "http://localhost:7293/api/Tournament/UpdateMatch",
+        {
+          MatchId: matchDetails.match.id,
+          WinnerName: winnnerName,
+          WinnerPoints: winnnerPoints,
+        }
       );
 
       console.log(response.data);
       if (isMountedRef.current) {
-        setGames(response.data);
+        setMatch(response.data);
       }
     } catch (err) {
       console.error(err);
@@ -91,18 +98,6 @@ export default function MoreInfoDialog({ organisationName }) {
 
   return (
     <ThemeProvider theme={theme}>
-      <Tooltip title="More info">
-        <IconButton
-          color="secondary"
-          aria-label="more info"
-          onClick={() => {
-            handleClickOpen();
-            getAllBGByOrganisation(organisationName);
-          }}
-        >
-          <InfoOutlinedIcon />
-        </IconButton>
-      </Tooltip>
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
@@ -116,7 +111,25 @@ export default function MoreInfoDialog({ organisationName }) {
         </BootstrapDialogTitle>
         <DialogContent dividers>
           <Container>
-            <BoardGameTable games={bGames} />
+            <Autocomplete
+              required
+              id="winner"
+              name="winner"
+              options={matchDetails?.participants.map((p) => p.name)}
+              renderInput={(params) => (
+                <TextField {...params} label={t("Organisation")} />
+              )}
+              onChange={(e) => {
+                setWinnnerName(e.target.innerText);
+              }}
+            ></Autocomplete>
+            <TextField
+              type="number"
+              label="Victory points"
+              onChange={(e) => {
+                setWinnnerPoints(e.target.value);
+              }}
+            />
           </Container>
         </DialogContent>
         <DialogActions>
@@ -128,4 +141,3 @@ export default function MoreInfoDialog({ organisationName }) {
     </ThemeProvider>
   );
 }
-MoreInfoDialog.propTypes = { organisationName: PropTypes.string.isRequired };

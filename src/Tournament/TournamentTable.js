@@ -26,6 +26,7 @@ import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import EditMatchDialog from "./EditMatchDialog";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -38,7 +39,18 @@ export default function TournamentTable() {
   const { t } = useTranslation();
   const { tournamentId } = useParams();
   const [tournamentData, setTournamentData] = React.useState();
+  const [selectedMatch, setSelectedMatch] = React.useState();
   const isMountedRef = useRefMounted();
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = (match) => {
+    setSelectedMatch(match);
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
   const getTournament = useCallback(async () => {
     try {
       const response = await axios.get(
@@ -77,10 +89,18 @@ export default function TournamentTable() {
               {children}
             </SVGViewer>
           )}
-          onMatchClick={(match) => console.log(match)}
+          onMatchClick={(match) => {
+            console.log(match);
+            handleClickOpen(match.match);
+          }}
           onPartyClick={(match) => console.log(match)}
         />
       </Container>
+      <EditMatchDialog
+        matchDetails={selectedMatch}
+        open={open}
+        setOpen={setOpen}
+      />
     </Box>
   );
 }
