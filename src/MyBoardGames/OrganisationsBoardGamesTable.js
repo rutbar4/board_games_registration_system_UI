@@ -23,6 +23,7 @@ import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import LinkToBGGDialog from "./Tools/LinkToBGGDialog";
 import { useTranslation } from "react-i18next";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -269,9 +270,10 @@ export default function OrganisationProfile() {
                   </StyledTableCell>
                   <Tooltip title={t("Add new board game")}>
                     <StyledTableCell>
-                      <IconButton id="addBoardGame" type="submit">
+                      <LinkToBGGDialog></LinkToBGGDialog>
+                      {/* <IconButton id="addBoardGame" type="submit">
                         <AddIcon />
-                      </IconButton>
+                      </IconButton> */}
                     </StyledTableCell>
                   </Tooltip>
                 </TableBody>
