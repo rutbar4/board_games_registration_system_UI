@@ -41,7 +41,7 @@ export default function TournamentTable() {
   const [tournamentData, setTournamentData] = React.useState();
   const [selectedMatch, setSelectedMatch] = React.useState();
   const isMountedRef = useRefMounted();
-
+  const { organisation } = useAuth();
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = (match) => {
@@ -71,7 +71,6 @@ export default function TournamentTable() {
   }, [getTournament]);
 
   if (!tournamentData) return null;
-
   return (
     <Box>
       <Container component="main" maxWidth="lg">
@@ -96,11 +95,14 @@ export default function TournamentTable() {
           onPartyClick={(match) => console.log(match)}
         />
       </Container>
-      <EditMatchDialog
-        matchDetails={selectedMatch}
-        open={open}
-        setOpen={setOpen}
-      />
+      {organisation?.name === tournamentData.organsiationName && (
+        <EditMatchDialog
+          matchDetails={selectedMatch}
+          open={open}
+          setOpen={setOpen}
+          setTournamentData={setTournamentData}
+        />
+      )}
     </Box>
   );
 }

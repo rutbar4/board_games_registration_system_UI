@@ -62,35 +62,35 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function EditMatchDialog({ matchDetails, open, setOpen }) {
+export default function EditMatchDialog({
+  matchDetails,
+  open,
+  setOpen,
+  setTournamentData,
+}) {
   const { t } = useTranslation();
   const isMountedRef = useRefMounted();
   const [winnnerName, setWinnnerName] = React.useState([]);
   const [winnnerPoints, setWinnnerPoints] = React.useState([]);
 
   const handleClose = () => {
-    editMatch();
     setOpen(false);
   };
 
-  const [match, setMatch] = React.useState([]);
-  const editMatch = async (organisationName) => {
+  const editMatch = async () => {
     try {
-      console.log("aaaaaaaaaaaaaaaaaaaaa");
-      console.log(organisationName);
+      console.log(matchDetails);
+
       const response = await axios.put(
         "http://localhost:7293/api/Tournament/UpdateMatch",
         {
-          MatchId: matchDetails.match.id,
+          Id: matchDetails.id,
           WinnerName: winnnerName,
           WinnerPoints: winnnerPoints,
         }
       );
-
       console.log(response.data);
-      if (isMountedRef.current) {
-        setMatch(response.data);
-      }
+      setTournamentData(response.data);
     } catch (err) {
       console.error(err);
     }
@@ -107,33 +107,46 @@ export default function EditMatchDialog({ matchDetails, open, setOpen }) {
           id="customized-dialog-title"
           onClose={handleClose}
         >
-          Information about organisation: {}
+          Select winner: {}
         </BootstrapDialogTitle>
         <DialogContent dividers>
           <Container>
-            <Autocomplete
-              required
-              id="winner"
-              name="winner"
-              options={matchDetails?.participants.map((p) => p.name)}
-              renderInput={(params) => (
-                <TextField {...params} label={t("Organisation")} />
-              )}
-              onChange={(e) => {
-                setWinnnerName(e.target.innerText);
-              }}
-            ></Autocomplete>
-            <TextField
-              type="number"
-              label="Victory points"
-              onChange={(e) => {
-                setWinnnerPoints(e.target.value);
-              }}
-            />
+            {matchDetails?.state !== "PLAYED" && (
+              <>
+                <Autocomplete
+                  required
+                  id="winner"
+                  name="winner"
+                  options={matchDetails?.participants.map((p) => p.name)}
+                  renderInput={(params) => (
+                    <TextField {...params} label={t("Winner")} />
+                  )}
+                  onChange={(e) => {
+                    setWinnnerName(e.target.innerText);
+                  }}
+                ></Autocomplete>
+                <TextField
+                  type="number"
+                  label="Victory points"
+                  onChange={(e) => {
+                    setWinnnerPoints(e.target.value);
+                  }}
+                />
+              </>
+            )}
+            {matchDetails?.state === "PLAYED" && (
+              <Typography>Game is already played</Typography>
+            )}
           </Container>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose}>
+          <Button
+            autoFocus
+            onClick={() => {
+              handleClose();
+              if (matchDetails?.state !== "PLAYED") editMatch();
+            }}
+          >
             Ok
           </Button>
         </DialogActions>

@@ -18,6 +18,7 @@ import OrganisationBoardGamesTable from "./MyBoardGames/OrganisationsBoardGamesT
 import UserBoardGamesTable from "./MyBoardGames/UserBoardGamesTable";
 import Organisations from "./ViewOrgnaisations/Organisations";
 import OrganisationPage from "./OrganisationPage/OrganisationPage";
+import AllTournaments from "./Tournament/AllTournaments/AllTournaments";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { useRoutes } from "react-router-dom";
@@ -115,6 +116,15 @@ const router = [
           </Authenticated>
         ),
       },
+      {
+        path: "public",
+        children: [
+          {
+            path: ":tournamentId",
+            element: <TournamentTable />,
+          },
+        ],
+      },
     ],
   },
   {
@@ -131,7 +141,11 @@ const router = [
   },
   {
     path: "organisations_page",
-    element: <Organisations />,
+    element: <OrganisationPage />,
+  },
+  {
+    path: "all_tournaments",
+    element: <AllTournaments />,
   },
 ];
 

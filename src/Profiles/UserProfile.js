@@ -82,7 +82,6 @@ export default function UserProfile() {
 
   const handleEditProfile = async (event) => {
     {
-      debugger;
       if (!user) return null;
       console.log(user.id);
       event.preventDefault();

@@ -73,7 +73,6 @@ export default function GameResults({ setFormData, formData }) {
               defaultValue={cjToday}
               label={t("Game play day")}
               onChange={(value) => {
-                debugger;
                 setFormData((data) => ({
                   ...data,
                   DatePlayed: value === null ? cjToday : value.$d,

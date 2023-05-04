@@ -71,6 +71,7 @@ export default function AddNewTournament({ ...props }) {
     Name: state.Name,
     Date: state.TournamentDate,
     OrganisationId: organisation.id,
+    Description: state.Description,
   });
 
   const handleClose = (event, reason) => {
@@ -155,6 +156,7 @@ export default function AddNewTournament({ ...props }) {
     setInputValue(event.target.value);
   }
   //>>>>>>>>>>>>>>>>Player input ^
+  let i = 1;
   return (
     <ThemeProvider theme={theme}>
       <Snackbar
@@ -185,15 +187,16 @@ export default function AddNewTournament({ ...props }) {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 7,
+            marginTop: 5,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
           }}
         >
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" sx={{ marginBottom: 2 }}>
             {t("Register all tournament players")}
           </Typography>
+
           <Box>
             <Typography component="h1">{t("Tournament name:")}</Typography>
             <Typography component="h1">{state.Name}</Typography>
@@ -208,7 +211,7 @@ export default function AddNewTournament({ ...props }) {
               display: "flex",
               alignItems: "flex-end",
               align: "left",
-              marginTop: 6,
+              marginTop: 4,
             }}
           >
             <Button
@@ -234,6 +237,7 @@ export default function AddNewTournament({ ...props }) {
                 {/* aria-label="sticky table" */}
                 <TableHead>
                   <TableRow>
+                    <StyledTableCell padding="checkbox">Nr.</StyledTableCell>
                     {columns.map((column) => (
                       <StyledTableCell
                         key={column.id}
@@ -256,6 +260,9 @@ export default function AddNewTournament({ ...props }) {
                   {tournamentPlayers.map((player) => {
                     return (
                       <StyledTableRow hover tabIndex={-1} key={player.code}>
+                        <StyledTableCell padding="checkbox">
+                          {i++}
+                        </StyledTableCell>
                         {columns.map((column) => {
                           const value = player;
                           return (
@@ -285,6 +292,7 @@ export default function AddNewTournament({ ...props }) {
                       </StyledTableRow>
                     );
                   })}
+                  <StyledTableCell padding="checkbox"></StyledTableCell>
                   <StyledTableCell>
                     <TextField
                       fullWidth

@@ -11,8 +11,7 @@ import TableRow from "@mui/material/TableRow";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import { useEffect, useCallback } from "react";
-import useRefMounted from "../../src/hooks/useRefMounted";
-import useAuth from "../../src/Authentication/Auth/useAuth";
+import useRefMounted from "../../hooks/useRefMounted";
 import axios from "axios";
 import { Button, TextField, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
@@ -28,47 +27,27 @@ import IconButton from "@mui/material/IconButton";
 
 const theme = createTheme();
 const columns = [
+  { id: "organisationName", label: "Organisation" },
   { id: "tournamentName", label: "Name" },
   { id: "tournamentDate", label: "Date" },
+  { id: "description", label: "Description" },
   { id: "actions", label: "" },
 ];
 
 export default function MainTournamentPage() {
   const navigate = useNavigate();
-  const { organisation } = useAuth();
   const [tournaments, setTournaments] = React.useState([]);
 
   const { t } = useTranslation();
-  const today = new Date();
-  const cjToday = dayjs(today);
-  const [tournamentData, setTournamentData] = React.useState({
-    Name: "",
-    TournamentDate: today,
-  });
 
   console.log(tournaments);
 
-  const handleOnSubmit = async (event) => {
-    {
-      const formData = new FormData(event.currentTarget);
-      const data = {
-        Name: formData.get("tournamentName"),
-        TournamentDate: tournamentData.TournamentDate,
-        Description: formData.get("description"),
-      };
-
-      navigate("/add_new_tournament", {
-        state: data,
-      });
-    }
-  };
   const isMountedRef = useRefMounted();
 
-  const GetAllTournamentsByOrgnisation = useCallback(async () => {
+  const GetAllTournaments = useCallback(async () => {
     try {
-      console.log(organisation.id);
       const response = await axios.get(
-        "http://localhost:7293/api/tournament/organisation/" + organisation.id
+        "http://localhost:7293/api/tournament/organisation/AllTournaments"
       );
 
       if (isMountedRef.current) {
@@ -81,8 +60,8 @@ export default function MainTournamentPage() {
   }, [isMountedRef]);
 
   useEffect(async () => {
-    await GetAllTournamentsByOrgnisation();
-  }, [GetAllTournamentsByOrgnisation]);
+    await GetAllTournaments();
+  }, [GetAllTournaments]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -101,80 +80,10 @@ export default function MainTournamentPage() {
           spacing={2}
           alignItems="center"
           justifyContent="center"
-          onSubmit={handleOnSubmit}
-        >
-          <Box
-            sx={{
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <Box
-              sx={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-evenly",
-              }}
-            >
-              <TextField
-                sx={{p:1}}
-                required
-                id="tournamentName"
-                name="tournamentName"
-                label="Tournament name"
-                variant="outlined"
-              />
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateTimePicker
-                sx={{p:1}}
-                  ampm={false}
-                  id="GamePlayDay"
-                  name="GamePlayDay"
-                  defaultValue={cjToday}
-                  format="DD-MM-YYYY HH:mm"
-                  label={t("Game play day")}
-                  onChange={(value) => {
-                    setTournamentData((tournamentData) => ({
-                      ...tournamentData,
-                      TournamentDate: value === null ? cjToday : value.$d,
-                    }));
-                  }}
-                />
-              </LocalizationProvider>
-              <TextField
-                sx={{p:1}}
-                id="description"
-                name="description"
-                label="Description"
-                multiline
-                maxRows={10}
-              />
-            </Box>
-            <Box
-              sx={{
-                alignItems: "center",
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <Box
-                fullWidth
-                sx={{
-                  marginTop: 2,
-                  alignItems: "center",
-                }}
-              >
-                <Button variant="contained" type="submit">
-                  Create new tournament
-                </Button>
-              </Box>
-            </Box>
-          </Box>
-        </Grid>
-
+        ></Grid>
         <Box
           sx={{
-            marginTop: 5,
+            marginTop: 7,
           }}
         >
           <TableContainer component={Paper}>
@@ -188,7 +97,7 @@ export default function MainTournamentPage() {
                       id="tournamentsTitle"
                       component="div"
                     >
-                      {t("All my organisations Tournaments")}
+                      {t("All Tournaments")}
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -208,15 +117,17 @@ export default function MainTournamentPage() {
                       key={row.name}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
+                      <TableCell align="left">{row.organsiationName}</TableCell>
                       <TableCell align="left">{row.name}</TableCell>
                       <TableCell align="left">
                         {format(date, "dd-MM-yyyy H:mm", { timeZone: "GMT+3" })}
                       </TableCell>
+                      <TableCell align="left">{row.description}</TableCell>
                       <TableCell>
                         <IconButton aria-label="delete" size="large">
                           <LaunchIcon
                             onClick={() => {
-                              navigate("/tournament_table/" + row.id);
+                              navigate("/tournament_table/public/" + row.id);
                             }}
                           />
                         </IconButton>
