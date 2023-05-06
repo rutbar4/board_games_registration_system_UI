@@ -16,18 +16,19 @@ import { useTranslation } from "react-i18next";
 
 const theme = createTheme();
 
-export default function PlaysTable() {
+export default function BGTable() {
   const { organisation } = useAuth();
   const [plays, setPlays] = React.useState([]);
   const { t } = useTranslation();
 
   const columns = [
     { id: "boardGameName", label: t("Board game name") },
-    { id: "boardGameType", label: t("Type") },
-    { id: "playersCount", label: t("Number of players") },
-    { id: "winner", label: t("Winner") },
-    { id: "winnerPoints", label: t("Winning points") },
-    { id: "playDate", label: t("Play date") },
+    { id: "count", label: t("Plays count") },
+    { id: "record", label: t("Game Record") },
+    { id: "mostWinningPlayer", label: t("Most winning player") },
+    { id: "wins", label: t("Win count") },
+    { id: "mostActivePlayer", label: t("Played most") },
+    { id: "mostActivePlayerPlayCount", label: t("Play count") },
   ];
 
   console.log(plays);
@@ -37,7 +38,7 @@ export default function PlaysTable() {
     try {
       console.log(organisation.id);
       const response = await axios.get(
-        "http://localhost:7293/api/BoardGamePlay/AllPlaysByOrganisationId/" +
+        "http://localhost:7293/api/BoardGamePlay/BGPlaysByOrganisationId/" +
           organisation.id
       );
 
@@ -48,7 +49,7 @@ export default function PlaysTable() {
     } catch (err) {
       console.error(err);
     }
-    }, [isMountedRef]);
+  }, [isMountedRef]);
 
   useEffect(async () => {
     await GetAllPlaysByOrgnisation();
@@ -58,7 +59,7 @@ export default function PlaysTable() {
   return (
     <ThemeProvider theme={theme}>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 550 }} aria-label="a dense table">
+        <Table sx={{ minWidth: 550 }} aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell colSpan={"100%"}>
@@ -68,7 +69,7 @@ export default function PlaysTable() {
                   id="playsTableTitle"
                   component="div"
                 >
-                  {t("All Board Game Plays")}
+                  {t("Board Game Statistic")}
                 </Typography>
               </TableCell>
             </TableRow>
@@ -89,12 +90,13 @@ export default function PlaysTable() {
                 <TableCell component="th" scope="row">
                   {row.boardGameName}
                 </TableCell>
-                <TableCell align="left">{row.boardGameType}</TableCell>
-                <TableCell align="left">{row.playersCount}</TableCell>
-                <TableCell align="left">{row.winner}</TableCell>
-                <TableCell align="left">{row.winnerPoints}</TableCell>
+                <TableCell align="left">{row.count}</TableCell>
+                <TableCell align="left">{row.record}</TableCell>
+                <TableCell align="left">{row.mostWinningPlayer}</TableCell>
+                <TableCell align="left">{row.wins}</TableCell>
+                <TableCell align="left">{row.mostActivePlayer}</TableCell>
                 <TableCell align="left">
-                  {row.datePlayed.slice(0, 10)}
+                  {row.mostActivePlayerPlayCount}
                 </TableCell>
               </TableRow>
             ))}
