@@ -10,7 +10,14 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import FormControl from "@mui/material/FormControl";
 import Container from "@mui/material/Container";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../Auth/useAuth";
@@ -38,6 +45,13 @@ export default function SignUp() {
     navigate("/");
   };
 
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -62,7 +76,7 @@ export default function SignUp() {
             onSubmit={handleSignUp}
             sx={{ mt: 3 }}
           >
-            <Grid container spacing={2}>
+            <Grid container spacing={2} component="form">
               <Grid item xs={12}>
                 <TextField
                   autoComplete="given-name"
@@ -70,7 +84,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="organisationName"
-                label={t("Name of organisation")}
+                  label={t("Name of organisation")}
                   autoFocus
                 />
               </Grid>
@@ -90,6 +104,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="email"
+                  type="email"
                   label={t("E-mail address")}
                   name="email"
                   autoComplete="email"
@@ -115,6 +130,28 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
+                {/* <FormControl variant="outlined" fullWidth>
+                  <InputLabel
+                    required>{t("Password")}</InputLabel>
+                  <OutlinedInput
+                    id="password"
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    label={t("Password")}
+                  />
+                </FormControl> */}
                 <TextField
                   required
                   fullWidth
