@@ -25,10 +25,10 @@ export default function OrganisationTableStat() {
           </Grid>
         </Grid>
       </Container>
-      <Container maxWidth="md" sx={{ pb: 3, pt: 3 }}>
+      <Container maxWidth="lg" sx={{ pb: 3, pt: 3 }}>
         <BGTable />
       </Container>
-      <Container maxWidth="md" sx={{ pb: 3, pt: 3 }}>
+      <Container maxWidth="lg" sx={{ pb: 3, pt: 3 }}>
         <PlaysTable />
       </Container>
     </ThemeProvider>

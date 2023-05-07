@@ -39,7 +39,7 @@ export default function BGTable() {
       console.log(organisation.id);
       const response = await axios.get(
         "http://localhost:7293/api/BoardGamePlay/BGPlaysByOrganisationId/" +
-          organisation.id
+        organisation.id
       );
 
       if (isMountedRef.current) {
@@ -64,7 +64,7 @@ export default function BGTable() {
             <TableRow>
               <TableCell colSpan={"100%"}>
                 <Typography
-                  sx={{ flex: "100%", textAlign: "center" }}
+                  sx={{ flex: "100%", textAlign: "center", fontWeight: "bold" }}
                   variant="h6"
                   id="playsTableTitle"
                   component="div"
@@ -75,9 +75,9 @@ export default function BGTable() {
             </TableRow>
           </TableHead>
           <TableHead>
-            <TableRow>
+            <TableRow >
               {columns.map((column) => (
-                <TableCell key={column.id}>{column.label}</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }} key={column.id}>{column.label}</TableCell>
               ))}
             </TableRow>
           </TableHead>

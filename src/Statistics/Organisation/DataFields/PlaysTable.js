@@ -15,6 +15,9 @@ import TablePagination from "@mui/material/TablePagination";
 import { Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
+import TableSortLabel from '@mui/material/TableSortLabel';
+import Box from '@mui/material/Box';
+import { visuallyHidden } from '@mui/utils';
 
 const theme = createTheme();
 export default function PlaysTable() {
@@ -42,6 +45,7 @@ export default function PlaysTable() {
       ),
     [order, orderBy, page, rowsPerPage]
   );
+
   function stableSort(array, comparator) {
     const stabilizedThis = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
@@ -67,13 +71,7 @@ export default function PlaysTable() {
       ? (a, b) => descendingComparator(a, b, orderBy)
       : (a, b) => -descendingComparator(a, b, orderBy);
   }
-  function EnhancedTableHead(props) {
-    const { order, orderBy, onRequestSort } = props;
-    const createSortHandler = (property) => (event) => {
-      onRequestSort(event, property);
-    };
-  }
- 
+
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelected = plays.map((n) => n.name);
@@ -82,19 +80,52 @@ export default function PlaysTable() {
     }
     setSelected([]);
   };
-  const handleRequestSort = (event, property) => {
+  const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
+
+  const createSortHandler = (event) => {
+    onRequestSort(event, property);
+  };
+
   const columns = [
-    { id: "boardGameName", label: t("Board game name") },
-    { id: "boardGameType", label: t("Type") },
-    { id: "playersCount", label: t("Number of players") },
-    { id: "winner", label: t("Winner") },
-    { id: "winnerPoints", label: t("Winning points") },
-    { id: "playDate", label: t("Play date") },
+    {
+      id: "boardGameName", numeric: false,
+      disablePadding: true,
+      label: t("Board game name")
+    },
+    {
+      id: "boardGameType", numeric: false,
+      disablePadding: true,
+      label: t("Type")
+    },
+    {
+      id: "playersCount",
+      numeric: true,
+      disablePadding: false,
+      label: t("Number of players")
+    },
+    {
+      id: "winner",
+      numeric: false,
+      disablePadding: true,
+      label: t("Winner")
+    },
+    {
+      id: "winnerPoints",
+      numeric: true,
+      disablePadding: false,
+      label: t("Winning points")
+    },
+    {
+      id: "playDate",
+      numeric: false,
+      disablePadding: false,
+      label: t("Play date")
+    },
   ];
 
   console.log(plays);
@@ -105,11 +136,12 @@ export default function PlaysTable() {
       console.log(organisation.id);
       const response = await axios.get(
         "http://localhost:7293/api/BoardGamePlay/AllPlaysByOrganisationId/" +
-          organisation.id
+        organisation.id
       );
 
       if (isMountedRef.current) {
         setPlays(response.data);
+        handleRequestSort(response.data);
       }
       console.log(plays);
     } catch (err) {
@@ -128,47 +160,59 @@ export default function PlaysTable() {
         <Table sx={{ minWidth: 550 }} aria-label="a dense table">
           <TableHead>
             <TableRow>
-              <TableCell colSpan={"100%"}>
+              <TableCell colSpan={"100%"} align="center">
                 <Typography
                   sx={{ flex: "100%", textAlign: "center" }}
                   variant="h6"
                   id="playsTableTitle"
                   component="div"
                 >
-                  {t("All Board Game Plays")}
+                  <Box sx={{ fontWeight: "bold" }}>
+                    {t("All Board Game Plays")}</Box>
                 </Typography>
               </TableCell>
             </TableRow>
-          </TableHead>
+            <TableRow >
+              {columns.map((headCell) => (
+                <TableCell
+                  size="small"
+                  key={headCell.id}
+                  align="center"
+                  padding={headCell.disablePadding ? 'none' : 'normal'}
+                  sortDirection={orderBy === headCell.id ? order : false}
 
-          <EnhancedTableHead
-            numSelected={selected.length}
-            order={order}
-            orderBy={orderBy}
-            onSelectAllClick={handleSelectAllClick}
-            onRequestSort={handleRequestSort}
-            rowCount={plays.length}
-          >
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell key={column.id}>{column.label}</TableCell>
+                >
+                  <TableSortLabel sx={{ fontWeight: "bold" }}
+                    active={orderBy === headCell.id}
+                    direction={orderBy === headCell.id ? order : 'asc'}
+                    onClick={(e) => { handleRequestSort(headCell.id) }}
+                  >
+                    {headCell.label}
+                    {orderBy === headCell.id ? (
+                      <Box component="span" sx={visuallyHidden}>
+                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                      </Box>
+                    ) : null}
+                  </TableSortLabel>
+                </TableCell>
               ))}
             </TableRow>
-          </EnhancedTableHead>
+          </TableHead>
           <TableBody>
-            {visibleRows.map((row, index) => (
+            {visibleRows.map((row) => (
               <TableRow
                 key={row.name}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell component="th" scope="row">
+                <TableCell component="th" scope="row"
+                  size="small">
                   {row.boardGameName}
                 </TableCell>
-                <TableCell align="left">{row.boardGameType}</TableCell>
-                <TableCell align="left">{row.playersCount}</TableCell>
-                <TableCell align="left">{row.winner}</TableCell>
-                <TableCell align="left">{row.winnerPoints}</TableCell>
-                <TableCell align="left">
+                <TableCell align="left" size="small">{row.boardGameType}</TableCell>
+                <TableCell align="center" size="small">{row.playersCount}</TableCell>
+                <TableCell align="left" size="small">{row.winner}</TableCell>
+                <TableCell align="center" size="small">{row.winnerPoints}</TableCell>
+                <TableCell align="left" size="small">
                   {row.datePlayed.slice(0, 10)}
                 </TableCell>
               </TableRow>
