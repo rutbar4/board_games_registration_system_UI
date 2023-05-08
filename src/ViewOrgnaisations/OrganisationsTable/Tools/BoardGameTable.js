@@ -7,12 +7,9 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
-import { useEffect, useCallback } from "react";
 import useRefMounted from "../../../hooks/useRefMounted";
-import axios from "axios";
 import { IconButton, Typography } from "@mui/material";
 import InsertLinkOutlinedIcon from "@mui/icons-material/InsertLinkOutlined";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import { useTranslation } from "react-i18next";
 
@@ -50,7 +47,7 @@ export default function BoardGameTable({ games }) {
           <TableHead>
             <TableRow>
               {columns.map((column) => (
-                <TableCell key={column.id}>{column.label}</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }} key={column.id}>{column.label}</TableCell>
               ))}
               <TableCell></TableCell>
             </TableRow>
@@ -65,7 +62,7 @@ export default function BoardGameTable({ games }) {
                   {row.name}
                 </TableCell>
                 <TableCell align="center">
-                  <Tooltip title="Get more info at BoardGameGeeks.com">
+                  <Tooltip title={t("Get more info at BoardGameGeeks.com")}>
                     <IconButton color="primary" aria-label="more info">
                       <InsertLinkOutlinedIcon />
                     </IconButton>

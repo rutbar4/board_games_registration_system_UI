@@ -69,7 +69,6 @@ export default function EditMatchDialog({
   setTournamentData,
 }) {
   const { t } = useTranslation();
-  const isMountedRef = useRefMounted();
   const [winnnerName, setWinnnerName] = React.useState([]);
   const [winnnerPoints, setWinnnerPoints] = React.useState([]);
 
@@ -107,7 +106,7 @@ export default function EditMatchDialog({
           id="customized-dialog-title"
           onClose={handleClose}
         >
-          Select winner: {}
+          {t("Select winner:")} { }
         </BootstrapDialogTitle>
         <DialogContent dividers>
           <Container>
@@ -127,7 +126,7 @@ export default function EditMatchDialog({
                 ></Autocomplete>
                 <TextField
                   type="number"
-                  label="Victory points"
+                  label={t("Victory points")}
                   onChange={(e) => {
                     setWinnnerPoints(e.target.value);
                   }}
@@ -147,7 +146,7 @@ export default function EditMatchDialog({
               if (matchDetails?.state !== "PLAYED") editMatch();
             }}
           >
-            Ok
+            {t("Ok")}
           </Button>
         </DialogActions>
       </BootstrapDialog>

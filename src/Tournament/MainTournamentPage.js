@@ -1,5 +1,3 @@
-//turėtų būti lentelė su mano buvusiais/vykstančiais turnyrais
-//mygtukas add nez tournament
 import * as React from "react";
 import { format } from "date-fns";
 import Table from "@mui/material/Table";
@@ -25,13 +23,11 @@ import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import LaunchIcon from "@mui/icons-material/Launch";
 import IconButton from "@mui/material/IconButton";
+import TableSortLabel from '@mui/material/TableSortLabel';
+import { visuallyHidden } from '@mui/utils';
+import TablePagination from "@mui/material/TablePagination";
 
 const theme = createTheme();
-const columns = [
-  { id: "tournamentName", label: "Name" },
-  { id: "tournamentDate", label: "Date" },
-  { id: "actions", label: "" },
-];
 
 export default function MainTournamentPage() {
   const navigate = useNavigate();
@@ -39,6 +35,87 @@ export default function MainTournamentPage() {
   const [tournaments, setTournaments] = React.useState([]);
 
   const { t } = useTranslation();
+
+
+  const [order, setOrder] = React.useState("asc");
+  const [orderBy, setOrderBy] = React.useState("playDate");
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const visibleRows = React.useMemo(
+    () =>
+      stableSort(tournaments, getComparator(order, orderBy)).slice(
+        page * rowsPerPage,
+        page * rowsPerPage + rowsPerPage
+      ),
+    [order, orderBy, page, rowsPerPage]
+  );
+
+  function stableSort(array, comparator) {
+    const stabilizedThis = array.map((el, index) => [el, index]);
+    stabilizedThis.sort((a, b) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) {
+        return order;
+      }
+      return a[1] - b[1];
+    });
+    return stabilizedThis.map((el) => el[0]);
+  }
+
+  function descendingComparator(a, b, orderBy) {
+    if (b[orderBy] < a[orderBy]) {
+      return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+      return 1;
+    }
+    return 0;
+  }
+
+  function getComparator(order, orderBy) {
+    return order === "desc"
+      ? (a, b) => descendingComparator(a, b, orderBy)
+      : (a, b) => -descendingComparator(a, b, orderBy);
+  }
+
+  const handleRequestSort = (property) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
+
+  console.log(visibleRows);
+  const columns = [
+    {
+      id: "name",
+      numeric: false,
+      disablePadding: false,
+      label: t("Name")
+    },
+    {
+      id: "date",
+      numeric: false,
+      disablePadding: true,
+      label: t("Date")
+    },
+    {
+      id: "actions",
+      numeric: false,
+      disablePadding: true,
+      label: ""
+    },
+  ];
+
+
   const today = new Date();
   const cjToday = dayjs(today);
   const [tournamentData, setTournamentData] = React.useState({
@@ -73,6 +150,7 @@ export default function MainTournamentPage() {
 
       if (isMountedRef.current) {
         setTournaments(response.data);
+        handleRequestSort(response.data);
       }
       console.log(tournaments);
     } catch (err) {
@@ -117,16 +195,16 @@ export default function MainTournamentPage() {
               }}
             >
               <TextField
-                sx={{p:1}}
+                sx={{ p: 1 }}
                 required
                 id="tournamentName"
                 name="tournamentName"
-                label="Tournament name"
+                label={t("Tournament name")}
                 variant="outlined"
               />
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateTimePicker
-                sx={{p:1}}
+                  sx={{ p: 1 }}
                   ampm={false}
                   id="GamePlayDay"
                   name="GamePlayDay"
@@ -142,10 +220,10 @@ export default function MainTournamentPage() {
                 />
               </LocalizationProvider>
               <TextField
-                sx={{p:1}}
+                sx={{ p: 1 }}
                 id="description"
                 name="description"
-                label="Description"
+                label={t("Description")}
                 multiline
                 maxRows={10}
               />
@@ -165,7 +243,7 @@ export default function MainTournamentPage() {
                 }}
               >
                 <Button variant="contained" type="submit">
-                  Create new tournament
+                  {t("Create new tournament")}
                 </Button>
               </Box>
             </Box>
@@ -195,13 +273,31 @@ export default function MainTournamentPage() {
               </TableHead>
               <TableHead>
                 <TableRow>
-                  {columns.map((column) => (
-                    <TableCell key={column.id}>{column.label}</TableCell>
+                  {columns.map((headCell) => (
+                    <TableCell
+                      key={headCell.id}
+                      align="center"
+                      padding={headCell.disablePadding ? 'none' : 'normal'}
+                      sortDirection={orderBy === headCell.id ? order : false}
+
+                    ><TableSortLabel sx={{ fontWeight: "bold" }}
+                      active={orderBy === headCell.id}
+                      direction={orderBy === headCell.id ? order : 'asc'}
+                      onClick={(e) => { handleRequestSort(headCell.id) }}
+                    >
+                        {headCell.label}
+                        {orderBy === headCell.id ? (
+                          <Box component="span" sx={visuallyHidden}>
+                            {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                          </Box>
+                        ) : null}
+                      </TableSortLabel>
+                    </TableCell>
                   ))}
                 </TableRow>
               </TableHead>
               <TableBody>
-                {tournaments.map((row) => {
+                {visibleRows.map((row) => {
                   var date = new Date(row.date);
                   return (
                     <TableRow
@@ -227,6 +323,15 @@ export default function MainTournamentPage() {
               </TableBody>
             </Table>
           </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25, 50]}
+            component="div"
+            count={tournaments.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
         </Box>
       </Box>
     </ThemeProvider>

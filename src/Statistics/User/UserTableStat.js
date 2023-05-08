@@ -4,6 +4,7 @@ import { Container } from "@mui/system";
 import PlaysTable from "./DataFields/PlaysTable";
 import Top10PlayedGamesHistogram from "./DataFields/Top10PlayedGamesHistogram";
 import DataOfMonth from "./DataFields/DataOfMonth";
+import BGTable from "./DataFields/BGTable";
 import { useTranslation } from "react-i18next";
 import { Grid } from "@mui/material";
 
@@ -24,7 +25,10 @@ export default function OrganisationTableStat() {
           </Grid>
         </Grid>
       </Container>
-      <Container maxWidth="md" sx={{ pb: 3, pt: 3 }}>
+      <Container maxWidth="lg" sx={{ pb: 3, pt: 3 }}>
+        <BGTable />
+      </Container>
+      <Container maxWidth="lg" sx={{ pb: 3, pt: 3 }}>
         <PlaysTable />
       </Container>
     </ThemeProvider>

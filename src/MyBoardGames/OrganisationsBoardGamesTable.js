@@ -70,7 +70,7 @@ export default function OrganisationProfile() {
   console.log(organisation);
 
   const columns = [
-    { id: "name", label: t("Board Game Name"), minWidth: 50 },
+    { id: "name", label: t("Board game name"), minWidth: 50 },
     { id: "gameType", label: t("Game type"), minWidth: 50 },
   ];
 
@@ -98,7 +98,7 @@ export default function OrganisationProfile() {
     try {
       const response = await axios.get(
         "http://localhost:7293/api/BoardGamePlay/GetAllBGDataByOrganisation/" +
-          organisation.id
+        organisation.id
       );
 
       if (isMountedRef.current) {
@@ -189,7 +189,7 @@ export default function OrganisationProfile() {
           }}
         >
           <Paper
-            style={{ height: 500, width: "100%" }}
+            style={{ width: "100%" }}
             component="form"
             onSubmit={handleAdd}
           >

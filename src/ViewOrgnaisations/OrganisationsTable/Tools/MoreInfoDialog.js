@@ -13,7 +13,6 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { useTranslation } from "react-i18next";
 import Tooltip from "@mui/material/Tooltip";
 import useRefMounted from "../../../hooks/useRefMounted";
-import { useCallback } from "react";
 import BoardGameTable from "./BoardGameTable";
 import axios from "axios";
 
@@ -77,7 +76,7 @@ export default function MoreInfoDialog({ organisationName }) {
       console.log(organisationName);
       const response = await axios.get(
         "http://localhost:7293/api/BoardGamePlay/GetAllBGDataByOrganisationName/" +
-          organisationName
+        organisationName
       );
 
       console.log(response.data);
@@ -91,7 +90,7 @@ export default function MoreInfoDialog({ organisationName }) {
 
   return (
     <ThemeProvider theme={theme}>
-      <Tooltip title="More info">
+      <Tooltip title={t("More info")}>
         <IconButton
           color="secondary"
           aria-label="more info"
@@ -112,7 +111,7 @@ export default function MoreInfoDialog({ organisationName }) {
           id="customized-dialog-title"
           onClose={handleClose}
         >
-          Information about organisation: {}
+          Information about organisation: { }
         </BootstrapDialogTitle>
         <DialogContent dividers>
           <Container>

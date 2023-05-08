@@ -172,7 +172,7 @@ export default function SignUp() {
                 handleSignUp();
               }}
             >
-              {t("Sign Up")}
+              {t("Sign up")}
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>

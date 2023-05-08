@@ -1,6 +1,5 @@
 import * as React from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Container } from "@mui/system";
 import useRefMounted from "../../../hooks/useRefMounted";
 import useAuth from "../../../Authentication/Auth/useAuth";
 import { Grid, TextField, Typography } from "@mui/material";
@@ -10,7 +9,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useEffect, useCallback } from "react";
 import axios from "axios";
-import FormControl from "@mui/material/FormControl";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 
@@ -18,7 +16,6 @@ const theme = createTheme();
 
 export default function DataOfMonth() {
   const { organisation } = useAuth();
-  const isMountedRef = useRefMounted();
   const [winners, setWinners] = React.useState(null);
   const [boardGames, setBoardGames] = React.useState(null);
   const today = new Date().$d;
@@ -32,7 +29,7 @@ export default function DataOfMonth() {
       console.log(date);
       const response = await axios.post(
         "http://localhost:7293/api/BoardGamePlay/TopMonthPlayers/" +
-          organisation.id,
+        organisation.id,
         date
       );
 
@@ -42,10 +39,10 @@ export default function DataOfMonth() {
         setWinners(
           response.data
             ? response.data.players +
-                "\n" +
-                t("(won ") +
-                response.data.winCount +
-                t(" games)")
+            "\n" +
+            t("(won ") +
+            response.data.winCount +
+            t(" games)")
             : null
         );
       }
@@ -62,10 +59,9 @@ export default function DataOfMonth() {
       console.log(date);
       const response = await axios.post(
         "http://localhost:7293/api/BoardGamePlay/TopMonthBoardGames/" +
-          organisation.id,
+        organisation.id,
         date
       );
-      console.log("hhhhhhhhhhhhhhh");
       console.log(response);
 
       if (response.data.count === "") {
@@ -74,13 +70,14 @@ export default function DataOfMonth() {
         setBoardGames(
           response.data
             ? response.data.boardGames +
-                "\n" +
-                t("(played ") +
-                response.data.count +
-                t(" times)")
+            "\n" +
+            t("(played ") +
+            response.data.count +
+            t(" times)")
             : null
         );
       }
+
       console.log(response);
     } catch (err) {
       console.error(err);

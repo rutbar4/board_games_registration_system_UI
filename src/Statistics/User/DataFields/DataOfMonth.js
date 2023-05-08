@@ -1,6 +1,5 @@
 import * as React from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Container } from "@mui/system";
 import useRefMounted from "../../../hooks/useRefMounted";
 import useAuth from "../../../Authentication/Auth/useAuth";
 import { Grid, TextField, Typography } from "@mui/material";
@@ -10,7 +9,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useEffect, useCallback } from "react";
 import axios from "axios";
-import FormControl from "@mui/material/FormControl";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 
@@ -18,7 +16,6 @@ const theme = createTheme();
 
 export default function DataOfMonth() {
   const { user } = useAuth();
-  const isMountedRef = useRefMounted();
   const [winners, setWinners] = React.useState(null);
   const [boardGames, setBoardGames] = React.useState(null);
   const today = new Date();
@@ -30,18 +27,23 @@ export default function DataOfMonth() {
       console.log("dt");
       console.log(date);
       const response = await axios.post(
-        "http://localhost:7293/api/BoardGamePlay/TopMonthPlayers/" + user.id,
+        "http://localhost:7293/api/BoardGamePlay/TopMonthPlayers/" +
+        user.id,
         date
       );
-      setWinners(
-        response.data
-          ? response.data.players +
-              "\n" +
-              t("(won ") +
-              response.data.winCount +
-              t(" games)")
-          : null
-      );
+      if (response.data.count === "") {
+        setWinners("");
+      } else {
+        setWinners(
+          response.data
+            ? response.data.players +
+            "\n" +
+            t("(won ") +
+            response.data.winCount +
+            t(" games)")
+            : null
+        );
+      }
       console.log(response);
     } catch (err) {
       console.error(err);
@@ -58,15 +60,21 @@ export default function DataOfMonth() {
         date
       );
       console.log(response);
-      setBoardGames(
-        response.data
-          ? response.data.boardGames +
-              "\n" +
-              t("(played ") +
-              response.data.count +
-              t(" times)")
-          : null
-      );
+
+      if (response.data.count === "") {
+        setBoardGames("");
+      } else {
+        setBoardGames(
+          response.data
+            ? response.data.boardGames +
+            "\n" +
+            t("(played ") +
+            response.data.count +
+            t(" times)")
+            : null
+        );
+      }
+
       console.log(response);
     } catch (err) {
       console.error(err);
@@ -76,7 +84,7 @@ export default function DataOfMonth() {
   useEffect(async () => {
     await GetTopMonthPlayer();
     await GetTopMonthBoardGame();
-  }, [GetTopMonthPlayer, GetTopMonthBoardGame]);
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>

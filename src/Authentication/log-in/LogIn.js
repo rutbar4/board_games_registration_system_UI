@@ -31,9 +31,9 @@ export default function LogIn() {
     console.log(response);
     navigate("/");
   };
-  
+
   if (auth.isAuthenticated) navigate("/");
-  
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -83,7 +83,7 @@ export default function LogIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              {t("Sign in")}
             </Button>
             <Grid container>
               <Grid item xs></Grid>

@@ -11,15 +11,15 @@ import { useEffect, useCallback } from "react";
 import useRefMounted from "../../../hooks/useRefMounted";
 import useAuth from "../../../Authentication/Auth/useAuth";
 import axios from "axios";
-import TablePagination from "@mui/material/TablePagination";
 import { Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import PropTypes from "prop-types";
-import TableSortLabel from '@mui/material/TableSortLabel';
 import Box from '@mui/material/Box';
+import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
+import TablePagination from "@mui/material/TablePagination";
 
 const theme = createTheme();
+
 export default function PlaysTable() {
   const { organisation } = useAuth();
   const [plays, setPlays] = React.useState([]);
@@ -28,15 +28,16 @@ export default function PlaysTable() {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("playDate");
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [selected, setSelected] = React.useState([]);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
+
   const visibleRows = React.useMemo(
     () =>
       stableSort(plays, getComparator(order, orderBy)).slice(
@@ -57,6 +58,7 @@ export default function PlaysTable() {
     });
     return stabilizedThis.map((el) => el[0]);
   }
+
   function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
       return -1;
@@ -66,39 +68,30 @@ export default function PlaysTable() {
     }
     return 0;
   }
+
   function getComparator(order, orderBy) {
     return order === "desc"
       ? (a, b) => descendingComparator(a, b, orderBy)
       : (a, b) => -descendingComparator(a, b, orderBy);
   }
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelected = plays.map((n) => n.name);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
-
-  const createSortHandler = (event) => {
-    onRequestSort(event, property);
-  };
-
+  console.log(visibleRows);
   const columns = [
     {
-      id: "boardGameName", numeric: false,
+      id: "boardGameName",
+      numeric: false,
       disablePadding: true,
       label: t("Board game name")
     },
     {
-      id: "boardGameType", numeric: false,
+      id: "boardGameType",
+      numeric: false,
       disablePadding: true,
       label: t("Type")
     },
@@ -121,7 +114,7 @@ export default function PlaysTable() {
       label: t("Winning points")
     },
     {
-      id: "playDate",
+      id: "datePlayed",
       numeric: false,
       disablePadding: false,
       label: t("Play date")
@@ -162,13 +155,12 @@ export default function PlaysTable() {
             <TableRow>
               <TableCell colSpan={"100%"} align="center">
                 <Typography
-                  sx={{ flex: "100%", textAlign: "center" }}
+                  sx={{ flex: "100%", textAlign: "center", fontWeight: "bold" }}
                   variant="h6"
                   id="playsTableTitle"
                   component="div"
                 >
-                  <Box sx={{ fontWeight: "bold" }}>
-                    {t("All Board Game Plays")}</Box>
+                  {t("All Board Game Plays")}
                 </Typography>
               </TableCell>
             </TableRow>
@@ -204,8 +196,7 @@ export default function PlaysTable() {
                 key={row.name}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell component="th" scope="row"
-                  size="small">
+                <TableCell component="th" scope="row" size="small">
                   {row.boardGameName}
                 </TableCell>
                 <TableCell align="left" size="small">{row.boardGameType}</TableCell>
@@ -221,7 +212,7 @@ export default function PlaysTable() {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[5, 10, 25, 50]}
         component="div"
         count={plays.length}
         rowsPerPage={rowsPerPage}

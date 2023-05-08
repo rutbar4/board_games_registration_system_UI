@@ -260,13 +260,13 @@ export default function MeniuToolbar() {
                 )}
               </ListItem>
               <ListItem disablePadding>
-                  <ListItemButton
-                    onClick={() => {
-                      navigate("/all_tournaments");
-                    }}
-                  >
-                    <ListItemText primary={t("All Tournaments")} />
-                  </ListItemButton>
+                <ListItemButton
+                  onClick={() => {
+                    navigate("/all_tournaments");
+                  }}
+                >
+                  <ListItemText primary={t("All Tournaments")} />
+                </ListItemButton>
               </ListItem>
               <ListItem disablePadding>
                 <ListItemButton
