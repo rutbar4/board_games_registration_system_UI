@@ -1,18 +1,12 @@
-//turnyro pavadinimas
-//(datos kada vyks įvedimas)
-//žaidėjų suvedimas (kaip boardgame)
 import * as React from "react";
 import { useState } from "react";
 import { Button, TextField, Typography } from "@mui/material";
-import useRefMounted from "../hooks/useRefMounted";
 import useAuth from "../Authentication/Auth/useAuth";
-import { useEffect, useCallback } from "react";
 import axios from "axios";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import MuiGrid from "@mui/material/Grid";
 import { styled } from "@mui/material/styles";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import Table from "@mui/material/Table";
@@ -48,7 +42,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  // hide last border
   "&:last-child td, &:last-child th": {
     border: 0,
   },
@@ -232,12 +225,10 @@ export default function AddNewTournament({ ...props }) {
             onSubmit={handleAdd}
           >
             <TableContainer sx={{ maxHeight: "100%" }} label="Filled">
-              {/* <Table stickyHeader aria-label="customized table"> */}
               <Table stickyHeader size="small" aria-label="a dense table">
-                {/* aria-label="sticky table" */}
                 <TableHead>
                   <TableRow>
-                    <StyledTableCell padding="checkbox">Nr.</StyledTableCell>
+                    <StyledTableCell padding="checkbox">"No."</StyledTableCell>
                     {columns.map((column) => (
                       <StyledTableCell
                         key={column.id}
