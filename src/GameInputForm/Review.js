@@ -49,21 +49,15 @@ export default function Review({ setFormData, formData }) {
             </Typography>
           </Grid>
         </Grid>
-        <Grid item xs={12} sm={6}>
-          {t("Players:")}
-          <Grid item xs={12}>
-            <Typography sx={{ fontWeight: "bold" }}>
-              {formData.players}
-            </Typography>
-          </Grid>
+        <Grid item xs={12}>
+          {t("Players")}:
+          <Typography sx={{ fontWeight: "bold" }}>
+            {formData.players.join(", ")}
+          </Typography>
         </Grid>
-        <Grid item xs={12} sm={6}>
-          {t("Winner:")}
-          <Grid item xs={12}>
-            <Typography sx={{ fontWeight: "bold" }}>
-              {formData.winner}
-            </Typography>
-          </Grid>
+        <Grid item xs={12}>
+          {t("Winner")}:
+          <Typography sx={{ fontWeight: "bold" }}>{formData.winner}</Typography>
         </Grid>
 
         <Grid item xs={12}>

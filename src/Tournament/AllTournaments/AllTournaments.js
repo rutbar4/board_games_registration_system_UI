@@ -17,9 +17,9 @@ import Box from "@mui/material/Box";
 import { useNavigate } from "react-router-dom";
 import LaunchIcon from "@mui/icons-material/Launch";
 import IconButton from "@mui/material/IconButton";
-import TableSortLabel from '@mui/material/TableSortLabel';
+import TableSortLabel from "@mui/material/TableSortLabel";
 import { Container } from "@mui/system";
-import { visuallyHidden } from '@mui/utils';
+import { visuallyHidden } from "@mui/utils";
 import TablePagination from "@mui/material/TablePagination";
 
 const theme = createTheme();
@@ -92,31 +92,31 @@ export default function MainTournamentPage() {
       id: "organisationName",
       numeric: false,
       disablePadding: false,
-      label: t("Organisation")
+      label: t("Organisation"),
     },
     {
       id: "name",
       numeric: false,
       disablePadding: false,
-      label: t("Name")
+      label: t("Name"),
     },
     {
       id: "date",
       numeric: true,
       disablePadding: false,
-      label: t("Date")
+      label: t("Date"),
     },
     {
       id: "description",
       numeric: false,
       disablePadding: false,
-      label: t("Description")
+      label: t("Description"),
     },
     {
       id: "actions",
       numeric: false,
       disablePadding: false,
-      label: ""
+      label: "",
     },
   ];
 
@@ -156,7 +156,7 @@ export default function MainTournamentPage() {
         }}
         maxWidth="md"
       >
-        <TableContainer component={Paper} >
+        <TableContainer component={Paper}>
           <Table sx={{ minWidth: 550 }} aria-label="simple table">
             <TableHead>
               <TableRow>
@@ -175,20 +175,26 @@ export default function MainTournamentPage() {
             <TableHead>
               <TableRow>
                 {columns.map((headCell) => (
-                  <TableCell key={headCell.id}
+                  <TableCell
+                    key={headCell.id}
                     align="center"
-                    padding={headCell.disablePadding ? 'none' : 'normal'}
+                    padding={headCell.disablePadding ? "none" : "normal"}
                     sortDirection={orderBy === headCell.id ? order : false}
                   >
-                    <TableSortLabel sx={{ fontWeight: "bold" }}
+                    <TableSortLabel
+                      sx={{ fontWeight: "bold" }}
                       active={orderBy === headCell.id}
-                      direction={orderBy === headCell.id ? order : 'asc'}
-                      onClick={(e) => { handleRequestSort(headCell.id) }}
+                      direction={orderBy === headCell.id ? order : "asc"}
+                      onClick={(e) => {
+                        handleRequestSort(headCell.id);
+                      }}
                     >
                       {headCell.label}
                       {orderBy === headCell.id ? (
                         <Box component="span" sx={visuallyHidden}>
-                          {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                          {order === "desc"
+                            ? "sorted descending"
+                            : "sorted ascending"}
                         </Box>
                       ) : null}
                     </TableSortLabel>
@@ -224,9 +230,14 @@ export default function MainTournamentPage() {
               })}
             </TableBody>
           </Table>
-        </TableContainer><TablePagination
+        </TableContainer>
+        <TablePagination
           rowsPerPageOptions={[5, 10, 25, 50]}
           component="div"
+          labelRowsPerPage={t("Rows per page")}
+          labelDisplayedRows={({ from, to, count }) => {
+            return "" + from + "-" + to + " " + t("of") + " " + count;
+          }}
           count={tournaments.length}
           rowsPerPage={rowsPerPage}
           page={page}

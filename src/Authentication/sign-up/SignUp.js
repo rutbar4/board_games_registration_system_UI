@@ -54,12 +54,7 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             {t("Sign up")}
           </Typography>
-          <Box
-            component="form"
-            noValidate
-            onSubmit={handleSignUp}
-            sx={{ mt: 3 }}
-          >
+          <Box component="form" sx={{ mt: 3 }} onSubmit={handleSignUp}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField

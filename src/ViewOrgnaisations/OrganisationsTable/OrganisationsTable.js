@@ -13,9 +13,9 @@ import axios from "axios";
 import { Typography } from "@mui/material";
 import MoreInfoDialog from "./Tools/MoreInfoDialog";
 import { useTranslation } from "react-i18next";
-import Box from '@mui/material/Box';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import { visuallyHidden } from '@mui/utils';
+import Box from "@mui/material/Box";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import { visuallyHidden } from "@mui/utils";
 import TablePagination from "@mui/material/TablePagination";
 
 const theme = createTheme();
@@ -87,19 +87,19 @@ export default function OrganisationsTable() {
       id: "name",
       numeric: false,
       disablePadding: false,
-      label: t("Name of organisation")
+      label: t("Name of organisation"),
     },
     {
       id: "city",
       numeric: false,
       disablePadding: false,
-      label: t("City")
+      label: t("City"),
     },
     {
       id: "description",
       numeric: true,
       disablePadding: false,
-      label: t("Description")
+      label: t("Description"),
     },
   ];
 
@@ -131,7 +131,12 @@ export default function OrganisationsTable() {
             <TableRow>
               <TableCell colSpan={"100%"}>
                 <Typography
-                  sx={{ flex: "100%", textAlign: "center", mb: 2, fontWeight: "bold" }}
+                  sx={{
+                    flex: "100%",
+                    textAlign: "center",
+                    mb: 2,
+                    fontWeight: "bold",
+                  }}
                   variant="h6"
                   id="organisationsTable"
                   component="div"
@@ -147,26 +152,29 @@ export default function OrganisationsTable() {
                 <TableCell
                   size="small"
                   key={headCell.id}
-                  padding={headCell.disablePadding ? 'none' : 'normal'}
+                  padding={headCell.disablePadding ? "none" : "normal"}
                   sortDirection={orderBy === headCell.id ? order : false}
-
                 >
-                  <TableSortLabel sx={{ fontWeight: "bold" }}
+                  <TableSortLabel
+                    sx={{ fontWeight: "bold" }}
                     active={orderBy === headCell.id}
-                    direction={orderBy === headCell.id ? order : 'asc'}
-                    onClick={(e) => { handleRequestSort(headCell.id) }}
+                    direction={orderBy === headCell.id ? order : "asc"}
+                    onClick={(e) => {
+                      handleRequestSort(headCell.id);
+                    }}
                   >
                     {headCell.label}
                     {orderBy === headCell.id ? (
                       <Box component="span" sx={visuallyHidden}>
-                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                        {order === "desc"
+                          ? "sorted descending"
+                          : "sorted ascending"}
                       </Box>
                     ) : null}
                   </TableSortLabel>
                 </TableCell>
               ))}
-              <TableCell>
-              </TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -187,9 +195,14 @@ export default function OrganisationsTable() {
             ))}
           </TableBody>
         </Table>
-      </TableContainer><TablePagination
+      </TableContainer>
+      <TablePagination
         rowsPerPageOptions={[5, 10, 25, 50]}
         component="div"
+        labelRowsPerPage={t("Rows per page")}
+        labelDisplayedRows={({ from, to, count }) => {
+          return "" + from + "-" + to + " " + t("of") + " " + count;
+        }}
         count={organisations.length}
         rowsPerPage={rowsPerPage}
         page={page}

@@ -65,13 +65,14 @@ export default function OrganisationProfile() {
     open: false,
     message: "",
   });
+
   const { t } = useTranslation();
   const { organisation } = useAuth();
   console.log(organisation);
 
   const columns = [
     { id: "name", label: t("Board game name"), minWidth: 50 },
-    { id: "gameType", label: t("Game type"), minWidth: 50 },
+    { id: "description", label: t("Game description"), minWidth: 50 },
   ];
 
   const handleClose = (event, reason) => {
@@ -80,6 +81,7 @@ export default function OrganisationProfile() {
     }
     setOpen(false);
   };
+
   const handleCloseSuccess = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -92,13 +94,14 @@ export default function OrganisationProfile() {
 
   const [games, setGames] = React.useState([]);
   console.log(games);
+
   const isMountedRef = useRefMounted();
 
   const getAllBGByOrganisation = useCallback(async () => {
     try {
       const response = await axios.get(
         "http://localhost:7293/api/BoardGamePlay/GetAllBGDataByOrganisation/" +
-        organisation.id
+          organisation.id
       );
 
       if (isMountedRef.current) {
@@ -119,15 +122,18 @@ export default function OrganisationProfile() {
       const formData = new FormData(event.currentTarget);
       const data = {
         Name: formData.get("BGName"),
-        GameType: formData.get("BGType"),
+        Description: formData.get("BGDescription"),
         OrganisationId: organisation.id,
       };
+
       const response = await axios.post(
         "http://localhost:7293/api/BoardGamePlay/AddOrganisationBG",
         data
       );
+
       console.log("Board Game added");
       console.log(response.data);
+
       if (response) {
         setGames(response.data);
         setOpenSuccess({
@@ -261,19 +267,18 @@ export default function OrganisationProfile() {
                   </StyledTableCell>
                   <StyledTableCell>
                     <TextField
+                      multiline
+                      maxRows={10}
                       fullWidth
-                      label={t("Type")}
-                      id="BGType"
-                      name="BGType"
+                      label={t("Description")}
+                      id="BGDescription"
+                      name="BGDescription"
                       variant="standard"
                     />
                   </StyledTableCell>
                   <Tooltip title={t("Add new board game")}>
                     <StyledTableCell>
                       <LinkToBGGDialog></LinkToBGGDialog>
-                      {/* <IconButton id="addBoardGame" type="submit">
-                        <AddIcon />
-                      </IconButton> */}
                     </StyledTableCell>
                   </Tooltip>
                 </TableBody>

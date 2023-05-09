@@ -53,6 +53,7 @@ export default function PlayersInput({ ...props }) {
       setSelectedItem(selectedPlayers.slice(0, selectedPlayers.length - 1));
     }
   }
+
   function handleChange(item) {
     let newSelectedItem = [...selectedPlayers];
     if (newSelectedItem.indexOf(item) === -1) {
@@ -75,6 +76,7 @@ export default function PlayersInput({ ...props }) {
   function handleInputChange(event) {
     setInputValue(event.target.value);
   }
+
   return (
     <React.Fragment>
       <Downshift

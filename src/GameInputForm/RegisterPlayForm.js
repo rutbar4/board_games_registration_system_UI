@@ -80,6 +80,7 @@ export default function RegisterPlayBox() {
       <Paper
         variant="outlined"
         sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 3 } }}
+        component="form"
       >
         <Typography component="h1" variant="h4" align="center">
           {t("Board Game Play")}
@@ -112,11 +113,11 @@ export default function RegisterPlayBox() {
 
               <Button
                 variant="contained"
+                sx={{ mt: 3, ml: 1 }}
                 onClick={() => {
                   handleNext();
                   handleFinish();
                 }}
-                sx={{ mt: 3, ml: 1 }}
               >
                 {activeStep === steps.length - 1 ? t("Finish") : ""}
                 {activeStep === steps.length - 2 ? t("Complete play") : ""}

@@ -23,8 +23,8 @@ import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import LaunchIcon from "@mui/icons-material/Launch";
 import IconButton from "@mui/material/IconButton";
-import TableSortLabel from '@mui/material/TableSortLabel';
-import { visuallyHidden } from '@mui/utils';
+import TableSortLabel from "@mui/material/TableSortLabel";
+import { visuallyHidden } from "@mui/utils";
 import TablePagination from "@mui/material/TablePagination";
 
 const theme = createTheme();
@@ -35,7 +35,6 @@ export default function MainTournamentPage() {
   const [tournaments, setTournaments] = React.useState([]);
 
   const { t } = useTranslation();
-
 
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("playDate");
@@ -99,22 +98,21 @@ export default function MainTournamentPage() {
       id: "name",
       numeric: false,
       disablePadding: false,
-      label: t("Name")
+      label: t("Name"),
     },
     {
       id: "date",
       numeric: false,
       disablePadding: true,
-      label: t("Date")
+      label: t("Date"),
     },
     {
       id: "actions",
       numeric: false,
       disablePadding: true,
-      label: ""
+      label: "",
     },
   ];
-
 
   const today = new Date();
   const cjToday = dayjs(today);
@@ -277,18 +275,23 @@ export default function MainTournamentPage() {
                     <TableCell
                       key={headCell.id}
                       align="center"
-                      padding={headCell.disablePadding ? 'none' : 'normal'}
+                      padding={headCell.disablePadding ? "none" : "normal"}
                       sortDirection={orderBy === headCell.id ? order : false}
-
-                    ><TableSortLabel sx={{ fontWeight: "bold" }}
-                      active={orderBy === headCell.id}
-                      direction={orderBy === headCell.id ? order : 'asc'}
-                      onClick={(e) => { handleRequestSort(headCell.id) }}
                     >
+                      <TableSortLabel
+                        sx={{ fontWeight: "bold" }}
+                        active={orderBy === headCell.id}
+                        direction={orderBy === headCell.id ? order : "asc"}
+                        onClick={(e) => {
+                          handleRequestSort(headCell.id);
+                        }}
+                      >
                         {headCell.label}
                         {orderBy === headCell.id ? (
                           <Box component="span" sx={visuallyHidden}>
-                            {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                            {order === "desc"
+                              ? "sorted descending"
+                              : "sorted ascending"}
                           </Box>
                         ) : null}
                       </TableSortLabel>
@@ -326,6 +329,10 @@ export default function MainTournamentPage() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25, 50]}
             component="div"
+            labelRowsPerPage={t("Rows per page")}
+            labelDisplayedRows={({ from, to, count }) => {
+              return "" + from + "-" + to + " " + t("of") + " " + count;
+            }}
             count={tournaments.length}
             rowsPerPage={rowsPerPage}
             page={page}

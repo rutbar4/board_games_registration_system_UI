@@ -58,19 +58,21 @@ const Grid = styled(MuiGrid)(({ theme }) => ({
 }));
 
 const theme = createTheme();
+
 export default function OrganisationProfile() {
   const [open, setOpen] = React.useState(false);
   const [openSuccess, setOpenSuccess] = React.useState({
     open: false,
     message: "",
   });
+
   const { t } = useTranslation();
   const { user } = useAuth();
   console.log(user);
 
   const columns = [
     { id: "name", label: t("Board game name"), minWidth: 50 },
-    { id: "gameType", label: t("Type"), minWidth: 50 },
+    { id: "description", label: t("Description"), minWidth: 50 },
   ];
 
   const handleClose = (event, reason) => {
@@ -79,6 +81,7 @@ export default function OrganisationProfile() {
     }
     setOpen(false);
   };
+
   const handleCloseSuccess = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -91,6 +94,7 @@ export default function OrganisationProfile() {
 
   const [games, setGames] = React.useState([]);
   console.log(games);
+
   const isMountedRef = useRefMounted();
 
   const getAllBGByOrganisation = useCallback(async () => {
@@ -132,7 +136,7 @@ export default function OrganisationProfile() {
       const formData = new FormData(event.currentTarget);
       const data = {
         Name: formData.get("BGName"),
-        GameType: formData.get("BGType"),
+        Description: formData.get("BGDescription"),
         OrganisationId: user.id,
       };
       const response = await axios.post(
@@ -274,10 +278,12 @@ export default function OrganisationProfile() {
                   </StyledTableCell>
                   <StyledTableCell>
                     <TextField
+                      multiline
+                      maxRows={10}
                       fullWidth
-                      label={t("Type")}
-                      id="BGType"
-                      name="BGType"
+                      label={t("Description")}
+                      id="BGDescription"
+                      name="BGDescription"
                       variant="standard"
                     />
                   </StyledTableCell>

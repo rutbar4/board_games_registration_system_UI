@@ -58,11 +58,14 @@ export default function GameStartForm({ setFormData, formData }) {
   const getBGByOrganisation = async (orgName) => {
     try {
       const response = await axios.get(
-        "http://localhost:7293/api/BoardGamePlay/GetBGByOrganisation/" + orgName
+        "http://localhost:7293/api/BoardGamePlay/GetAllBGDataByOrganisationName/" +
+          orgName
       );
 
       if (isMountedRef.current) {
-        setGames(response.data);
+        let names = response.data.map((n) => n.name);
+        console.log(names);
+        setGames(names);
       }
     } catch (err) {
       console.error(err);
@@ -91,7 +94,7 @@ export default function GameStartForm({ setFormData, formData }) {
         {t("Starting board game")}
       </Typography>{" "}
       <Grid container spacing={3}>
-        <Grid item xs={12}>
+        <Grid item xs={12} component="form">
           {auth.isAuthenticated && auth.user && (
             <Grid>
               <Typography gutterBottom>

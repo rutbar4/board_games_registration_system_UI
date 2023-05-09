@@ -13,10 +13,10 @@ import useAuth from "../../../Authentication/Auth/useAuth";
 import axios from "axios";
 import { Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import TableSortLabel from '@mui/material/TableSortLabel';
-import { visuallyHidden } from '@mui/utils';
+import TableSortLabel from "@mui/material/TableSortLabel";
+import { visuallyHidden } from "@mui/utils";
 import TablePagination from "@mui/material/TablePagination";
-import Box from '@mui/material/Box';
+import Box from "@mui/material/Box";
 
 const theme = createTheme();
 
@@ -87,36 +87,37 @@ export default function PlaysTable() {
       id: "boardGameName",
       numeric: false,
       disablePadding: true,
-      label: t("Board Game Name")
+      label: t("Board Game Name"),
     },
     {
       id: "boardGameType",
       numeric: false,
       disablePadding: true,
-      label: t("Type")
+      label: t("Type"),
     },
     {
       id: "playersCount",
       numeric: true,
       disablePadding: false,
-      label: t("Number of players")
+      label: t("Number of players"),
     },
     {
       id: "winner",
       numeric: false,
       disablePadding: true,
-      label: t("Winner")
+      label: t("Winner"),
     },
     {
       id: "winnerPoints",
       numeric: true,
-      disablePadding: false, label: t("Winning points")
+      disablePadding: false,
+      label: t("Winning points"),
     },
     {
       id: "datePlayed",
       numeric: false,
       disablePadding: false,
-      label: t("Play date")
+      label: t("Play date"),
     },
   ];
 
@@ -127,8 +128,7 @@ export default function PlaysTable() {
     try {
       console.log(user.id);
       const response = await axios.get(
-        "http://localhost:7293/api/BoardGamePlay/AllPlaysByUserId/" +
-        user.id
+        "http://localhost:7293/api/BoardGamePlay/AllPlaysByUserId/" + user.id
       );
 
       if (isMountedRef.current) {
@@ -171,19 +171,23 @@ export default function PlaysTable() {
                   size="small"
                   key={headCell.id}
                   align="center"
-                  padding={headCell.disablePadding ? 'none' : 'normal'}
+                  padding={headCell.disablePadding ? "none" : "normal"}
                   sortDirection={orderBy === headCell.id ? order : false}
-
                 >
-                  <TableSortLabel sx={{ fontWeight: "bold" }}
+                  <TableSortLabel
+                    sx={{ fontWeight: "bold" }}
                     active={orderBy === headCell.id}
-                    direction={orderBy === headCell.id ? order : 'asc'}
-                    onClick={(e) => { handleRequestSort(headCell.id) }}
+                    direction={orderBy === headCell.id ? order : "asc"}
+                    onClick={(e) => {
+                      handleRequestSort(headCell.id);
+                    }}
                   >
                     {headCell.label}
                     {orderBy === headCell.id ? (
                       <Box component="span" sx={visuallyHidden}>
-                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                        {order === "desc"
+                          ? "sorted descending"
+                          : "sorted ascending"}
                       </Box>
                     ) : null}
                   </TableSortLabel>
@@ -201,10 +205,11 @@ export default function PlaysTable() {
                   {row.boardGameName}
                 </TableCell>
                 <TableCell align="left">{row.boardGameType}</TableCell>
-                <TableCell align="left">{row.playersCount}</TableCell>
+                <TableCell align="center">{row.playersCount}</TableCell>
                 <TableCell align="left">{row.winner}</TableCell>
-                <TableCell align="left">{row.winnerPoints}</TableCell>
-                <TableCell align="left">
+
+                <TableCell align="center">{row.winnerPoints}</TableCell>
+                <TableCell align="center">
                   {row.datePlayed.slice(0, 10)}
                 </TableCell>
               </TableRow>
@@ -215,6 +220,10 @@ export default function PlaysTable() {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25, 50]}
         component="div"
+        labelRowsPerPage={t("Rows per page")}
+        labelDisplayedRows={({ from, to, count }) => {
+          return "" + from + "-" + to + " " + t("of") + " " + count;
+        }}
         count={plays.length}
         rowsPerPage={rowsPerPage}
         page={page}

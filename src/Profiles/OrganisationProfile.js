@@ -34,6 +34,7 @@ export default function OrganisationProfile() {
     open: false,
     message: "",
   });
+
   const [isEditing, setIsEditing] = React.useState(false);
   const { t } = useTranslation();
   const { organisation } = useAuth();
@@ -45,6 +46,7 @@ export default function OrganisationProfile() {
     }
     setOpen(false);
   };
+
   const handleCloseSuccess = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -70,10 +72,12 @@ export default function OrganisationProfile() {
         City: formData.get("organisationCity"),
         Description: formData.get("description"),
       };
+
       const response = await axios.put(
         "http://localhost:7293/api/Organisation/UpdateOrganisation",
         data
       );
+
       if (response) {
         console.log(t("Profile updated"));
         console.log(response);
@@ -84,6 +88,7 @@ export default function OrganisationProfile() {
       }
     }
   };
+
   if (!organisation) return null;
 
   return (

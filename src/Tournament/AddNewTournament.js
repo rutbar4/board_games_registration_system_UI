@@ -17,6 +17,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
+import { format } from "date-fns";
 import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
 import Snackbar from "@mui/material/Snackbar";
@@ -192,11 +193,16 @@ export default function AddNewTournament({ ...props }) {
 
           <Box>
             <Typography component="h1">{t("Tournament name:")}</Typography>
-            <Typography component="h1">{state.Name}</Typography>
+            <Typography component="h1" variant="h6">
+              {state.Name}
+            </Typography>
             <Typography component="h1">{t("Tournament date:")}</Typography>
-            <Typography component="h1">
+            <Typography component="h1" variant="h6">
               {state.TournamentDate.toLocaleDateString()}{" "}
-              {state.TournamentDate.toLocaleTimeString()}
+              {state.TournamentDate.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
             </Typography>
           </Box>
           <Box

@@ -4,6 +4,8 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
 import { TimeField } from "@mui/x-date-pickers/TimeField/TimeField";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -19,6 +21,16 @@ export default function GameResults({ setFormData, formData }) {
   const cjToday = dayjs(today);
   const [selectedWinner, setSelectedWinner] = React.useState("");
   const { t } = useTranslation();
+
+  const handleChange = (e, playerName) => {
+    if (selectedWinner !== playerName) setSelectedWinner(playerName);
+    else setSelectedWinner(playerName);
+    setFormData((data) => ({
+      ...data,
+      winner: playerName,
+    }));
+    setSelectedWinner(playerName);
+  };
 
   return (
     <React.Fragment>
@@ -44,21 +56,14 @@ export default function GameResults({ setFormData, formData }) {
                 <FormControlLabel
                   key={player1}
                   control={
-                    <Checkbox
-                      disabled={
-                        selectedWinner !== "" && player1 !== selectedWinner
-                      }
+                    <Radio
+                      checked={selectedWinner === player1}
+                      onChange={(e) => {
+                        handleChange(e, player1);
+                      }}
+                      aria-labelledby="demo-controlled-radio-buttons-group"
                     />
                   }
-                  onChange={(e) => {
-                    console.log(e.target.checked);
-                    if (e.target.checked === true) setSelectedWinner(player1);
-                    else setSelectedWinner("");
-                    setFormData((data) => ({
-                      ...data,
-                      winner: player1,
-                    }));
-                  }}
                   label={player1}
                 />
               );
