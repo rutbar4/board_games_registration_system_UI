@@ -120,14 +120,26 @@ export default function MeniuToolbar() {
                   ({t("Hi ")} {auth.user.username}!)
                 </Typography>
               )}
-              <Button
-                color="inherit"
-                onClick={() => {
-                  navigate("/");
-                }}
-              >
-                {t("Register play")}
-              </Button>
+              {auth.isAuthenticated && (
+                <Button
+                  color="inherit"
+                  onClick={() => {
+                    navigate("/");
+                  }}
+                >
+                  {t("Register play")}
+                </Button>
+              )}
+              {!auth.isAuthenticated && (
+                <Button
+                  color="inherit"
+                  onClick={() => {
+                    navigate("/anonymous_play_form");
+                  }}
+                >
+                  {t("Register play")}
+                </Button>
+              )}
               {!auth.isAuthenticated && (
                 <Button
                   color="inherit"

@@ -38,6 +38,10 @@ const router = [
     ),
   },
   {
+    path: "anonymous_play_form",
+    element: <BGamePlayInputForm />,
+  },
+  {
     path: "log_in",
     element: <LogIn />,
   },

@@ -12,7 +12,7 @@ const Authenticated = (props) => {
     if (location.pathname !== requestedLocation) {
       setRequestedLocation(location.pathname);
     }
-    return <Navigate to={"/log_in"} />;
+    return <Navigate to={"/anonymous_play_form"} />;
   }
 
   if (requestedLocation && location.pathname !== requestedLocation) {
