@@ -89,6 +89,7 @@ export default function OrganisationProfile() {
     }
   };
 
+  console.log(organisation);
   if (!organisation) return null;
 
   return (

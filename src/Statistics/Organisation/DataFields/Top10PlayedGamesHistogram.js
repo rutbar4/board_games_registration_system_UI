@@ -17,6 +17,7 @@ import {
 } from "@devexpress/dx-react-chart-material-ui";
 import { Animation } from "@devexpress/dx-react-chart";
 import { Typography } from "@mui/material";
+import { Label } from "@mui/icons-material";
 
 const theme = createTheme();
 
@@ -55,7 +56,11 @@ export default function Top10PlayedGamesHistogram() {
         <Chart data={chartData}>
           <ArgumentAxis />
           <ValueAxis />
-          <BarSeries valueField="playCount" argumentField="boardGameName" />
+          <BarSeries
+            valueField="playCount"
+            argumentField="boardGameName"
+          ></BarSeries>
+
           <Title
             text={
               <Typography variant="h6s">

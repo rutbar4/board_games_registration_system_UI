@@ -61,7 +61,8 @@ export default function MoreInfoDialog({ organisationName }) {
 
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
-    setOpen(true);
+    setOpen(false);
+    // setOpen(true);     Setting false as data parsing is not fixed
   };
   const handleClose = () => {
     setOpen(false);
@@ -69,9 +70,10 @@ export default function MoreInfoDialog({ organisationName }) {
 
   const [bGames, setGames] = React.useState([]);
   const getAllBGByOrganisation = async (organisationName) => {
-    console.log("aaaaaaaaaaaaaaaaaaaaa");
     console.log(organisationName);
-
+    //>>>
+    //Here should be used BoardGameGeeks API, issues with parsing XML data to JSON
+    //>>>
     // axios
     //   .get(`https://api.geekdo.com/xmlapi2/search?type=boardgame&query=wonders`)
     //   .then(function (response) {

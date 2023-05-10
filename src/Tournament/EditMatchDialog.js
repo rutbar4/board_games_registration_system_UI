@@ -106,11 +106,14 @@ export default function EditMatchDialog({
           id="customized-dialog-title"
           onClose={handleClose}
         >
-          {t("Select winner:")} { }
+          {t("Select winner:")} {}
         </BootstrapDialogTitle>
         <DialogContent dividers>
           <Container>
-            {matchDetails?.state !== "PLAYED" && (
+            {((matchDetails?.state !== "PLAYED" &&
+              matchDetails?.state !== "NOPLAYERS") ||
+              (matchDetails?.participants.length === 2 &&
+                matchDetails?.state === "NOPLAYERS")) && (
               <>
                 <Autocomplete
                   required
@@ -136,6 +139,12 @@ export default function EditMatchDialog({
             {matchDetails?.state === "PLAYED" && (
               <Typography>Game is already played</Typography>
             )}
+            {matchDetails?.participants.length !== 2 &&
+              matchDetails?.state === "NOPLAYERS" && (
+                <Typography>
+                  Waiting for all players to finish previous rounds
+                </Typography>
+              )}
           </Container>
         </DialogContent>
         <DialogActions>
@@ -143,7 +152,13 @@ export default function EditMatchDialog({
             autoFocus
             onClick={() => {
               handleClose();
-              if (matchDetails?.state !== "PLAYED") editMatch();
+              if (
+                (matchDetails?.state !== "PLAYED" &&
+                  matchDetails?.state !== "NOPLAYERS") ||
+                (matchDetails?.participants.length === 2 &&
+                  matchDetails?.state === "NOPLAYERS")
+              )
+                editMatch();
             }}
           >
             {t("Ok")}
