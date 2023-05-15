@@ -141,6 +141,7 @@ export default function OrganisationProfile() {
                     <TextField
                       name="organisationName"
                       fullWidth
+                      required
                       id="organisationName"
                       label={t("Name of organisation")}
                       defaultValue={organisation.name}
@@ -154,6 +155,7 @@ export default function OrganisationProfile() {
                     <TextField
                       name="organisationUsername"
                       fullWidth
+                      required
                       id="organisationUsername"
                       label={t("Username")}
                       defaultValue={organisation.username}
@@ -166,9 +168,11 @@ export default function OrganisationProfile() {
                   <Grid item>
                     <TextField
                       fullWidth
+                      required
                       id="email"
                       label={t("E-mail address")}
                       name="email"
+                      type="email"
                       defaultValue={organisation.email}
                       variant="standard"
                       InputProps={{
@@ -179,6 +183,7 @@ export default function OrganisationProfile() {
                   <Grid item>
                     <TextField
                       fullWidth
+                      required
                       id="organisationAddress"
                       label={t("Address of location")}
                       name="organisationAddress"
@@ -192,6 +197,7 @@ export default function OrganisationProfile() {
                   <Grid item>
                     <TextField
                       fullWidth
+                      required
                       id="organisationCity"
                       label={t("City")}
                       name="organisationCity"
@@ -205,6 +211,7 @@ export default function OrganisationProfile() {
                   <Grid item>
                     <TextField
                       fullWidth
+                      required
                       name="password"
                       label={t("Password")}
                       type="password"

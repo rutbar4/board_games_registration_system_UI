@@ -13,10 +13,12 @@ import {
   Title,
   ArgumentAxis,
   ValueAxis,
+  Legend,
   Tooltip,
 } from "@devexpress/dx-react-chart-material-ui";
 import { Animation } from "@devexpress/dx-react-chart";
 import { Typography } from "@mui/material";
+import { Label } from "@mui/icons-material";
 
 const theme = createTheme();
 

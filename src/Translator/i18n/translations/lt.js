@@ -1,5 +1,5 @@
 const ltJSON = {
-  "Board Game Registration System": "	Stalo žaidimų rezultatų sekimo sistema",
+  "Board Game Result Tracking System": "Stalo žaidimų rezultatų sekimo sistema",
   "Log in": "Prisijungti",
   "Register play": "Registruoti žaidimą",
   Username: "Slapyvardis",
@@ -68,7 +68,7 @@ const ltJSON = {
   "Hi ": "Sveiki ",
   "E-mail address": "El. paštas",
   Cancel: "Atšaukti",
-  '"Month" and "Year"': "Mėnuo ir metai",
+  '"Year" and "Month"': "Metai ir mėnuo",
   "(played ": "(žaista ",
   " times)": " kartų)",
   "(won ": "(laimėti ",

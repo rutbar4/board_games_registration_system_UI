@@ -22,13 +22,23 @@ export default function LogIn() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+  const [dataIsValid, setdataIsValid] = React.useState(true);
+
   const auth = useAuth();
   const { login } = useAuth();
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const response = await login(data.get("username"), data.get("password"));
-    console.log(response);
+    try {
+      const response = await login(data.get("username"), data.get("password"));
+      if (response) setdataIsValid(true);
+    } catch {
+      setdataIsValid(false);
+
+      console.log("response");
+      console.log(response);
+    }
+
     navigate("/");
   };
 
@@ -52,12 +62,12 @@ export default function LogIn() {
           <Typography component="h1" variant="h5">
             {t("Log in")}
           </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
-          >
+          {!dataIsValid && (
+            <Typography color="red">
+              {t("Username or password is incorrect")}
+            </Typography>
+          )}
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required

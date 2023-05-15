@@ -108,7 +108,7 @@ export default function MeniuToolbar() {
                 noWrap
                 sx={{ flexGrow: 1 }}
               >
-                {t("Board Game Registration System")}
+                {t("Board Game Result Tracking System")}
               </Typography>
               {auth.user && (
                 <Typography
@@ -117,7 +117,7 @@ export default function MeniuToolbar() {
                   noWrap
                   sx={{ flexGrow: 1 }}
                 >
-                  ({t("Hi ")} {auth.user.username}!)
+                  {t("Hi ")} {auth.user.username}!
                 </Typography>
               )}
               {auth.isAuthenticated && (

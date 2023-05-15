@@ -213,7 +213,7 @@ export default function MainTournamentPage() {
                     <TableCell align="left">{row.organsiationName}</TableCell>
                     <TableCell align="left">{row.name}</TableCell>
                     <TableCell align="left">
-                      {format(date, "dd-MM-yyyy H:mm", { timeZone: "GMT+3" })}
+                      {format(date, "yyyy-MM-dd H:mm", { timeZone: "GMT+3" })}
                     </TableCell>
                     <TableCell align="left">{row.description}</TableCell>
                     <TableCell>

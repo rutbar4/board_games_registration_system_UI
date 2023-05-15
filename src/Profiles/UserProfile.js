@@ -162,6 +162,7 @@ export default function UserProfile() {
                   <TextField
                     name="userName"
                     fullWidth
+                    required
                     id="userName"
                     label={t("Name")}
                     defaultValue={user.name}
@@ -175,6 +176,7 @@ export default function UserProfile() {
                   <TextField
                     name="userUsername"
                     fullWidth
+                    required
                     id="userUsername"
                     label={t("Username")}
                     defaultValue={user.username}
@@ -188,7 +190,9 @@ export default function UserProfile() {
                   <TextField
                     fullWidth
                     id="email"
+                    required
                     label={t("E-mail address")}
+                    type="email"
                     name="email"
                     defaultValue={user.email}
                     variant="standard"
@@ -200,6 +204,7 @@ export default function UserProfile() {
                 <Grid item>
                   <TextField
                     fullWidth
+                    required
                     name="password"
                     label={t("Password")}
                     type="password"

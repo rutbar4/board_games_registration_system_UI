@@ -15,12 +15,12 @@ export default function OrganisationTableStat() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container maxWidth="md" sx={{ pb: 3, pt: 3 }}>
-        <Grid spacing={3} container>
-          <Grid item xs={8}>
+      <Container maxWidth="lg" sx={{ pb: 3, pt: 3 }}>
+        <Grid spacing={4} container>
+          <Grid item xs={9}>
             <Top10PlayedGamesHistogram />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={2}>
             <DataOfMonth />
           </Grid>
         </Grid>

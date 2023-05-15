@@ -29,7 +29,7 @@ export default function DataOfMonth() {
       console.log(date);
       const response = await axios.post(
         "http://localhost:7293/api/BoardGamePlay/TopMonthPlayers/" +
-        organisation.id,
+          organisation.id,
         date
       );
 
@@ -39,10 +39,10 @@ export default function DataOfMonth() {
         setWinners(
           response.data
             ? response.data.players +
-            "\n" +
-            t("(won ") +
-            response.data.winCount +
-            t(" games)")
+                "\n" +
+                t("(won ") +
+                response.data.winCount +
+                t(" games)")
             : null
         );
       }
@@ -59,7 +59,7 @@ export default function DataOfMonth() {
       console.log(date);
       const response = await axios.post(
         "http://localhost:7293/api/BoardGamePlay/TopMonthBoardGames/" +
-        organisation.id,
+          organisation.id,
         date
       );
       console.log(response);
@@ -70,10 +70,10 @@ export default function DataOfMonth() {
         setBoardGames(
           response.data
             ? response.data.boardGames +
-            "\n" +
-            t("(played ") +
-            response.data.count +
-            t(" times)")
+                "\n" +
+                t("(played ") +
+                response.data.count +
+                t(" times)")
             : null
         );
       }
@@ -106,7 +106,8 @@ export default function DataOfMonth() {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["DatePicker"]} type="button">
                 <DatePicker
-                  label={t('"Month" and "Year"')}
+                  format="YYYY-MM"
+                  label={t('"Year" and "Month"')}
                   defaultValue={todayjs}
                   onChange={(e) => {
                     GetTopMonthPlayer(e);

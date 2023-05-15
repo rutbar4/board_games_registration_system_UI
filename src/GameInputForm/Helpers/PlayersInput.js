@@ -1,8 +1,12 @@
 import React, { useEffect } from "react";
 import Chip from "@material-ui/core/Chip";
+import { styled } from "@mui/material/styles";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Downshift from "downshift";
+import Paper from "@mui/material/Paper";
+import { Autocomplete } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   chip: {
@@ -10,13 +14,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const ListItem = styled("li")(({ theme }) => ({
+  margin: theme.spacing(0.5),
+}));
 export default function PlayersInput({ ...props }) {
+  const { t } = useTranslation();
   const classes = useStyles();
   const { setFormData, formData, placeholder, ...other } = props;
   const [inputValue, setInputValue] = React.useState("");
   const [selectedPlayers, setSelectedItem] = React.useState([]);
 
   const handlePlayers = (newPlayers) => {
+    setSelectedItem(newPlayers);
     setFormData({ ...formData, players: newPlayers });
   };
 
@@ -24,98 +33,34 @@ export default function PlayersInput({ ...props }) {
     console.log("formadata", formData);
   });
 
-  function handleKeyDown(event) {
-    if (event.key === "Enter") {
-      const newSelectedItem = [...selectedPlayers];
-      const duplicatedValues = newSelectedItem.indexOf(
-        event.target.value.trim()
-      );
-
-      if (duplicatedValues !== -1) {
-        setInputValue("");
-        return;
-      }
-      if (!event.target.value.replace(/\s/g, "").length) return;
-
-      newSelectedItem.push(event.target.value.trim());
-      setSelectedItem(newSelectedItem);
-
-      console.log("enter players", selectedPlayers);
-      handlePlayers(newSelectedItem);
-
-      setInputValue("");
-    }
-    if (
-      selectedPlayers.length &&
-      !inputValue.length &&
-      event.key === "Backspace"
-    ) {
-      setSelectedItem(selectedPlayers.slice(0, selectedPlayers.length - 1));
-    }
-  }
-
-  function handleChange(item) {
-    let newSelectedItem = [...selectedPlayers];
-    if (newSelectedItem.indexOf(item) === -1) {
-      newSelectedItem = [...newSelectedItem, item];
-      console.log({
-        handleChange: formData,
-        selektintiplaueriai: selectedPlayers,
-      });
-    }
-    setInputValue("");
-    setSelectedItem(newSelectedItem);
-  }
-
-  const handleDelete = (item) => () => {
-    const newSelectedItem = [...selectedPlayers];
-    newSelectedItem.splice(newSelectedItem.indexOf(item), 1);
-    setSelectedItem(newSelectedItem);
-  };
-
-  function handleInputChange(event) {
-    setInputValue(event.target.value);
+  function handleChange(event, value) {
+    handlePlayers(value);
+    console.log(value);
   }
 
   return (
     <React.Fragment>
-      <Downshift
-        id="downshift-multiple"
-        inputValue={inputValue}
+      <Autocomplete
+        clearIcon={false}
+        freeSolo
+        options={[]}
+        value={selectedPlayers}
+        multiple
         onChange={handleChange}
-        selectedPlayers={selectedPlayers}
-      >
-        {({ getInputProps }) => {
-          const { onBlur, onChange, onFocus, ...inputProps } = getInputProps({
-            onKeyDown: handleKeyDown,
-            placeholder,
-          });
-          return (
-            <div>
-              <TextField
-                InputProps={{
-                  startAdornment: selectedPlayers.map((item) => (
-                    <Chip
-                      key={item}
-                      tabIndex={-1}
-                      label={item}
-                      className={classes.chip}
-                      onDelete={handleDelete(item)}
-                    />
-                  )),
-                  onBlur,
-                  onChange: (event) => {
-                    handleInputChange(event);
-                  },
-                  onFocus,
-                }}
-                {...other}
-                {...inputProps}
-              />
-            </div>
-          );
-        }}
-      </Downshift>
+        autoComplete={false}
+        renderTags={(value, props) =>
+          value.map((option, index) => (
+            <Chip label={option} {...props({ index })} />
+          ))
+        }
+        renderInput={(params) => (
+          <TextField
+            label="Players"
+            placeholder={t("Add Players (Link to account like '@username')")}
+            {...params}
+          />
+        )}
+      />
     </React.Fragment>
   );
 }

@@ -75,6 +75,7 @@ export default function GameResults({ setFormData, formData }) {
             <DatePicker
               id="GamePlayDay"
               name="GamePlayDay"
+              format="YYYY-MM-DD"
               defaultValue={cjToday}
               label={t("Game play day")}
               onChange={(value) => {

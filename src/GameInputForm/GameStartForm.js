@@ -10,6 +10,7 @@ import { useEffect, useCallback } from "react";
 import useAuth from "../Authentication/Auth/useAuth";
 import Switch from "@mui/material/Switch";
 import axios from "axios";
+import Paper from "@mui/material/Paper";
 import { useTranslation } from "react-i18next";
 
 axios.interceptors.response.use(
@@ -176,7 +177,6 @@ export default function GameStartForm({ setFormData, formData }) {
             formData={formData}
             id="Players"
             name="Players"
-            label={t("Players")}
             fullWidth
             placeholder={t("Add Players (Link to account like '@username')")}
             variant="standard"
