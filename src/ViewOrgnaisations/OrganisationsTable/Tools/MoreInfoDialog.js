@@ -76,7 +76,7 @@ export default function MoreInfoDialog({ organisationName }) {
       console.log(organisationName);
       const response = await axios.get(
         "http://localhost:7293/api/BoardGamePlay/GetAllBGDataByOrganisationName/" +
-        organisationName
+          organisationName
       );
 
       console.log(response.data);
@@ -111,7 +111,8 @@ export default function MoreInfoDialog({ organisationName }) {
           id="customized-dialog-title"
           onClose={handleClose}
         >
-          Information about organisation: { }
+          {t("Information about organisation:")}
+          {}
         </BootstrapDialogTitle>
         <DialogContent dividers>
           <Container>

@@ -155,6 +155,7 @@ export default function MeniuToolbar() {
                   color="inherit"
                   onClick={() => {
                     logout();
+                    navigate("/anonymous_play_form");
                   }}
                 >
                   {t("Log out")}

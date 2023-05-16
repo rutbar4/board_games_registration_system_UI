@@ -104,7 +104,7 @@ export default function MainTournamentPage() {
       id: "date",
       numeric: false,
       disablePadding: true,
-      label: t("Date"),
+      label: t("Start date"),
     },
     {
       id: "actions",

@@ -114,7 +114,7 @@ const ltJSON = {
   "Board Game Statistic": "Stalo žaidimų statistika",
   "Rows per page": "Eilutės per puslapį",
   of: "iš",
-  iiiii: "ooooooooooo",
+  "Start date": "Pradžios data",
 };
 
 export default ltJSON;
